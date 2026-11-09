@@ -44,23 +44,27 @@
       ]
     },
     {
-      "id": "solaris-trolino-12-iii",
-      "title": "Solaris Trolino 12 III GEN",
-      "author": "Solarisek_3813",
-      "categories": ["pojazd"],
-      "versions": [
-        {
-          "version": "1.0",
-          "date": "2026-11-02",
-          "description": "Trolejbusy III generacji BETA.",
-          "description_en": "Third-generation trolleybuses, BETA.",
-          "media": { "type": "image", "src": "image/image1.png", "alt": "Solaris Trolino 12 III GEN – BETA 1" },
-          "downloads": [
-            { "label": "Aktualna wersja (Google Drive)", "label_en": "Current version (Google Drive)", "url": "https://drive.google.com/file/d/1C0BJFkHtjs_7p8eHCb_iNBhxuuXBh4-k/view?usp=sharing" }
-          ]
-        }
+  "id": "solaris-trolino-12-18-III",
+  "title": "Solaris Trolino 12 III GEN",
+  "author": "Solarisek_3813",
+  "categories": ["pojazd"],
+  "versions": [
+    {
+      "version": "1.0",
+      "date": "2026-11-02",
+      "description": "Trolejbusy III generacji BETA. Dużo rzeczy jest spierdolonych jak coś nie działa nie pytaj. Twrócy nie ma.",
+      "description_en": "Third-generation trolleybuses, BETA. A lot of things are messed up – if something doesn't work, don't ask. The creator is gone.",
+      "media": [
+        { "type": "image", "src": "TROLINO12-18GENIII/1.png", "alt": "Solaris Trolino 12 III GEN" },
+        { "type": "image", "src": "TROLINO12-18GENIII/2.png", "alt": "Solaris Trolino 12 III GEN" },
+        { "type": "image", "src": "TROLINO12-18GENIII/3.png", "alt": "Solaris Trolino 12 III GEN" }
+      ],
+      "downloads": [
+        { "label": "Aktualna wersja (Google Drive)", "label_en": "Current version (Google Drive)", "url": "https://drive.google.com/file/d/1C0BJFkHtjs_7p8eHCb_iNBhxuuXBh4-k/view?usp=sharing" }
       ]
-    },
+    }
+  ]
+},
     {
       "id": "siec-trolejbusowa",
       "title": "Sieć trolejbusowa Projekt Lublin + Trollino IV by GUMOLIT",
