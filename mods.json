@@ -82,10 +82,10 @@
   "description": "Mapa Projekt Lublin 2017 z siecią trolejbusową oraz Trollino 12 i 18 w barwach MPK Lublin, w jednej paczce.\n\n- Zwrotnice sterowane radiowo z kabiny, z wyświetlaczami Elektroline i strzałkami LED.\n- Nowe podwieszenie sieci: liny, wieszaki, odciągi, krzyżownice i izolatory sekcyjne.\n- Trollino 12 (MVP Continental, SRG-7000P) i 18 (MOKI II, SRG-6000P) z R&G ETL.\n- Odbieraki z napędem i dźwiękami, obsługa ręczna linką. Jazda pod siecią i na baterii.\n- Do tego wiele innych poprawek i ulepszeń mapy i pojazdów.\n\nWymagania: Projekt Lublin 2017 3.1 oraz Solaris Urbino IV Pack 0.9.1 (Iwo).",
   "description_en": "Projekt Lublin 2017 map with a trolleybus network and Trollino 12 and 18 in MPK Lublin colors, in a single package.\n\n- Radio-controlled turnouts from the cab, with Elektroline displays and LED arrows.\n- New network suspension: wires, hangers, guy lines, crossings, and sectional insulators.\n- Trollino 12 (MVP Continental, SRG-7000P) and 18 (MOKI II, SRG-6000P) with R&G ETL.\n- Current collectors with drive and sounds, manual rope operation. Driving under the network and on battery.\n- Plus many other fixes and improvements to the map and vehicles.\n\nRequirements: Projekt Lublin 2017 3.1 and Solaris Urbino IV Pack 0.9.1 (Iwo).",
   "media": [
+    { "type": "image", "src": "GUMOLIT/GIF.gif", "alt": "Sieć trolejbusowa" },
     { "type": "image", "src": "image/1.png", "alt": "Sieć trolejbusowa" },
     { "type": "image", "src": "GUMOLIT/2.png", "alt": "Sieć trolejbusowa" },
-    { "type": "image", "src": "GUMOLIT/3.png", "alt": "Sieć trolejbusowa" },
-    { "type": "image", "src": "GUMOLIT/GIF.gif", "alt": "Sieć trolejbusowa" }
+    { "type": "image", "src": "GUMOLIT/3.png", "alt": "Sieć trolejbusowa" }
   ],
   "downloads": [
     { "label": "POBIERZ", "label_en": "DOWNLOAD", "url": "https://drive.google.com/file/d/1t3OZLblKxyDu4Wg61oeTeJLZ1LzsNzSw/view?usp=drive_link" }
