@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://translate.googleapis.com https://api.mymemory.translated.net; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>
 if (window.top !== window.self) { try { window.top.location = window.self.location; } catch (e) { document.documentElement.style.display = 'none'; } }
@@ -86,6 +86,18 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .icon{width:1.15em;height:1.15em;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .icon.fill{fill:currentColor;stroke:none}
+
+/* ===== Suwak (scrollbar) dopasowany do motywu ===== */
+[data-theme="dark"]{color-scheme:dark;--sb:#3b3b3b}
+[data-theme="light"]{color-scheme:light;--sb:#bdbdbd}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--sb);border:4px solid var(--bg);border-radius:99px;transition:background .2s}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+::-webkit-scrollbar-corner{background:var(--bg)}
+.mod-modal-scroll::-webkit-scrollbar-track{background:var(--card)}
+.mod-modal-scroll::-webkit-scrollbar-thumb{border-color:var(--card)}
+@supports (-moz-appearance:none){*{scrollbar-width:thin;scrollbar-color:var(--sb) transparent}}
 
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
 .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
@@ -196,9 +208,11 @@ main{flex:1;padding:48px 0 72px}
 .post .body{padding:18px 20px 22px}
 .meta{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--muted)}
 .post h3{font-size:1.25rem;margin:6px 0 8px;letter-spacing:-.01em}
-.post p{color:var(--muted);font-size:.95rem}
+.post p{color:var(--muted);font-size:.95rem;white-space:pre-line}
 .post:hover{transform:translateY(-3px)}
 a.post{display:block;color:inherit;cursor:pointer}
+.post .media.pm{aspect-ratio:auto;background:#111}
+.post .media.pm img{position:static;width:100%;height:auto}
 
 .pager{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:30px;flex-wrap:wrap}
 .pager button{
@@ -242,6 +256,27 @@ a.post{display:block;color:inherit;cursor:pointer}
 .mm-ver .tag-chip.new{color:var(--text);border-color:var(--accent)}
 .mod .date-meta,.mm-ver .date-meta{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
 .mod .mod-open{padding:10px 16px}
+
+/* ---------- Karuzela zdjęć ---------- */
+.car{position:absolute;inset:0;user-select:none;-webkit-user-select:none}
+.car-track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;cursor:grab}
+.car-track::-webkit-scrollbar{display:none}
+.car.single .car-track{overflow:hidden;cursor:default}
+.car-track.drag{scroll-snap-type:none;cursor:grabbing}
+.car-slide{position:relative;flex:0 0 100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always}
+.car-slide img,.car-slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+.car-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.55);color:#fff;cursor:pointer;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s,transform .2s var(--ease);
+}
+.car-btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-50%) scale(1.08)}
+.car-btn.prev{left:10px}.car-btn.next{right:10px}
+.car-btn .icon{width:18px;height:18px;stroke-width:2}
+.car-dots{position:absolute;left:0;right:0;bottom:10px;z-index:2;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.car-dot{pointer-events:auto;width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.5);cursor:pointer;transition:width .25s var(--ease),background .2s}
+.car-dot.on{width:22px;background:var(--accent)}
+.car-count{position:absolute;top:10px;left:10px;z-index:2;font:600 .74rem var(--display);padding:3px 9px;border-radius:99px;background:rgba(0,0,0,.6);color:#fff}
 
 /* ---------- Okno (modal) moda z historią wersji ---------- */
 .mod-modal{
@@ -500,6 +535,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   main{padding:32px 0 56px}
   .posts,.dl-grid,.gallery,.tasks{grid-template-columns:1fr}
   .post .media{aspect-ratio:16/10}
+  .post .media.pm{aspect-ratio:auto}
   .post .body{padding:18px 20px 22px!important}
   .post h3{font-size:1.3rem!important}
   .arch{grid-template-columns:1fr!important}
@@ -617,64 +653,9 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 
   <div class="layout">
     <div>
-      <div class="posts" data-paginate="4">
-                <a class="card post" href="https://youtu.be/47y-3gAhOOE" target="_blank" rel="noopener noreferrer">
-<div class="media" style="aspect-ratio: auto; background: #111;">
-  <img loading="lazy" decoding="async" src="image/minuaturka1.png" alt="Miniaturka wpisu"
-       style="position: static; width: 100%; height: auto; display: block;">
-</div>
-  <div class="body">
-    <div class="meta"><svg class="icon"><use href="#i-cal"/></svg>08.11.2026</div>
-    <h3>Działająca trakcja trolejbusowa-modyfikacja GUMOLIT. Przejazd lini 156 Chodźki Szpital-Felin.</h3>
-    <p>Na naszym Discordzie użytkownik"GUMOLIT" stworzył ekscytującą modyfikację do OpenOmsi na realistycznie działającą trakcję trolejbusową. Modyfikacja dodaje usprawnioną trakcję oraz funkcjonalne wyświetlacze sygnalizujące aktualne ułożenie zwrotnicy. W kolejnej aktualizacji według autora pojawi się funkcja działających kanałów radiowych, a co za tym idzie w końcu przyciski sterowania radiowego zwrotnicami (1-3, 2-4) dostaną realne zastosowanie. Modyfikacja do pobrania na serwerze Discord lub stronie Projektu Lublin
-</p>
-  </div>
-</a>
-                <a class="card post" href="https://discord.com/invite/DWz5tAW4T4" target="_blank" rel="noopener noreferrer">
-<div class="media" style="aspect-ratio: auto; background: #111;">
-  <img loading="lazy" decoding="async" src="image/Wspolpraca.png" alt="Miniaturka wpisu"
-       style="position: static; width: 100%; height: auto; display: block;">
-</div>
-  <div class="body">
-    <div class="meta"><svg class="icon"><use href="#i-cal"/></svg>08.11.2026</div>
-    <h3>Twórz mapę z nami!</h3>
-    <p>Dzień dobry wszystkim! Szukamy osób do pracy przy mapie w edytorze lub tworzenia obiektów dedykowanych. Prace przy wersji 4.0 Projektu Lublin idą cały czas naprzód, jednak ze względu na bardzo małą liczbę osób zaangażowanych w rozwój mapy wszystko się wydłuża. Jeśli jesteś zainteresowany pomocą przy rozwoju mapy - skontaktuj się z nami, wszystkiego możemy nauczyć od zera. Chętne osoby bardzo prosimy o kontakt przez ticket na serwerze discord.<br><s>Chcielibyśmy również zorganizować mini projekt poboczny do Lublina jednak to jedynie plany, póki nie dodamy sensownych terenów na mapie</s></p>
-  </div>
-</a>
-        <a class="card post" href="https://www.youtube.com/watch?v=DqDP-t0aGv4&t=3s" target="_blank" rel="noopener noreferrer">
-  <div class="media">
-    <img src="image/Nowa_miniatruka1.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-  </div>
-  <div class="body">
-    <div class="meta"><svg class="icon"><use href="#i-cal"/></svg>01.11.2026</div>
-    <h3>OpenOmsi Projekt Lublin 4.0 151 Węglin-Wojciechowska</h3>
-    <p>Postanowiliśmy przetestować nowy projekt OpenOmsi na mapie Lublina, wyniki są bardzo ciekawe. Mimo, że teren wizualnie może wyglądać identycznie jak na poprzednim filmie to prace nadal trwają. Na Kraśnickiej zostały juz głównie minimalne poprawki i ruch/kostki AI, natomiast ulica Kunickiego zaszła już za skrzyżowanie Kunickiego i Zemborzyckiej (same spliny na ten moment). Niestety rąk do pomocy jest bardzo mało (a właściwie w ogóle ich nie ma) dlatego projekt długo się ciągnie, chętnych do udzielenia jakiejkolwiek pomocy prosimy o kontakt przez "ticket" na serwerze Discord</p>
-  </div>
-</a>
-        <a class="card post" href="https://www.youtube.com/watch?v=BrFn_28LaLc&t=1s" target="_blank" rel="noopener noreferrer">
-<div class="media" style="aspect-ratio: auto; background: #111;">
-  <img loading="lazy" decoding="async" src="image/image.png" alt="Miniaturka wpisu"
-       style="position: static; width: 100%; height: auto; display: block;">
-</div>
-  <div class="body">
-    <div class="meta"><svg class="icon"><use href="#i-cal"/></svg>01.11.2026</div>
-    <h3>Linia 151 Projekt Lublin 4.0 odcinek Węglin - Wojciechowska</h3>
-    <p>Pierwszy przejazd po skończonym odcinku 151 Węglin - Wojciechowska. Wszystkie linki w komentarzu pod filmem.</p>
-  </div>
-</a>
-        <a class="card post" href="https://www.youtube.com/watch?v=EcHvpTXCfV4&t=397s" target="_blank" rel="noopener noreferrer">
-<div class="media" style="aspect-ratio: auto; background: #111;">
-  <img loading="lazy" decoding="async" src="image/Bogdan.png" alt="Miniaturka wpisu"
-       style="position: static; width: 100%; height: auto; display: block;">
-</div>
-  <div class="body">
-    <div class="meta"><svg class="icon"><use href="#i-cal"/></svg>01.11.2026</div>
-    <h3>Poradnik obiektów Blender - OMSI2</h3>
-    <p>Prosty poradnik tworzenia obiektów dedykowanych w Blenderze dla OMSI2. Wszystkie linki w komentarzu pod filmem.</p>
-  </div>
-</a>
-      </div>
-      <div class="pager"></div>
+      <!-- Wpisy są wczytywane z pliku posts.json (najnowsze na górze) -->
+      <div class="posts" id="postsList"></div>
+      <div class="pager" id="postsPager"></div>
 
       <div class="support-box">
         <a class="btn" href="https://suppi.pl/projekt-lublin-omsi2" target="_blank" rel="noopener noreferrer">
@@ -787,7 +768,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 
   <div class="card route-card" id="routeCard" data-progress-red="90" data-progress-orange="60" data-progress-green="30">
     <div class="route-stage">
-      <img loading="lazy" decoding="async" src="image/Przebiegtrasy.png" alt="Przebieg trasy linii 151 od Węglina do Abramowic" width="1376" height="752">
+      <img decoding="async" fetchpriority="low" src="image/Przebiegtrasy.png" alt="Przebieg trasy linii 151 od Węglina do Abramowic" width="1376" height="752">
       <svg viewBox="0 0 1376 752" preserveAspectRatio="none" aria-hidden="true">
         <path id="routeRed" class="route-line" pathLength="100" fill="none" stroke="#ef2b2b" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round"
           d="M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650"/>
@@ -839,7 +820,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   <div class="gallery">
     <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Zwycięska</h3>
@@ -848,7 +829,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 </figure>
     <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace1.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace1.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Węglin</h3>
@@ -857,7 +838,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 </figure>
 <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace2.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace2.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Poczekajka</h3>
@@ -866,7 +847,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 </figure>
 <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace3.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace3.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Szpital Wojewódzki</h3>
@@ -875,7 +856,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 </figure>
 <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace4.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace4.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Szpital Wojewódzki</h3>
@@ -884,7 +865,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 </figure>
 <figure class="card">
   <div class="media">
-    <img loading="lazy" decoding="async" src="image/obrazyPokazujace5.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+    <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace5.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
   </div>
   <figcaption class="body">
     <h3>Wojciechowska</h3>
@@ -903,7 +884,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 
   <div class="team">
     <div class="member">
-      <div class="avatar"><img loading="lazy" decoding="async" src="image/avatar1.jpg" alt="Awatar 1"></div>
+      <div class="avatar"><img decoding="async" src="image/avatar1.jpg" alt="Awatar 1"></div>
       <div class="box">
         <h2>Ziemniak</h2>
         <h3>Główny twórca Projektu Lublin</h3>
@@ -911,7 +892,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
       </div>
     </div>
     <div class="member">
-      <div class="avatar"><img loading="lazy" decoding="async" src="image/avatar2.jpg" alt="Awatar 2"></div>
+      <div class="avatar"><img decoding="async" src="image/avatar2.jpg" alt="Awatar 2"></div>
       <div class="box">
         <h2>Pikacz</h2>
         <h3>Główny twórca Projektu Lublin</h3>
@@ -941,10 +922,10 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   </div>
 
   <div class="photos">
-    <div class="media"> <img loading="lazy" decoding="async" src="image/Lublin/images.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 1</div></div>
-    <div class="media"><img loading="lazy" decoding="async" src="image/Lublin/images (1).jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 2</div></div>
-    <div class="media"><img loading="lazy" decoding="async" src="image/Lublin/image2.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 3</div></div>
-    <div class="media"><img loading="lazy" decoding="async" src="image/Lublin/image3.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 4</div></div>
+    <div class="media"> <img decoding="async" fetchpriority="low" src="image/Lublin/images.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 1</div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/images (1).jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 2</div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image2.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 3</div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image3.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 4</div></div>
   </div>
 </section>
 
@@ -1010,33 +991,6 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     if (target.id === 'page-rozwoj') updateProgress();
   }
   window.addEventListener('hashchange', route);
-
-  $$('[data-paginate]').forEach(list => {
-    const per = +list.dataset.paginate || 4;
-    const items = [...list.children];
-    const pager = list.nextElementSibling?.classList.contains('pager') ? list.nextElementSibling : list.parentElement.querySelector('.pager');
-    const pagesCount = Math.ceil(items.length / per);
-    let cur = 1;
-    const btn = (html, page, opts = {}) => {
-      const b = document.createElement('button');
-      b.innerHTML = html; b.disabled = !!opts.disabled;
-      if (opts.on) b.classList.add('on');
-      if (opts.label) b.setAttribute('aria-label', opts.label);
-      b.addEventListener('click', () => { show(page); list.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-      return b;
-    };
-    function show(p) {
-      cur = Math.min(Math.max(1, p), pagesCount || 1);
-      items.forEach((el, i) => el.style.display = (i >= (cur - 1) * per && i < cur * per) ? '' : 'none');
-      if (!pager) return;
-      pager.innerHTML = '';
-      if (pagesCount <= 1) return;
-      pager.append(btn('<svg class="icon"><use href="#i-left"/></svg>', cur - 1, { disabled: cur === 1, label: 'Poprzednia' }));
-      for (let i = 1; i <= pagesCount; i++) pager.append(btn(i, i, { on: i === cur }));
-      pager.append(btn('<svg class="icon"><use href="#i-right"/></svg>', cur + 1, { disabled: cur === pagesCount, label: 'Następna' }));
-    }
-    show(1);
-  });
 
   function updateProgress() {
     const done = $$('.done-list li').length;
@@ -1167,16 +1121,26 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     });
   }
 
-  function mediaHtml(m) {
-    if (!m) return '<div class="ph"><svg class="icon"><use href="#i-image"/></svg>Brak podglądu</div>';
-    if (m.type === 'video') {
-      return `<video src="${esc(m.src)}" preload="metadata" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>`;
-    }
-    return `<img loading="lazy" decoding="async" src="${esc(m.src)}" alt="${esc(m.alt || '')}" style="width:100%;height:100%;object-fit:cover;display:block">`;
+  /* ---------- Karuzela: lista zdjęć/wideo -> przewijany slider ---------- */
+  const slideHtml = (m) => m.type === 'video'
+    ? `<video src="${esc(m.src)}" preload="metadata" autoplay loop muted playsinline></video>`
+    : `<img decoding="async" draggable="false" src="${esc(m.src)}" alt="${esc(m.alt || '')}">`;
+
+  function mediaHtml(list) {
+    const items = Array.isArray(list) ? list : (list ? [list] : []);
+    if (!items.length) return '<div class="ph"><svg class="icon"><use href="#i-image"/></svg>Brak podglądu</div>';
+    const n = items.length;
+    const slides = items.map(m => `<div class="car-slide">${slideHtml(m)}</div>`).join('');
+    if (n === 1) return `<div class="car single"><div class="car-track">${slides}</div></div>`;
+    const dots = items.map((_, i) => `<button type="button" class="car-dot${i ? '' : ' on'}" data-i="${i}" aria-label="${L('Zdjęcie', 'Photo')} ${i + 1}"></button>`).join('');
+    return `<div class="car"><div class="car-track">${slides}</div>
+      <button type="button" class="car-btn prev" aria-label="${L('Poprzednie', 'Previous')}"><svg class="icon"><use href="#i-left"/></svg></button>
+      <button type="button" class="car-btn next" aria-label="${L('Następne', 'Next')}"><svg class="icon"><use href="#i-right"/></svg></button>
+      <span class="car-count">1 / ${n}</span><div class="car-dots">${dots}</div></div>`;
   }
 
-  const verDesc = (v) => (currentLang === 'en' && v.description_en) ? v.description_en : v.description;
-  const dlLabel = (d) => (currentLang === 'en' && d.label_en) ? d.label_en : (d.label || L('Pobierz', 'Download'));
+  const verDesc = (v) => txt(v.description, v.description_en);
+  const dlLabel = (d) => d.label ? txt(d.label, d.label_en) : esc(L('Pobierz', 'Download'));
   const tagsHtml = (mod) => (mod.categories || []).map(id =>
     `<span class="tag-chip">${esc(catLabel[id] || id)}</span>`
   ).join('');
@@ -1224,7 +1188,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
         <div class="body">
           <div class="date-meta"><svg class="icon"><use href="#i-cal"/></svg>${esc(fmtDate(v.date))}${verLabel}</div>
           <h3>${esc(mod.title)}</h3>
-          <p>${esc(verDesc(v))}</p>
+          <p>${verDesc(v)}</p>
           <div class="tags">${tagsHtml(mod)}${countChip}</div>
           <div class="row">
             <div class="meta"><svg class="icon"><use href="#i-user"/></svg>Autor: ${esc(mod.author)}</div>
@@ -1297,11 +1261,11 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   const modalBody = $('#modModalBody');
   let openModId = null, lastFocus = null;
 
-  // jeden blok wersji: zdjęcie, nazwa wersji, data, opis, pliki do pobrania
+  // jeden blok wersji: zdjęcia (karuzela), nazwa wersji, data, opis, pliki do pobrania
   function versionBlock(v, i, total) {
     const dls = v.downloads.map(d => `<a class="mm-item" href="${esc(d.url)}" target="_blank" rel="noopener noreferrer">
         <svg class="icon"><use href="#i-download"/></svg>
-        <span class="lbl">${esc(dlLabel(d))}</span>
+        <span class="lbl">${dlLabel(d)}</span>
       </a>`).join('');
     const badge = i === 0
       ? (total > 1 ? '<span class="tag-chip new">Najnowsza</span>' : '')
@@ -1314,7 +1278,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
           ${badge}
         </div>
         <div class="date-meta"><svg class="icon"><use href="#i-cal"/></svg>${esc(fmtDate(v.date))}</div>
-        <p>${esc(verDesc(v))}</p>
+        <p>${verDesc(v)}</p>
         <div class="mm-files">
           <div class="mm-label">Pliki do pobrania</div>
           ${dls ? `<div class="mm-list">${dls}</div>` : '<p class="mm-empty">Brak plików do pobrania.</p>'}
@@ -1368,10 +1332,12 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 
   const modsListEl = $('#modsList');
   modsListEl?.addEventListener('click', (e) => {
+    if (e.target.closest('.car-btn, .car-dot, .car-count')) return;
     const c = e.target.closest('.mod');
     if (c) openMod(c.dataset.id);
   });
   modsListEl?.addEventListener('keydown', (e) => {
+    if (e.target.closest('.car-btn, .car-dot')) return;
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const c = e.target.closest('.mod');
     if (c) { e.preventDefault(); openMod(c.dataset.id); }
@@ -1392,10 +1358,16 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     .map(c => c && typeof c === 'object' ? { id: str(c.id, 32), label: str(c.label, 60) } : null)
     .filter(c => c && /^[a-z0-9_-]{1,32}$/i.test(c.id) && c.label);
 
+  // media: pojedynczy obiekt, tablica obiektów lub tablica ścieżek ("image/a.png")
   const sanitizeMedia = (mt) => {
-    if (!mt || typeof mt !== 'object') return null;
-    const src = safeMedia(mt.src);
-    return src ? { type: mt.type === 'video' ? 'video' : 'image', src, alt: str(mt.alt, 160) } : null;
+    const arr = Array.isArray(mt) ? mt : (mt ? [mt] : []);
+    return arr.slice(0, 40).map(x => {
+      if (typeof x === 'string') x = { src: x };
+      if (!x || typeof x !== 'object') return null;
+      const src = safeMedia(x.src);
+      if (!src) return null;
+      return { type: (x.type === 'video' || /\.(mp4|webm)$/i.test(src)) ? 'video' : 'image', src, alt: str(x.alt, 160) };
+    }).filter(Boolean);
   };
   const sanitizeDl = (d) => d && typeof d === 'object'
     ? { label: str(d.label, 80), label_en: str(d.label_en, 80), url: safeUrl(d.url), date: str(d.date, 10) }
@@ -1410,7 +1382,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
       date: str(v.date, 10) || downloads.map(d => d.date).find(Boolean) || '',
       description: str(v.description, 2000),
       description_en: str(v.description_en, 2000),
-      media: sanitizeMedia(v.media),
+      media: sanitizeMedia(v.media ?? v.images),
       downloads
     };
   };
@@ -1421,7 +1393,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     if (!id || !title) return null;
 
     // wartości zapasowe z poziomu moda (gdy wersja nie ma własnego zdjęcia/opisu/daty)
-    const baseMedia = sanitizeMedia(m.media);
+    const baseMedia = sanitizeMedia(m.media ?? m.images);
     const baseDate = str(m.date, 10);
     const baseDesc = str(m.description, 2000);
     const baseDescEn = str(m.description_en, 2000);
@@ -1429,14 +1401,14 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     // nowy format: "versions": [...]  |  stary format (jedna wersja na poziomie moda) nadal działa
     const raw = (Array.isArray(m.versions) && m.versions.length)
       ? m.versions.slice(0, 50)
-      : [{ version: m.version, date: m.date, description: m.description, description_en: m.description_en, media: m.media, downloads: m.downloads }];
+      : [{ version: m.version, date: m.date, description: m.description, description_en: m.description_en, media: m.media ?? m.images, downloads: m.downloads }];
 
     let versions = raw.map(sanitizeVersion).filter(Boolean).map(v => ({
       ...v,
       date: v.date || baseDate,
       description: v.description || baseDesc,
       description_en: v.description_en || baseDescEn,
-      media: v.media || baseMedia
+      media: (v.media && v.media.length) ? v.media : baseMedia
     }));
     if (!versions.length) return null;
 
@@ -1477,6 +1449,221 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   $('#modSearch')?.addEventListener('input', () => applyModsFilter());
   $('#modSort')?.addEventListener('change', () => applyModsFilter());
   loadMods();
+
+  /* ---------- Karuzela zdjęć (strzałki, kropki, przeciąganie, swipe) ---------- */
+  const carIdx = (tr) => Math.round(tr.scrollLeft / (tr.clientWidth || 1));
+  function carGo(car, i) {
+    const tr = car.querySelector('.car-track'), n = tr.children.length;
+    tr.scrollTo({ left: ((i + n) % n) * tr.clientWidth, behavior: 'smooth' });
+  }
+  function carSync(tr) {
+    const car = tr.parentElement, i = carIdx(tr);
+    car.querySelectorAll('.car-dot').forEach((d, k) => d.classList.toggle('on', k === i));
+    const c = car.querySelector('.car-count');
+    if (c) c.textContent = `${i + 1} / ${tr.children.length}`;
+  }
+  document.addEventListener('scroll', (e) => {
+    const t = e.target;
+    if (t.classList && t.classList.contains('car-track')) requestAnimationFrame(() => carSync(t));
+  }, true);
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('.car-btn, .car-dot'); if (!b) return;
+    const car = b.closest('.car'), tr = car.querySelector('.car-track');
+    if (b.classList.contains('car-dot')) carGo(car, +b.dataset.i);
+    else carGo(car, carIdx(tr) + (b.classList.contains('next') ? 1 : -1));
+  });
+  addEventListener('keydown', (e) => {
+    if ((e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') || !e.target.closest) return;
+    const car = e.target.closest('.car'); if (!car || car.classList.contains('single')) return;
+    e.preventDefault();
+    carGo(car, carIdx(car.querySelector('.car-track')) + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+  let drag = null, noClick = false;
+  document.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0 || !e.target.closest) return;
+    const tr = e.target.closest('.car-track');
+    if (!tr || tr.parentElement.classList.contains('single')) return;
+    drag = { tr, x: e.clientX, s: tr.scrollLeft, moved: false };
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) < 6) return;
+    drag.moved = true; drag.tr.classList.add('drag');
+    drag.tr.scrollLeft = drag.s - dx;
+  });
+  const endDrag = (e) => {
+    if (!drag) return;
+    const { tr, moved, x, s } = drag; drag = null;
+    if (!moved) return;
+    noClick = true; setTimeout(() => { noClick = false; }, 60);
+    const w = tr.clientWidth || 1, dx = e.clientX - x;
+    let i = Math.round(s / w) + (Math.abs(dx) > w * 0.15 ? (dx < 0 ? 1 : -1) : 0);
+    i = Math.max(0, Math.min(tr.children.length - 1, i));
+    tr.scrollTo({ left: i * w, behavior: 'smooth' });
+    setTimeout(() => tr.classList.remove('drag'), 450);
+  };
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
+  document.addEventListener('click', (e) => { if (noClick) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+  /* ---------- Automatyczne tłumaczenie PL -> EN ----------
+     Kolejność: pole *_en z JSON (jeśli jest) -> słownik -> pamięć podręczna ->
+     tłumacz wbudowany w Chrome -> Google (translate.googleapis.com) -> MyMemory */
+  const fmt = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/~~(.+?)~~/g, '<s>$1</s>');
+  const trCache = new Map();
+  try { Object.entries(JSON.parse(localStorage.getItem('pl-trcache') || '{}')).forEach(([k, v]) => { if (typeof v === 'string') trCache.set(k, v); }); } catch (e) {}
+  const saveTr = () => {
+    try {
+      while (trCache.size > 300) trCache.delete(trCache.keys().next().value);
+      localStorage.setItem('pl-trcache', JSON.stringify(Object.fromEntries(trCache)));
+    } catch (e) {}
+  };
+  const trSrc = new Map(), trPend = new Map();
+  let tidSeq = 0, active = 0, nativeTr = null, nativeOff = false;
+  const waitQ = [];
+  const slot = async () => { if (active >= 4) await new Promise(r => waitQ.push(r)); active++; };
+  const free = () => { active--; const n = waitQ.shift(); if (n) n(); };
+
+  // tekst do wstawienia w HTML; w EN bez gotowego tłumaczenia zwraca <span data-tid> i tłumaczy w tle
+  function txt(raw, over) {
+    raw = raw || '';
+    if (!raw || currentLang !== 'en') return fmt(raw);
+    if (over) return fmt(over);
+    if (trCache.has(raw)) return fmt(trCache.get(raw));
+    const id = String(++tidSeq); trSrc.set(id, raw);
+    return `<span data-tid="${id}">${fmt(raw)}</span>`;
+  }
+  function flushTr(rootEl) {
+    const els = [...rootEl.querySelectorAll('[data-tid]')];
+    if (rootEl.matches && rootEl.matches('[data-tid]')) els.push(rootEl);
+    els.forEach(el => {
+      const id = el.dataset.tid, src = trSrc.get(id);
+      el.removeAttribute('data-tid'); trSrc.delete(id);
+      if (!src) return;
+      autoTr(src).then(t => { if (el.isConnected && currentLang === 'en') el.innerHTML = fmt(t); }).catch(() => {});
+    });
+  }
+  async function viaNative(t) {
+    if (nativeOff) throw new Error('off');
+    if (!nativeTr) {
+      try {
+        const o = { sourceLanguage: 'pl', targetLanguage: 'en' };
+        if (!('Translator' in self) || await Translator.availability(o) !== 'available') throw new Error('na');
+        nativeTr = await Translator.create(o);
+      } catch (e) { nativeOff = true; throw e; }
+    }
+    return nativeTr.translate(t);
+  }
+  async function viaGoogle(t) {
+    const r = await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=pl&tl=en&dt=t&q=' + encodeURIComponent(t), { credentials: 'omit' });
+    if (!r.ok) throw new Error('G' + r.status);
+    return (await r.json())[0].map(s => s[0]).join('');
+  }
+  async function viaMyMemory(t) {
+    const r = await fetch('https://api.mymemory.translated.net/get?langpair=pl%7Cen&q=' + encodeURIComponent(t), { credentials: 'omit' });
+    const j = await r.json();
+    if (!r.ok || j.responseStatus != 200) throw new Error('MM');
+    return j.responseData.translatedText;
+  }
+  async function trChunk(t) {
+    for (const f of [viaNative, viaGoogle, viaMyMemory]) { try { const o = await f(t); if (o) return o; } catch (e) {} }
+    throw new Error('no translator');
+  }
+  function chunks(line) {
+    const out = []; let cur = '';
+    (line.match(/[^.!?…]+[.!?…]*\s*/g) || [line]).forEach(s => {
+      while (s.length > 450) {
+        let k = s.lastIndexOf(' ', 450); if (k < 100) k = 450;
+        if (cur) { out.push(cur); cur = ''; }
+        out.push(s.slice(0, k)); s = s.slice(k);
+      }
+      if ((cur + s).length > 450) { out.push(cur); cur = ''; }
+      cur += s;
+    });
+    out.push(cur);
+    return out.filter(x => x.trim());
+  }
+  function autoTr(text) {
+    const known = DICT.get(text.trim().replace(/\s+/g, ' '));
+    if (known) return Promise.resolve(known);
+    if (trCache.has(text)) return Promise.resolve(trCache.get(text));
+    if (trPend.has(text)) return trPend.get(text);
+    const p = (async () => {
+      const lines = await Promise.all(text.split('\n').map(async (line) => {
+        if (!/\p{L}/u.test(line)) return line;
+        const res = [];
+        for (const c of chunks(line)) { await slot(); try { res.push(await trChunk(c)); } finally { free(); } }
+        return res.join(' ').replace(/ {2,}/g, ' ').trim();
+      }));
+      const out = lines.join('\n');
+      trCache.set(text, out); saveTr();
+      return out;
+    })();
+    trPend.set(text, p);
+    p.catch(() => {}).finally(() => trPend.delete(text));
+    return p;
+  }
+
+  /* ---------- Aktualności z posts.json (najnowsze na górze) ---------- */
+  const POSTS_PER_PAGE = 4;
+  let postsData = [], postsPage = 1;
+  const postTime = (s) => {
+    const m = String(s || '').match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/);
+    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)) : toTime(s);
+  };
+  function pageButtons(pager, pagesCount, cur, go) {
+    pager.innerHTML = '';
+    if (pagesCount <= 1) return;
+    const mk = (html, page, o = {}) => {
+      const b = document.createElement('button');
+      b.innerHTML = html; b.disabled = !!o.disabled;
+      if (o.on) b.classList.add('on');
+      if (o.label) b.setAttribute('aria-label', o.label);
+      b.addEventListener('click', () => go(page));
+      return b;
+    };
+    pager.append(mk('<svg class="icon"><use href="#i-left"/></svg>', cur - 1, { disabled: cur === 1, label: L('Poprzednia', 'Previous') }));
+    for (let i = 1; i <= pagesCount; i++) pager.append(mk(String(i), i, { on: i === cur }));
+    pager.append(mk('<svg class="icon"><use href="#i-right"/></svg>', cur + 1, { disabled: cur === pagesCount, label: L('Następna', 'Next') }));
+  }
+  function renderPosts() {
+    const list = $('#postsList'), pager = $('#postsPager');
+    if (!list) return;
+    const pagesCount = Math.max(1, Math.ceil(postsData.length / POSTS_PER_PAGE));
+    postsPage = Math.min(Math.max(1, postsPage), pagesCount);
+    const slice = postsData.slice((postsPage - 1) * POSTS_PER_PAGE, postsPage * POSTS_PER_PAGE);
+    list.innerHTML = slice.map(p => {
+      const img = p.image ? `<div class="media pm"><img decoding="async" src="${esc(p.image)}" alt="${esc(L('Miniaturka wpisu', 'Post thumbnail'))}"></div>` : '';
+      const body = `${img}<div class="body"><div class="meta"><svg class="icon"><use href="#i-cal"/></svg>${esc(fmtDate(p.date))}</div><h3>${txt(p.title, p.title_en)}</h3><p>${txt(p.text, p.text_en)}</p></div>`;
+      return p.url
+        ? `<a class="card post" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${body}</a>`
+        : `<article class="card post">${body}</article>`;
+    }).join('');
+    if (pager) pageButtons(pager, pagesCount, postsPage, (n) => { postsPage = n; renderPosts(); list.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  }
+  const sanitizePost = (p, i) => {
+    if (!p || typeof p !== 'object') return null;
+    const title = str(p.title, 200); if (!title) return null;
+    return { _i: i, date: str(p.date, 16), title, title_en: str(p.title_en, 200), text: str(p.text, 4000), text_en: str(p.text_en, 4000), url: safeUrl(p.url), image: safeMedia(p.image) };
+  };
+  async function loadPosts() {
+    try {
+      const res = await fetch('posts.json', { cache: 'no-cache', credentials: 'omit' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const arr = Array.isArray(data) ? data : data.posts;
+      if (!Array.isArray(arr)) throw new Error('Invalid JSON');
+      postsData = arr.slice(0, 500).map(sanitizePost).filter(Boolean)
+        .sort((a, b) => (postTime(b.date) - postTime(a.date)) || (a._i - b._i));
+      renderPosts();
+    } catch (err) {
+      console.error('posts.json:', err);
+      const l = $('#postsList');
+      if (l) l.innerHTML = `<div class="mod-empty">${L('Nie udało się wczytać wpisów (posts.json).', 'Failed to load posts (posts.json).')}</div>`;
+    }
+  }
+  loadPosts();
 
   /* ---------- Tłumaczenie strony PL <-> EN ---------- */
   const DICT = new Map(Object.entries({
@@ -1581,6 +1768,7 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
   }));
   const PATTERNS = [
     [/^Wersja: /, 'Version: '],
+    [/^Wersja (?=\d)/, 'Version '],
     [/^Autor: /, 'Author: '],
     [/^Data wydania /, 'Release date '],
     [/^Zdjęcie (\d+)$/, 'Photo $1']
@@ -1646,10 +1834,10 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
     }
   }
 
-  // tłumaczy treści doklejane dynamicznie (lista modów, filtry, okno modala, paginacja)
+  // tłumaczy treści doklejane dynamicznie (lista modów, wpisy, filtry, okno modala, paginacja)
   new MutationObserver((muts) => {
     if (currentLang !== 'en') return;
-    muts.forEach(m => m.addedNodes.forEach(translateTree));
+    muts.forEach(m => m.addedNodes.forEach(n => { translateTree(n); if (n.nodeType === 1) flushTr(n); }));
   }).observe(document.body, { childList: true, subtree: true });
 
   const langBtn = $('#langBtn');
@@ -1657,10 +1845,12 @@ footer{border-top:1px solid var(--line);background:var(--bg)}
 
   function setLang(lang) {
     currentLang = lang === 'en' ? 'en' : 'pl';
-    langLabel.textContent = $('#langFlag use').setAttribute('href', currentLang === 'pl' ? '#i-flag-gb' : '#i-flag-pl');
+    langLabel.textContent = currentLang === 'pl' ? 'EN' : 'PL';
+    $('#langFlag use').setAttribute('href', currentLang === 'pl' ? '#i-flag-gb' : '#i-flag-pl');
     document.documentElement.lang = currentLang;
     document.title = currentLang === 'en' ? TITLE_EN : TITLE_PL;
     translateTree(document.body);
+    renderPosts();
     if (modsData.mods.length) {
       renderModsPage();
       if (openModId) {
