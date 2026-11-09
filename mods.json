@@ -63,8 +63,8 @@
     },
     {
       "id": "siec-trolejbusowa",
-      "title": "Sieć trolejbusowa",
-      "author": "Gumolit",
+      "title": "Sieć trolejbusowa Projekt Lublin + Trollino IV by GUMOLIT"
+      "author": "GUMOLIT",
       "categories": ["siec"],
       "versions": [
         {
@@ -73,19 +73,19 @@
           "description_en": "Trolleybus network with switches, suspensions and LED indicators outside the depot. Corrected network routing and old wires removed from selected intersections. HOFs, announcements and the MEGA AI group using the Trollino 18.",
           "media": { "type": "video", "src": "image/F1HsbtP.mp4", "alt": "Sieć trolejbusowa" },
           "downloads": [
-            { "label": "Aktualna wersja", "label_en": "Current version", "url": "https://docs.google.com/uc?export=download&id=1lz8CTv5v6vP9B9DKi6xl839HoJsEwF2w" }
+            { "label": "wersja archwialna", "label_en": "Current version", "url": "https://docs.google.com/uc?export=download&id=1lz8CTv5v6vP9B9DKi6xl839HoJsEwF2w" }
           ]
         },
         {
-          "version": "3.1.3",
-          "date": "2026-11-04",
-          "description": "* Obsługa wielu kanałów systemu sterowania zwrotnicami.\n* Poprawki generalne dźwięków i możliwość ustawiania swoich dźwięków związanych z działaniem trolejbusów w każdym pojeździe.\n* Wyciszenie tego irytującego szumienia od kontaktu z siecią.\n* Zmniejszenie natężenia iskrzenia.\n* Usunięcie żółtego elementu i światełka nad zwrotnicami.\n* Dźwięk mechanizmu zmiany kierunku na zwrotnicy.\n\nA tu kilka zdjęć ukazujących następną wersję sieci na mapie na testowej wersji OpenOMSI, nowe wyświetlacze zgodne z typem i kolorystyką w rzeczywistości:\n\nTu jest jeszcze filmik jak ktoś nie widział: https://streamable.com/ecaf10",
-          "description_en": "* Support for multiple channels of the turnout control system.\n* General sound fixes and the ability to set your own sounds related to trolleybus operations in each vehicle.\n* Muting that annoying buzzing from contact with the network.\n* Reducing the intensity of sparking.\n* Removal of the yellow element and the little light above the turnouts.\n* Sound of the direction-changing mechanism on the turnout.\n\nAnd here are a few photos showing the next version of the network on the map in the test version of OpenOMSI, new displays matching the type and color scheme in real life:\n\nHere's also a little video that some people haven’t seen: https://streamable.com/ecaf10",
-          "media": { "type": "image", "src": "image/1.png", "alt": "Sieć trolejbusowa" },
-          "downloads": [
-            { "label": "Brak linku pobierz wersję poniżej.", "label_en": "No link, download the version below.", "url": "Brak" }
-          ]
-        }
+  "version": "Wersja 3.5",
+  "date": "2026-11-09",
+  "description": "Mapa Projekt Lublin 2017 z siecią trolejbusową oraz Trollino 12 i 18 w barwach MPK Lublin, w jednej paczce.\n\n- Zwrotnice sterowane radiowo z kabiny, z wyświetlaczami Elektroline i strzałkami LED.\n- Nowe podwieszenie sieci: liny, wieszaki, odciągi, krzyżownice i izolatory sekcyjne.\n- Trollino 12 (MVP Continental, SRG-7000P) i 18 (MOKI II, SRG-6000P) z R&G ETL.\n- Odbieraki z napędem i dźwiękami, obsługa ręczna linką. Jazda pod siecią i na baterii.\n- Do tego wiele innych poprawek i ulepszeń mapy i pojazdów.\n\nWymagania: Projekt Lublin 2017 3.1 oraz Solaris Urbino IV Pack 0.9.1 (Iwo).",
+  "description_en": "Projekt Lublin 2017 map with a trolleybus network and Trollino 12 and 18 in MPK Lublin colors, in a single package.\n\n- Radio-controlled turnouts from the cab, with Elektroline displays and LED arrows.\n- New network suspension: wires, hangers, guy lines, crossings, and sectional insulators.\n- Trollino 12 (MVP Continental, SRG-7000P) and 18 (MOKI II, SRG-6000P) with R&G ETL.\n- Current collectors with drive and sounds, manual rope operation. Driving under the network and on battery.\n- Plus many other fixes and improvements to the map and vehicles.\n\nRequirements: Projekt Lublin 2017 3.1 and Solaris Urbino IV Pack 0.9.1 (Iwo).",
+  "media": { "type": "image", "src": "image/1.png", "alt": "Sieć trolejbusowa" },
+  "downloads": [
+    { "label": "POBIERZ", "label_en": "DOWNLOAD", "url": "https://drive.google.com/file/d/1t3OZLblKxyDu4Wg61oeTeJLZ1LzsNzSw/view?usp=drive_link" }
+  ]
+}
       ]
     },
     {
