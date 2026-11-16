@@ -106,8 +106,6 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></symbol>
 </svg>
 
-<canvas id="particles"></canvas>
-
 <header>
   <div class="wrap navbar">
     <a class="logo" href="#glowna"><img id="logoImg" fetchpriority="high" decoding="async" alt="Metaliczne logo Projekt Lublin" data-i18n-attr="alt:common.logoAlt" src="image/Metaliczny_logo_Projekt_Lublin.png" width="1013" height="448" style="width: 50%; height: auto; max-width: 2000px;"></a>
@@ -172,7 +170,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
   <div class="layout">
     <div>
-      <!-- Wpisy są wczytywane z pliku posts.json (najnowsze na górze) -->
+      <!-- Wpisy są wczytywane z pliku json/posts.json (najnowsze na górze) -->
       <div class="posts" id="postsList"></div>
       <div class="pager" id="postsPager"></div>
 
@@ -265,67 +263,8 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     <h1 data-i18n="progress.title">Rozwój</h1>
   </div>
 
-  <div class="card progress-card">
-    <div class="progress-top">
-      <div class="line-tag">
-        <span class="line-num">151</span>
-        <div><h2 data-i18n="progress.line">Linia 151</h2><small data-i18n="progress.completion">Postęp ukończenia</small></div>
-      </div>
-    </div>
-    <div class="progress-info">
-      <span><span data-i18n="progress.done">Zrobione:</span> <b id="cDone">0</b></span>
-      <span><span data-i18n="progress.todo">Do zrobienia:</span> <b id="cTodo">0</b></span>
-    </div>
-    <div class="route-legend">
-      <div class="item"><span class="swatch green"></span><span data-i18n="progress.legend.completed">Ukończony odcinek</span></div>
-      <div class="item"><span class="swatch orange"></span><span data-i18n="progress.legend.renovation">Odcinek do renowacji</span></div>
-      <div class="item"><span class="swatch red"></span><span data-i18n="progress.legend.streets">Odcinek z utworzonymi ulicami</span></div>
-    </div>
-  </div>
-
-  <div class="card route-card" id="routeCard" data-progress-red="90" data-progress-orange="60" data-progress-green="30">
-    <div class="route-stage">
-      <img decoding="async" fetchpriority="low" src="image/Przebiegtrasy.png" alt="Przebieg trasy linii 151 od Węglina do Abramowic" data-i18n-attr="alt:progress.routeAlt" width="1376" height="752">
-      <svg viewBox="0 0 1376 752" preserveAspectRatio="none" aria-hidden="true">
-        <path id="routeRed" class="route-line" pathLength="100" fill="none" stroke="#ef2b2b" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round"
-          d="M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650"/>
-        <path id="routeOrange" class="route-line" pathLength="100" fill="none" stroke="#ff7a1a" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round"
-          d="M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650"/>
-        <path id="routeGreen" class="route-line" pathLength="100" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round"
-          d="M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650"/>
-
-        <g class="route-point">
-          <rect x="168" y="603" width="104" height="36" rx="18" fill="#050505"/>
-          <text x="182" y="628" textLength="78" lengthAdjust="spacingAndGlyphs">WĘGLIN</text>
-          <circle cx="152" cy="621" r="12" fill="#000" stroke="#fff" stroke-width="5"/>
-        </g>
-        <g class="route-point">
-          <rect x="1233" y="632" width="132" height="36" rx="18" fill="#050505"/>
-          <text x="1247" y="657" textLength="104" lengthAdjust="spacingAndGlyphs">ABRAMOWICE</text>
-          <circle cx="1221" cy="650" r="12" fill="#000" stroke="#fff" stroke-width="5"/>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <div class="tasks">
-    <div class="card">
-      <h3><svg class="icon ok"><use href="#i-check"/></svg><span data-i18n="progress.doneHeading">Zrobione</span> <span class="count" id="hDone"></span></h3>
-      <ul class="task-list done-list">
-        <li data-i18n="progress.tasks.krasnickaStreets">Wykonanie Ulic na Al.Kraśnickiej</li>
-        <li data-i18n="progress.tasks.krasnickaObjects">Wykonanie wszystkich obiektów na Al.Kraśnickiej</li>
-        <li data-i18n="progress.tasks.targiGluska">Ulice na odcinku Targi-Głuska</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3><svg class="icon no"><use href="#i-clock"/></svg><span data-i18n="progress.todoHeading">Do zrobienia</span> <span class="count" id="hTodo"></span></h3>
-      <ul class="task-list todo-list">
-        <li data-i18n="progress.tasks.gluskaAbramowice">Ulice na odcinku Głuska-Abramowice</li>
-        <li data-i18n="progress.tasks.kunickiegoObjects">Wykonanie Obiektów na odcinku Kunickiego-Abramowice</li>
-        <li data-i18n="progress.tasks.raclawickie">Modernizacja AL.Racławickich</li>
-      </ul>
-    </div>
-  </div>
+  <!-- Zawartość (linie, legenda, trasa, listy zadań, liczniki) generuje main.js z json/progress.json -->
+  <div id="progressRoot"></div>
 </section>
 
 <section class="page" id="page-wspolpraca">
@@ -407,6 +346,8 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
         <h3>Rzemieślnicza</h3>
         <p></p>
       </figcaption>
+    </figure>
+    <figure class="card">
       <div class="media">
         <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
