@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://translate.googleapis.com https://api.mymemory.translated.net; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>
 if (window.top !== window.self) { try { window.top.location = window.self.location; } catch (e) { document.documentElement.style.display = 'none'; } }
@@ -110,24 +110,24 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <header>
   <div class="wrap navbar">
-    <a class="logo" href="#glowna"><img id="logoImg" fetchpriority="high" decoding="async" alt="Metaliczne logo Projekt Lublin" src="image/Metaliczny_logo_Projekt_Lublin.png" width="1013" height="448" style="width: 50%; height: auto; max-width: 2000px;"></a>
+    <a class="logo" href="#glowna"><img id="logoImg" fetchpriority="high" decoding="async" alt="Metaliczne logo Projekt Lublin" data-i18n-attr="alt:common.logoAlt" src="image/Metaliczny_logo_Projekt_Lublin.png" width="1013" height="448" style="width: 50%; height: auto; max-width: 2000px;"></a>
 
     <nav class="nav" id="nav">
-      <a href="#download"><svg class="icon"><use href="#i-download"/></svg>Download</a>
-      <a href="#mod"><svg class="icon"><use href="#i-mod"/></svg>MODY</a>
-      <a href="#rozwoj"><svg class="icon"><use href="#i-dev"/></svg>Rozwój</a>
-      <a href="#wspolpraca"><svg class="icon"><use href="#i-link"/></svg>Współpraca</a>
-      <a href="#galeria"><svg class="icon"><use href="#i-image"/></svg>Galeria</a>
-      <a href="#info"><svg class="icon"><use href="#i-info"/></svg>Info</a>
+      <a href="#download"><svg class="icon"><use href="#i-download"/></svg><span data-i18n="nav.download">Download</span></a>
+      <a href="#mod"><svg class="icon"><use href="#i-mod"/></svg><span data-i18n="nav.mods">MODY</span></a>
+      <a href="#rozwoj"><svg class="icon"><use href="#i-dev"/></svg><span data-i18n="nav.progress">Rozwój</span></a>
+      <a href="#wspolpraca"><svg class="icon"><use href="#i-link"/></svg><span data-i18n="nav.coop">Współpraca</span></a>
+      <a href="#galeria"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="nav.gallery">Galeria</span></a>
+      <a href="#info"><svg class="icon"><use href="#i-info"/></svg><span data-i18n="nav.info">Info</span></a>
 
       <!-- Widoczne tylko na mobile: to, co na desktopie jest w osobnych przyciskach -->
       <div class="nav-extra">
         <a class="nav-discord" href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer"><svg class="icon fill"><use href="#i-discord"/></svg>Discord</a>
-        <button class="nav-item" type="button" data-act="lang" aria-label="Change language / Zmień język"><svg class="flag lang-flag" aria-hidden="true"><use href="#i-flag-gb"/></svg><span class="lang-label">EN</span></button>
-        <button class="nav-item" type="button" data-act="theme" aria-label="Zmień motyw">
+        <button class="nav-item" type="button" data-act="lang" aria-label="Zmień język" data-i18n-attr="aria-label:common.changeLanguage"><svg class="flag lang-flag" aria-hidden="true"><use href="#i-flag-gb"/></svg><span class="lang-label">EN</span></button>
+        <button class="nav-item" type="button" data-act="theme" aria-label="Zmień motyw" data-i18n-attr="aria-label:common.changeTheme">
           <svg class="icon i-moon"><use href="#i-moon"/></svg>
           <svg class="icon i-sun"><use href="#i-sun"/></svg>
-          <span>Motyw</span>
+          <span data-i18n="common.theme">Motyw</span>
         </button>
       </div>
     </nav>
@@ -139,23 +139,23 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
       <!-- Jedno menu: Facebook + język + motyw -->
       <div class="more-menu" id="moreMenu">
-        <button class="icon-btn" id="moreBtn" type="button" aria-label="Więcej" aria-haspopup="true" aria-expanded="false" aria-controls="morePanel">
+        <button class="icon-btn" id="moreBtn" type="button" aria-label="Więcej" data-i18n-attr="aria-label:common.more" aria-haspopup="true" aria-expanded="false" aria-controls="morePanel">
           <svg class="icon"><use href="#i-dots"/></svg>
         </button>
         <div class="more-panel" id="morePanel">
         
-          <button class="more-item" id="langBtn" type="button" aria-label="Change language / Zmień język">
+          <button class="more-item" id="langBtn" type="button" aria-label="Zmień język" data-i18n-attr="aria-label:common.changeLanguage">
             <svg class="flag lang-flag" id="langFlag" aria-hidden="true"><use href="#i-flag-gb"/></svg><span class="lang-label" id="langLabel">EN</span>
           </button>
-          <button class="more-item" id="themeBtn" type="button" aria-label="Zmień motyw">
+          <button class="more-item" id="themeBtn" type="button" aria-label="Zmień motyw" data-i18n-attr="aria-label:common.changeTheme">
             <svg class="icon i-moon"><use href="#i-moon"/></svg>
             <svg class="icon i-sun"><use href="#i-sun"/></svg>
-            <span>Motyw</span>
+            <span data-i18n="common.theme">Motyw</span>
           </button>
         </div>
       </div>
 
-      <button class="icon-btn" id="menuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg class="icon"><use href="#i-menu"/></svg></button>
+      <button class="icon-btn" id="menuBtn" type="button" aria-label="Menu" data-i18n-attr="aria-label:common.menu" aria-expanded="false" aria-controls="nav"><svg class="icon"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </header>
@@ -165,9 +165,9 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <section class="page" id="page-glowna">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-bus"/></svg>Aktualności</div>
-    <h1>Projekt Lublin</h1>
-    <p>Najnowsze wpisy i informacje o postępach projektu.</p>
+    <div class="eyebrow"><svg class="icon"><use href="#i-bus"/></svg><span data-i18n="home.eyebrow">Aktualności</span></div>
+    <h1 data-i18n="home.title">Projekt Lublin</h1>
+    <p data-i18n="home.lead">Najnowsze wpisy i informacje o postępach projektu.</p>
   </div>
 
   <div class="layout">
@@ -178,7 +178,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
       <div class="support-box">
         <a class="btn" href="https://suppi.pl/projekt-lublin-omsi2" target="_blank" rel="noopener noreferrer">
-          <svg class="icon"><use href="#i-heart"/></svg>Wesprzyj twórców
+          <svg class="icon"><use href="#i-heart"/></svg><span data-i18n="home.support">Wesprzyj twórców</span>
         </a>
       </div>
     </div>
@@ -187,69 +187,69 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <section class="page" id="page-download">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-download"/></svg>Pobieranie</div>
-    <h1>Download</h1>
-    <p>Pobierz najnowszą wersję mapy i dodatków.</p>
+    <div class="eyebrow"><svg class="icon"><use href="#i-download"/></svg><span data-i18n="download.eyebrow">Pobieranie</span></div>
+    <h1 data-i18n="download.title">Download</h1>
+    <p data-i18n="download.lead">Pobierz najnowszą wersję mapy i dodatków.</p>
   </div>
   <div class="dl-grid">
     <div class="card dl">
       <div class="ic"><svg class="icon"><use href="#i-box"/></svg></div>
-      <h3>Mapa Projekt Lublin</h3>
-      <div class="meta"><svg class="icon"><use href="#i-clock"/></svg>Wersja: 3.0</div>
-      <p>Po prostu pobierz.</p>
-      <a class="btn" href="https://drive.google.com/file/d/1SNj1RhmgZAvMokXrYNw80QjWJllW228w/view" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"/></svg>Pobierz</a>
+      <h3 data-i18n="download.mapTitle">Mapa Projekt Lublin</h3>
+      <div class="meta"><svg class="icon"><use href="#i-clock"/></svg><span data-i18n="common.versionValue" data-v="3.0">Wersja: 3.0</span></div>
+      <p data-i18n="download.mapDesc">Po prostu pobierz.</p>
+      <a class="btn" href="https://drive.google.com/file/d/1SNj1RhmgZAvMokXrYNw80QjWJllW228w/view" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"/></svg><span data-i18n="common.download">Pobierz</span></a>
     </div>
     <div class="card dl">
       <div class="ic"><svg class="icon"><use href="#i-layers"/></svg></div>
       <h3>3.1 Patch</h3>
-      <div class="meta"><svg class="icon"><use href="#i-clock"/></svg>Wersja: 3_1.7z</div>
-      <p>Opis pliku do pobrania.</p>
-      <a class="btn ghost" href="https://drive.google.com/file/d/1q6MtrCYyjl5p9Pfj3M-oiu_GfjnOCvi2/view" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"/></svg>Pobierz</a>
+      <div class="meta"><svg class="icon"><use href="#i-clock"/></svg><span data-i18n="common.versionValue" data-v="3_1.7z">Wersja: 3_1.7z</span></div>
+      <p data-i18n="download.patchDesc">Opis pliku do pobrania.</p>
+      <a class="btn ghost" href="https://drive.google.com/file/d/1q6MtrCYyjl5p9Pfj3M-oiu_GfjnOCvi2/view" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"/></svg><span data-i18n="common.download">Pobierz</span></a>
     </div>
   </div>
 
-  <h2 class="arch-head" id="archiwum"><svg class="icon"><use href="#i-layers"/></svg>Archiwum</h2>
-  <p class="arch-sub">Poprzednie wersje mapy.</p>
+  <h2 class="arch-head" id="archiwum"><svg class="icon"><use href="#i-layers"/></svg><span data-i18n="download.archive.heading">Archiwum</span></h2>
+  <p class="arch-sub" data-i18n="download.archive.sub">Poprzednie wersje mapy.</p>
   <div class="arch">
     <div class="card ver">
       <span class="tag">v2.0</span>
-      <div class="txt"><h4>Projekt Lublin 2.0</h4><p>Data wydania 09.08.18<br>
-        · dodano nową linię – 156<br>
-        · zaktualizowano trasę linii 55<br>
-        · zaktualizowano otoczenie, stan na 2017/2018 rok.</p></div>
-      <a class="btn ghost" href="https://drive.google.com/open?id=1BufN91J4SF_T0DEdlpeOVboKchWGx-es" aria-label="Pobierz"><svg class="icon"><use href="#i-download"/></svg></a>
+      <div class="txt"><h4>Projekt Lublin 2.0</h4><p><span data-i18n="download.archive.releaseDate">Data wydania</span> 09.08.18<br>
+        · <span data-i18n="download.archive.v2.line156">dodano nową linię – 156</span><br>
+        · <span data-i18n="download.archive.v2.route55">zaktualizowano trasę linii 55</span><br>
+        · <span data-i18n="download.archive.v2.surroundings">zaktualizowano otoczenie, stan na 2017/2018 rok.</span></p></div>
+      <a class="btn ghost" href="https://drive.google.com/open?id=1BufN91J4SF_T0DEdlpeOVboKchWGx-es" aria-label="Pobierz" data-i18n-attr="aria-label:common.download"><svg class="icon"><use href="#i-download"/></svg></a>
     </div>
     <div class="card ver">
       <span class="tag">v1.0</span>
-      <div class="txt"><h4>Projekt Lublin 1.0</h4><p>Data wydania  2013  <br> · Dodano linię 55</p></div>
-      <a class="btn ghost" href="https://mega.nz/#!iREF1ZDT!QGIcBx_Pm7yJvBmMnStib53HQ4yHY2uN7pkcHFQOJ9g" aria-label="Pobierz"><svg class="icon"><use href="#i-download"/></svg></a>
+      <div class="txt"><h4>Projekt Lublin 1.0</h4><p><span data-i18n="download.archive.releaseDate">Data wydania</span> 2013<br> · <span data-i18n="download.archive.v1.line55">Dodano linię 55</span></p></div>
+      <a class="btn ghost" href="https://mega.nz/#!iREF1ZDT!QGIcBx_Pm7yJvBmMnStib53HQ4yHY2uN7pkcHFQOJ9g" aria-label="Pobierz" data-i18n-attr="aria-label:common.download"><svg class="icon"><use href="#i-download"/></svg></a>
     </div>
   </div>
 </section>
 
 <section class="page" id="page-mod">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-mod"/></svg>Modyfikacje</div>
-    <h1>MODY</h1>
-    <p>Modyfikacje stworzone przez społeczność. Szukaj, filtruj i sortuj.</p>
+    <div class="eyebrow"><svg class="icon"><use href="#i-mod"/></svg><span data-i18n="mods.eyebrow">Modyfikacje</span></div>
+    <h1 data-i18n="mods.title">MODY</h1>
+    <p data-i18n="mods.lead">Modyfikacje stworzone przez społeczność. Szukaj, filtruj i sortuj.</p>
   </div>
 
   <div class="mod-toolbar">
     <div class="mod-search-wrap">
       <svg class="icon"><use href="#i-search"/></svg>
-      <input type="search" class="mod-search" id="modSearch" maxlength="100" placeholder="Szukaj po nazwie, autorze, opisie…" autocomplete="off">
+      <input type="search" class="mod-search" id="modSearch" maxlength="100" placeholder="Szukaj po nazwie, autorze, opisie…" data-i18n-attr="placeholder:mods.searchPlaceholder" autocomplete="off">
     </div>
     <div class="mod-filters" id="modFilters">
     </div>
 
     <div class="mod-sort">
-      <label for="modSort">Sortuj:</label>
+      <label for="modSort" data-i18n="mods.sortLabel">Sortuj:</label>
       <select id="modSort">
-        <option value="date-desc">Najnowsze</option>
-        <option value="date-asc">Najstarsze</option>
-        <option value="title-asc">Nazwa A–Z</option>
-        <option value="title-desc">Nazwa Z–A</option>
-        <option value="author-asc">Autor A–Z</option>
+        <option value="date-desc" data-i18n="common.newest">Najnowsze</option>
+        <option value="date-asc" data-i18n="mods.sort.oldest">Najstarsze</option>
+        <option value="title-asc" data-i18n="mods.sort.nameAsc">Nazwa A–Z</option>
+        <option value="title-desc" data-i18n="mods.sort.nameDesc">Nazwa Z–A</option>
+        <option value="author-asc" data-i18n="mods.sort.authorAsc">Autor A–Z</option>
       </select>
     </div>
   </div>
@@ -261,31 +261,31 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <section class="page" id="page-rozwoj">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-dev"/></svg>Postęp prac</div>
-    <h1>Rozwój</h1>
+    <div class="eyebrow"><svg class="icon"><use href="#i-dev"/></svg><span data-i18n="progress.eyebrow">Postęp prac</span></div>
+    <h1 data-i18n="progress.title">Rozwój</h1>
   </div>
 
   <div class="card progress-card">
     <div class="progress-top">
       <div class="line-tag">
         <span class="line-num">151</span>
-        <div><h2>Linia 151</h2><small>Postęp ukończenia</small></div>
+        <div><h2 data-i18n="progress.line">Linia 151</h2><small data-i18n="progress.completion">Postęp ukończenia</small></div>
       </div>
     </div>
     <div class="progress-info">
-      <span>Zrobione: <b id="cDone">0</b></span>
-      <span>Do zrobienia: <b id="cTodo">0</b></span>
+      <span><span data-i18n="progress.done">Zrobione:</span> <b id="cDone">0</b></span>
+      <span><span data-i18n="progress.todo">Do zrobienia:</span> <b id="cTodo">0</b></span>
     </div>
     <div class="route-legend">
-      <div class="item"><span class="swatch green"></span>Ukończony odcinek</div>
-      <div class="item"><span class="swatch orange"></span>Odcinek do renowacji</div>
-      <div class="item"><span class="swatch red"></span>Odcinek z utworzonymi ulicami</div>
+      <div class="item"><span class="swatch green"></span><span data-i18n="progress.legend.completed">Ukończony odcinek</span></div>
+      <div class="item"><span class="swatch orange"></span><span data-i18n="progress.legend.renovation">Odcinek do renowacji</span></div>
+      <div class="item"><span class="swatch red"></span><span data-i18n="progress.legend.streets">Odcinek z utworzonymi ulicami</span></div>
     </div>
   </div>
 
   <div class="card route-card" id="routeCard" data-progress-red="90" data-progress-orange="60" data-progress-green="30">
     <div class="route-stage">
-      <img decoding="async" fetchpriority="low" src="image/Przebiegtrasy.png" alt="Przebieg trasy linii 151 od Węglina do Abramowic" width="1376" height="752">
+      <img decoding="async" fetchpriority="low" src="image/Przebiegtrasy.png" alt="Przebieg trasy linii 151 od Węglina do Abramowic" data-i18n-attr="alt:progress.routeAlt" width="1376" height="752">
       <svg viewBox="0 0 1376 752" preserveAspectRatio="none" aria-hidden="true">
         <path id="routeRed" class="route-line" pathLength="100" fill="none" stroke="#ef2b2b" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round"
           d="M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650"/>
@@ -310,19 +310,19 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
   <div class="tasks">
     <div class="card">
-      <h3><svg class="icon ok"><use href="#i-check"/></svg>Zrobione <span class="count" id="hDone"></span></h3>
+      <h3><svg class="icon ok"><use href="#i-check"/></svg><span data-i18n="progress.doneHeading">Zrobione</span> <span class="count" id="hDone"></span></h3>
       <ul class="task-list done-list">
-        <li>Wykonanie Ulic na Al.Kraśnickiej</li>
-        <li>Wykonanie wszystkich obiektów na Al.Kraśnickiej</li>
-        <li>Ulice na odcinku Targi-Głuska</li>
+        <li data-i18n="progress.tasks.krasnickaStreets">Wykonanie Ulic na Al.Kraśnickiej</li>
+        <li data-i18n="progress.tasks.krasnickaObjects">Wykonanie wszystkich obiektów na Al.Kraśnickiej</li>
+        <li data-i18n="progress.tasks.targiGluska">Ulice na odcinku Targi-Głuska</li>
       </ul>
     </div>
     <div class="card">
-      <h3><svg class="icon no"><use href="#i-clock"/></svg>Do zrobienia <span class="count" id="hTodo"></span></h3>
+      <h3><svg class="icon no"><use href="#i-clock"/></svg><span data-i18n="progress.todoHeading">Do zrobienia</span> <span class="count" id="hTodo"></span></h3>
       <ul class="task-list todo-list">
-        <li>Ulice na odcinku Głuska-Abramowice</li>
-        <li>Wykonanie Obiektów na odcinku Kunickiego-Abramowice </li>
-        <li>Modernizacja AL.Racławickich</li>
+        <li data-i18n="progress.tasks.gluskaAbramowice">Ulice na odcinku Głuska-Abramowice</li>
+        <li data-i18n="progress.tasks.kunickiegoObjects">Wykonanie Obiektów na odcinku Kunickiego-Abramowice</li>
+        <li data-i18n="progress.tasks.raclawickie">Modernizacja AL.Racławickich</li>
       </ul>
     </div>
   </div>
@@ -332,16 +332,16 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   <div class="coop-scene">
 
     <div class="coop-hero" data-fx="hero">
-      <div class="fx"><h1>Pracuj z nami</h1></div>
+      <div class="fx"><h1 data-i18n="coop.heroTitle">Pracuj z nami</h1></div>
     </div>
 
     <!-- Prace: podmień src na PNG z przezroczystym tłem (sam budynek), reszta zadziała bez zmian -->
     <div class="works">
       <figure class="work" data-fx="work" data-depth="1.5" data-tilt="18">
-        <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/1.png" alt=""><figcaption>Budynek na placu Bychawskim</figcaption></div>
+        <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/1.png" alt=""><figcaption data-i18n="coop.workCaption">Budynek na placu Bychawskim</figcaption></div>
       </figure>
       <figure class="work" data-fx="work" data-depth=".7" data-tilt="-14">
-        <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/2.png" alt=""><figcaption>Budynek na placu Bychawskim</figcaption></div>
+        <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/2.png" alt=""><figcaption data-i18n="coop.workCaption">Budynek na placu Bychawskim</figcaption></div>
       </figure>
     </div>
 
@@ -349,42 +349,42 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
     <div class="req">
       <span class="req-node" aria-hidden="true"></span>
-      <h2>Wymagania</h2>
+      <h2 data-i18n="coop.requirementsTitle">Wymagania</h2>
 
       <div class="req-flow">
         <article class="req-item" data-side="left" data-tilt="28">
           <div class="fx">
-            <h3><svg class="icon"><use href="#i-cal"/></svg>Długoterminowość</h3>
-            <p>Mapa powstaje miesiącami. Szukamy osób, które zostaną z nami na dłużej i będą regularnie pracować nad swoją częścią.</p>
+            <h3><svg class="icon"><use href="#i-cal"/></svg><span data-i18n="coop.longTerm.title">Długoterminowość</span></h3>
+            <p data-i18n="coop.longTerm.text">Mapa powstaje miesiącami. Szukamy osób, które zostaną z nami na dłużej i będą regularnie pracować nad swoją częścią.</p>
             <div class="tl" aria-hidden="true">
               <div class="tl-bar"><span class="tl-fill"></span></div>
               <span class="tl-cut" style="--at:.25"><i>1</i></span>
               <span class="tl-cut" style="--at:.5"><i>2</i></span>
               <span class="tl-cut" style="--at:.75"><i>3</i></span>
-              <span class="tl-unit">miesiące</span>
+              <span class="tl-unit" data-i18n="coop.longTerm.unit">miesiące</span>
             </div>
           </div>
         </article>
 
         <article class="req-item" data-side="right" data-tilt="-28">
           <div class="fx">
-            <h3><svg class="icon"><use href="#i-check"/></svg>Dokładność</h3>
-            <p>Szukamy osób, które potrafią dokładnie wykonywać swoją pracę. Ulice, spliny i obiekty muszą pasować do prawdziwego Lublina, więc liczą się szczegóły.</p>
+            <h3><svg class="icon"><use href="#i-check"/></svg><span data-i18n="coop.accuracy.title">Dokładność</span></h3>
+            <p data-i18n="coop.accuracy.text">Szukamy osób, które potrafią dokładnie wykonywać swoją pracę. Ulice, spliny i obiekty muszą pasować do prawdziwego Lublina, więc liczą się szczegóły.</p>
           </div>
         </article>
 
         <article class="req-item" data-side="left" data-tilt="28">
           <div class="fx">
-            <h3><svg class="icon"><use href="#i-dev"/></svg>Doświadczenie</h3>
-            <p>Szukamy ludzi z doświadczeniem i z portfolio jednak przyjmujemy również osoby bez doświadczenia(dostaniesz materiały do nauki)  </p>
+            <h3><svg class="icon"><use href="#i-dev"/></svg><span data-i18n="coop.experience.title">Doświadczenie</span></h3>
+            <p data-i18n="coop.experience.text">Szukamy ludzi z doświadczeniem i z portfolio jednak przyjmujemy również osoby bez doświadczenia(dostaniesz materiały do nauki)</p>
           </div>
         </article>
 
         <article class="req-item" data-side="right" data-tilt="-28">
           <div class="fx">
-            <h3><svg class="icon fill"><use href="#i-discord"/></svg>Kontakt</h3>
-            <p>Zgłoś się przez ticket na naszym Discordzie.</p>
-            <a class="btn ghost" href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer">Napisz na Discordzie</a>
+            <h3><svg class="icon fill"><use href="#i-discord"/></svg><span data-i18n="coop.contact.title">Kontakt</span></h3>
+            <p data-i18n="coop.contact.text">Zgłoś się przez ticket na naszym Discordzie.</p>
+            <a class="btn ghost" href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer" data-i18n="coop.contact.button">Napisz na Discordzie</a>
           </div>
         </article>
       </div>
@@ -395,20 +395,20 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <section class="page" id="page-galeria">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-image"/></svg>Screenshoty</div>
-    <h1>Galeria</h1>
+    <div class="eyebrow"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="gallery.eyebrow">Screenshoty</span></div>
+    <h1 data-i18n="gallery.title">Galeria</h1>
   </div>
   <div class="gallery">
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/image.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/image.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
         <h3>Rzemieślnicza</h3>
         <p></p>
       </figcaption>
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
         <h3>Zwycięska</h3>
@@ -417,7 +417,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     </figure>
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace1.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace1.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
         <h3>Węglin</h3>
@@ -426,7 +426,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     </figure>
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace2.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace2.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
         <h3>Poczekajka</h3>
@@ -435,25 +435,25 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     </figure>
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace3.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace3.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
-        <h3>Szpital Wojewódzki</h3>
+        <h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3>
         <p></p>
       </figcaption>
     </figure>
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace4.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace4.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
-        <h3>Szpital Wojewódzki</h3>
+        <h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3>
         <p></p>
       </figcaption>
     </figure>
     <figure class="card">
       <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace5.png" alt="Miniaturka wpisu" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
+        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace5.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
       </div>
       <figcaption class="body">
         <h3>Wojciechowska</h3>
@@ -465,53 +465,53 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 
 <section class="page" id="page-info">
   <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-users"/></svg>Zespół</div>
-    <h1>Info</h1>
+    <div class="eyebrow"><svg class="icon"><use href="#i-users"/></svg><span data-i18n="info.eyebrow">Zespół</span></div>
+    <h1 data-i18n="info.title">Info</h1>
   </div>
 
   <div class="team">
     <div class="member">
-      <div class="avatar"><img decoding="async" src="image/avatar1.jpg" alt="Awatar 1"></div>
+      <div class="avatar"><img decoding="async" src="image/avatar1.jpg" alt="Awatar 1" data-i18n-attr="alt:info.avatar1"></div>
       <div class="box">
         <h2>Ziemniak</h2>
-        <h3>Główny twórca Projektu Lublin</h3>
-        <p>Edytor, Blender</p>
+        <h3 data-i18n="info.role">Główny twórca Projektu Lublin</h3>
+        <p data-i18n="info.skillsEditorBlender">Edytor, Blender</p>
       </div>
     </div>
     <div class="member">
-      <div class="avatar"><img decoding="async" src="image/avatar2.jpg" alt="Awatar 2"></div>
+      <div class="avatar"><img decoding="async" src="image/avatar2.jpg" alt="Awatar 2" data-i18n-attr="alt:info.avatar2"></div>
       <div class="box">
         <h2>Pikacz</h2>
-        <h3>Główny twórca Projektu Lublin</h3>
-        <p>Edytor, Blender, PR</p>
+        <h3 data-i18n="info.role">Główny twórca Projektu Lublin</h3>
+        <p data-i18n="info.skillsEditorBlenderPr">Edytor, Blender, PR</p>
       </div>
     </div>
   </div>
 
-  <h2 class="arch-head city"><svg class="icon"><use href="#i-pin"/></svg>O mieście</h2>
+  <h2 class="arch-head city"><svg class="icon"><use href="#i-pin"/></svg><span data-i18n="info.cityHeading">O mieście</span></h2>
 
   <div class="info-grid">
     <div class="card map">
-      <iframe src="https://maps.google.com/maps?q=Lublin,%20Polska&z=12&output=embed" sandbox="allow-scripts allow-same-origin allow-popups" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa Lublina"></iframe>
+      <iframe src="https://maps.google.com/maps?q=Lublin,%20Polska&z=12&output=embed" sandbox="allow-scripts allow-same-origin allow-popups" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa Lublina" data-i18n-attr="title:info.mapTitle"></iframe>
     </div>
 
     <div class="card about">
       <h2>Lublin</h2>
-      <p>Lublin to największe miasto we wschodniej Polsce i stolica województwa lubelskiego. Położony nad Bystrzycą, słynie z malowniczego Starego Miasta, Zamku Lubelskiego z Kaplicą Trójcy Świętej oraz Bramy Krakowskiej. To ważny ośrodek akademicki z kilkoma uczelniami i dziesiątkami tysięcy studentów. Lublin ma jedną z największych sieci trolejbusowych w Polsce, a komunikację miejską obsługuje ZTM Lublin.</p>
+      <p data-i18n="info.about">Lublin to największe miasto we wschodniej Polsce i stolica województwa lubelskiego. Położony nad Bystrzycą, słynie z malowniczego Starego Miasta, Zamku Lubelskiego z Kaplicą Trójcy Świętej oraz Bramy Krakowskiej. To ważny ośrodek akademicki z kilkoma uczelniami i dziesiątkami tysięcy studentów. Lublin ma jedną z największych sieci trolejbusowych w Polsce, a komunikację miejską obsługuje ZTM Lublin.</p>
       <div class="stats">
-        <div class="stat"><svg class="icon"><use href="#i-users"/></svg><b>326 685</b><span>mieszkańców (koniec 2025)</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-area"/></svg><b>147,5 km²</b><span>powierzchnia</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-landmark"/></svg><b>1317</b><span>prawa miejskie</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-pin"/></svg><b>lubelskie</b><span>województwo</span></div>
+        <div class="stat"><svg class="icon"><use href="#i-users"/></svg><b>326 685</b><span data-i18n="info.stats.population">mieszkańców (koniec 2025)</span></div>
+        <div class="stat"><svg class="icon"><use href="#i-area"/></svg><b>147,5 km²</b><span data-i18n="info.stats.area">powierzchnia</span></div>
+        <div class="stat"><svg class="icon"><use href="#i-landmark"/></svg><b>1317</b><span data-i18n="info.stats.cityRights">prawa miejskie</span></div>
+        <div class="stat"><svg class="icon"><use href="#i-pin"/></svg><b data-i18n="info.stats.voivodeshipValue">lubelskie</b><span data-i18n="info.stats.voivodeship">województwo</span></div>
       </div>
     </div>
   </div>
 
   <div class="photos">
-    <div class="media"> <img decoding="async" fetchpriority="low" src="image/Lublin/images.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 1</div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/images (1).jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 2</div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image2.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 3</div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image3.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg>Zdjęcie 4</div></div>
+    <div class="media"> <img decoding="async" fetchpriority="low" src="image/Lublin/images.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="1">Zdjęcie 1</span></div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/images (1).jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="2">Zdjęcie 2</span></div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image2.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="3">Zdjęcie 3</span></div></div>
+    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image3.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="4">Zdjęcie 4</span></div></div>
   </div>
 </section>
 
@@ -522,24 +522,24 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   <div class="wrap foot">
     <div class="brand">Projekt Lublin 2026</div>
     <nav>
-      <a href="#download">Download</a>
-      <a href="#info">Info</a>
-      <a href="#rozwoj">Rozwój</a>
-      <a href="#wspolpraca">Współpraca</a>
-      <a href="#galeria">Galeria</a>
+      <a href="#download" data-i18n="nav.download">Download</a>
+      <a href="#info" data-i18n="nav.info">Info</a>
+      <a href="#rozwoj" data-i18n="nav.progress">Rozwój</a>
+      <a href="#wspolpraca" data-i18n="nav.coop">Współpraca</a>
+      <a href="#galeria" data-i18n="nav.gallery">Galeria</a>
       <a href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer">Discord</a>
     </nav>
   </div>
 </footer>
 
 <div class="lightbox" id="lightbox">
-  <button class="icon-btn" aria-label="Zamknij"><svg class="icon"><use href="#i-x"/></svg></button>
+  <button class="icon-btn" aria-label="Zamknij" data-i18n-attr="aria-label:common.close"><svg class="icon"><use href="#i-x"/></svg></button>
   <img alt="">
 </div>
 
 <div class="mod-modal" id="modModal" role="dialog" aria-modal="true" aria-labelledby="modModalTitle">
   <div class="card mod-modal-box">
-    <button type="button" class="icon-btn mod-modal-close" aria-label="Zamknij"><svg class="icon"><use href="#i-x"/></svg></button>
+    <button type="button" class="icon-btn mod-modal-close" aria-label="Zamknij" data-i18n-attr="aria-label:common.close"><svg class="icon"><use href="#i-x"/></svg></button>
     <div id="modModalBody" class="mod-modal-scroll"></div>
   </div>
 </div>
