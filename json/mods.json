@@ -1,0 +1,191 @@
+{
+  "categories": [
+    { "id": "malowanie", "label": "Malowanie", "label_en": "Livery" },
+    { "id": "pojazd", "label": "Pojazd", "label_en": "Vehicle" },
+    { "id": "blender", "label": "Blender / Narzędzia", "label_en": "Blender / Tools" },
+    { "id": "siec", "label": "Sieć trolejbusowa", "label_en": "Trolleybus network" },
+    { "id": "ai", "label": "AI / HOF", "label_en": "AI / HOF" },
+    { "id": "inne", "label": "Inne", "label_en": "Other" }
+  ],
+  "mods": [
+    {
+      "id": "paczuszka-solarisow-trollino-18-iii-3932-3943",
+      "title": "Paczuszka Solarisów Trollino 18 III (3932-3943)",
+      "title_en": "Solaris Trollino 18 III pack (3932-3943)",
+      "author": "Der Omnibussimulator 2",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-11-06",
+          "description": "No takie tam nom. (12 metrowych nie robię bo autor zrobił najnowszą wersje na jedną zabudowę i to taką która nie przypomina tej z 12mb + nie da sie tego pokolorować w cti. nie chce mi się w te bawić). Miłego korzystania, jakie kolwiek poprawki do malowań proszę kierować na mail ZDiTM'u, nie odpiszę. Szerokiej drogi! Krzyżyk na drogę. Klucz: xekdIBoNrzzAjvsVdfwW8g",
+          "description_en": "Just the usual stuff. (I'm not doing the 12 m ones because the author made the latest version for a single body type that doesn't resemble the 12 m one, and it can't be recolored in the cti. I can't be bothered with that.) Enjoy, please send any livery corrections to ZDiTM's e-mail, I won't reply. Safe travels! Good riddance. Key: xekdIBoNrzzAjvsVdfwW8g",
+          "media": { "type": "image", "src": "image/Trolino18III.png", "alt": "Paczuszka Solarisów Trollino 18 III (3932-3943)" },
+          "downloads": [
+            { "label": "Aktualna paczka (MEGA)", "label_en": "Current pack (MEGA)", "url": "https://mega.nz/folder/EcwSlSQI" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "man-lions-city-ng313-pks-zielona-gora",
+      "title": "MAN Lion's City NG313 - PKS Zielona Góra",
+      "author": "Yuki",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "date": "2026-11-04",
+          "description": "Paczka 4 MANów Lion's city NG313 z PKS Zielona Góra (numery 6108-6111). Wrzucamy oczywiście do A23_3D",
+          "description_en": "Pack of 4 MAN Lion's City NG313 buses from PKS Zielona Góra (fleet numbers 6108-6111). To be placed in A23_3D",
+          "media": { "type": "image", "src": "image/Mod4.11.2026.png", "alt": "MAN Lion's City NG313 PKS Zielona Góra" },
+          "downloads": [
+            { "label": "Aktualna wersja (Google Drive)", "label_en": "Current version (Google Drive)", "url": "https://drive.google.com/drive/folders/1bMS9OZC8Bt9FwEbnh6dXGnW2PmTzukgm?usp=sharing" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solaris-trolino-12-18-III",
+      "title": "Solaris-Trolino-12-18-III",
+      "author": "Solarisek_3813",
+      "categories": ["pojazd"],
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-11-02",
+          "description": "Trolejbusy III generacji BETA. Dużo rzeczy jest spierdolonych jak coś nie działa nie pytaj. Twrócy nie ma.",
+          "description_en": "Third-generation trolleybuses, BETA. A lot of things are messed up – if something doesn't work, don't ask. The creator is gone.",
+          "media": [
+            { "type": "image", "src": "TROLINO12-18GENIII/1.png", "alt": "Solaris Trolino 12 III GEN" },
+            { "type": "image", "src": "TROLINO12-18GENIII/2.png", "alt": "Solaris Trolino 12 III GEN" },
+            { "type": "image", "src": "TROLINO12-18GENIII/3.png", "alt": "Solaris Trolino 12 III GEN" }
+          ],
+          "downloads": [
+            { "label": "Aktualna wersja (Google Drive)", "label_en": "Current version (Google Drive)", "url": "https://drive.google.com/file/d/1C0BJFkHtjs_7p8eHCb_iNBhxuuXBh4-k/view?usp=sharing" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "siec-trolejbusowa",
+      "title": "Sieć trolejbusowa Projekt Lublin + Trollino IV by GUMOLIT",
+      "title_en": "Projekt Lublin trolleybus network + Trollino IV by GUMOLIT",
+      "author": "GUMOLIT",
+      "categories": ["siec"],
+      "versions": [
+        {
+          "date": "2026-11-01",
+          "description": "Sieć trolejbusowa ze zwrotnicami, podwieszeniami i wskaźnikami LED poza zajezdnią. Poprawiony przebieg sieci i usunięte stare przewody z wybranych skrzyżowań. HOF-y, zapowiedzi i grupa AI MEGA korzystająca z Trollino 18.",
+          "description_en": "Trolleybus network with switches, suspensions and LED indicators outside the depot. Corrected network routing and old wires removed from selected intersections. HOFs, announcements and the MEGA AI group using the Trollino 18.",
+          "media": { "type": "video", "src": "image/F1HsbtP.mp4", "alt": "Sieć trolejbusowa" },
+          "downloads": [
+            { "label": "wersja archiwalna", "label_en": "Archival version", "url": "https://docs.google.com/uc?export=download&id=1lz8CTv5v6vP9B9DKi6xl839HoJsEwF2w" }
+          ]
+        },
+        {
+          "version": "Wersja 3.5",
+          "version_en": "Version 3.5",
+          "date": "2026-11-09",
+          "description": "Mapa Projekt Lublin 2017 z siecią trolejbusową oraz Trollino 12 i 18 w barwach MPK Lublin, w jednej paczce.\n\n- Zwrotnice sterowane radiowo z kabiny, z wyświetlaczami Elektroline i strzałkami LED.\n- Nowe podwieszenie sieci: liny, wieszaki, odciągi, krzyżownice i izolatory sekcyjne.\n- Trollino 12 (MVP Continental, SRG-7000P) i 18 (MOKI II, SRG-6000P) z R&G ETL.\n- Odbieraki z napędem i dźwiękami, obsługa ręczna linką. Jazda pod siecią i na baterii.\n- Do tego wiele innych poprawek i ulepszeń mapy i pojazdów.\n\nWymagania: Projekt Lublin 2017 3.1 oraz Solaris Urbino IV Pack 0.9.1 (Iwo).",
+          "description_en": "Projekt Lublin 2017 map with a trolleybus network and Trollino 12 and 18 in MPK Lublin colors, in a single package.\n\n- Radio-controlled turnouts from the cab, with Elektroline displays and LED arrows.\n- New network suspension: wires, hangers, guy lines, crossings, and sectional insulators.\n- Trollino 12 (MVP Continental, SRG-7000P) and 18 (MOKI II, SRG-6000P) with R&G ETL.\n- Current collectors with drive and sounds, manual rope operation. Driving under the network and on battery.\n- Plus many other fixes and improvements to the map and vehicles.\n\nRequirements: Projekt Lublin 2017 3.1 and Solaris Urbino IV Pack 0.9.1 (Iwo).",
+          "media": [
+            { "type": "image", "src": "GUMOLIT/GIF.gif", "alt": "Sieć trolejbusowa" },
+            { "type": "image", "src": "image/1.png", "alt": "Sieć trolejbusowa" },
+            { "type": "image", "src": "GUMOLIT/2.png", "alt": "Sieć trolejbusowa" },
+            { "type": "image", "src": "GUMOLIT/3.png", "alt": "Sieć trolejbusowa" }
+          ],
+          "downloads": [
+            { "label": "POBIERZ", "label_en": "DOWNLOAD", "url": "https://drive.google.com/file/d/1t3OZLblKxyDu4Wg61oeTeJLZ1LzsNzSw/view?usp=drive_link" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "malowanie-autosan",
+      "title": "Malowanie AUTOSAN",
+      "title_en": "AUTOSAN livery",
+      "author": "65Vajpej",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "date": "2026-11-01",
+          "description": "Na stronie znajdują 3 różne malowania dla Lublina.",
+          "description_en": "The page contains 3 different liveries for Lublin.",
+          "media": { "type": "image", "src": "image/autosqn.png", "alt": "Malowanie AUTOSAN" },
+          "downloads": [
+            { "label": "Pobierz ze strony autora", "label_en": "Download from the author's website", "url": "https://vajpej.github.io/omsi" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "easyiomsi",
+      "title": "Easyiomsi",
+      "author": "Zetii",
+      "categories": ["blender", "inne"],
+      "versions": [
+        {
+          "version": "1.0r BETA",
+          "date": "2026-11-01",
+          "description": "Po ponad 1,5 roku wychodzi nowa wtyczka do Blendera. Wtyczka została stworzona przeze mnie. Jako pierwszy użytkownik tej oto wtyczki zaleca się używać wersji Blendera 3.0+. Jest po prostu lepiej zoptymalizowana. Wtyczka jest w fazie BETA – błędy mogą się pojawić szczególnie przy funkcjach tools. Dodatek może importować pliki .o3d .cfg .sco tak samo przy eksporcie. W toolsach są funkcje szybkiego importu/eksportu oraz automatycznego bake (bake jest w fazie eksperymentalnej). Wtyczka jest zrobiona pod optymalizację i wygodę użytkownika.",
+          "description_en": "After more than 1.5 years, a new Blender add-on is out. The add-on was created by me. As the first user of this add-on, it is recommended to use Blender 3.0+, as it is simply better optimized. The add-on is in BETA – bugs may appear, especially in the tools functions. The add-on can import .o3d, .cfg and .sco files, and likewise export them. The tools include quick import/export functions and automatic bake (bake is experimental). The add-on is built for optimization and user convenience.",
+          "media": { "type": "image", "src": "image/mody.png", "alt": "Easyiomsi" },
+          "downloads": [
+            { "label": "Wersja 1.0r BETA", "label_en": "Version 1.0r BETA", "url": "https://cdn.discordapp.com/attachments/1566461705699987677/1566482089593798706/easyiomsi_1.0r_beta.zip?ex=6ae95c61&is=6ae80ae1&hm=bd0c7b65cb17de3447706813b4e816bda431d902e677aa767b95029de6ebbd3a&" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "su18-hybrid-2524-2535",
+      "title": "Solaris Urbino 18 Plug-In HYBRID #2524-2535",
+      "author": "Der Omnibussimulator 2",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "date": "2026-10-18",
+          "description": "Kontynuacja paczki malowań do pierwszej, drugiej i części trzeciej transzy hybryd. (Wgrać do Texture/Rep FL/SU18_4D/Hybrid). Klucz: iK5x6aObME-YtpKXLyI3Fg",
+          "description_en": "Continuation of the livery pack for the first, second and part of the third batch of hybrids. (Install into Texture/Rep FL/SU18_4D/Hybrid). Key: iK5x6aObME-YtpKXLyI3Fg",
+          "media": { "type": "image", "src": "image/mody1.png", "alt": "Solaris Urbino 18 Hybrid" },
+          "downloads": [
+            { "label": "Aktualna paczka (MEGA)", "label_en": "Current pack (MEGA)", "url": "https://mega.nz/folder/AAhSQYoI" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trollino-12mb-3888-3891",
+      "title": "Solaris Trollino 12 MB #3888-3891",
+      "author": "Der Omnibussimulator 2",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "date": "2026-10-17",
+          "description": "Malowania Solaris Trollino 12 MB #3888-3891. Klucz: _Fj6HgSgYvbPO53vWZdllw",
+          "description_en": "Liveries for Solaris Trollino 12 MB #3888-3891. Key: _Fj6HgSgYvbPO53vWZdllw",
+          "media": { "type": "image", "src": "image/mody2.png", "alt": "Solaris Trollino 12 MB" },
+          "downloads": [
+            { "label": "Aktualna paczka (MEGA)", "label_en": "Current pack (MEGA)", "url": "https://mega.nz/folder/hYBSEKpB" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urbino-12-electric-4028-4032",
+      "title": "Solaris Urbino 12 electric 4028-4032",
+      "author": "Pro_ziomek",
+      "categories": ["malowanie"],
+      "versions": [
+        {
+          "date": "2026-10-06",
+          "description": "Malowania dla elektryków 12 m 4028-4032 (ostatnia tercja Solarisów 12 electric dla MPK Lublin, dostawa 2022). Posiadają pulpit z zegarami cyfrowymi. Malowania wzorowane na Radomskiej lakierni (wozy 4001-4006).",
+          "description_en": "Liveries for the 12 m electric buses 4028-4032 (the last third of the Solaris 12 electric buses for MPK Lublin, delivered in 2022). They have a dashboard with digital gauges. Liveries modeled on the Radom paint shop (vehicles 4001-4006).",
+          "media": { "type": "image", "src": "image/mody3.png", "alt": "Solaris Urbino 12 electric" },
+          "downloads": [
+            { "label": "Aktualna paczka (MEGA)", "label_en": "Current pack (MEGA)", "url": "https://mega.nz/file/VokmRSAL#kJmfrN5lbPWMWDSkce2ZouQlYQUS0PwrYuvLtNrFpn8" }
+          ]
+        }
+      ]
+    }
+  ]
+}

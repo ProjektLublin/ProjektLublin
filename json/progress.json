@@ -1,0 +1,84 @@
+{
+  "line": {
+    "number": "151",
+    "name": "Linia 151",
+    "name_en": "Line 151",
+    "completionLabel": "Postęp ukończenia",
+    "completionLabel_en": "Completion progress"
+  },
+  "route": {
+    "image": "image/Przebiegtrasy.png",
+    "imageAlt": "Przebieg trasy linii 151 od Węglina do Abramowic",
+    "imageAlt_en": "Route of line 151 from Węglin to Abramowice",
+    "width": 1376,
+    "height": 752,
+    "progressRed": 90,
+    "progressOrange": 60,
+    "progressGreen": 30,
+    "path": "M152 621 L154 606 L175 565 L194 521 L219 472 L240 431 L265 392 L290 352 L311 310 L333 268 L355 226 L382 190 L429 180 L476 171 L521 162 L560 153 L583 143 L608 149 L620 157 L632 173 L644 186 L656 195 L668 200 L692 203.5 L728 208.5 L764 214.5 L800 223.5 L836 231.5 L848 233.5 L860 241 L872 257 L884 274.5 L896 291 L908 307.5 L932 332 L944 340.5 L956 346.5 L968 355 L980 363.5 L992 373 L1004 383.5 L1016 393.5 L1028 403.5 L1040 412.5 L1052 417.5 L1093 437 L1125 471 L1157 504 L1178 544 L1200 592 L1219 634 L1221 650",
+    "points": [
+      {
+        "text": "WĘGLIN",
+        "x": 152,
+        "y": 621,
+        "label": {
+          "x": 168,
+          "y": 603,
+          "width": 104,
+          "textX": 182,
+          "textY": 628,
+          "textLength": 78
+        }
+      },
+      {
+        "text": "ABRAMOWICE",
+        "x": 1221,
+        "y": 650,
+        "label": {
+          "x": 1233,
+          "y": 632,
+          "width": 132,
+          "textX": 1247,
+          "textY": 657,
+          "textLength": 104
+        }
+      }
+    ]
+  },
+  "legend": {
+    "completed": "Ukończony odcinek",
+    "completed_en": "Completed section",
+    "renovation": "Odcinek do renowacji",
+    "renovation_en": "Section under renovation",
+    "streets": "Odcinek z utworzonymi ulicami",
+    "streets_en": "Section with created streets"
+  },
+  "done": [
+    {
+      "pl": "Wykonanie Ulic na Al.Kraśnickiej",
+      "en": "Streets completed on Al. Kraśnicka"
+    },
+    {
+      "pl": "Wykonanie wszystkich obiektów na Al.Kraśnickiej",
+      "en": "All objects completed on Al. Kraśnicka"
+    },
+    {
+      "pl": "Ulice na odcinku Targi-Głuska",
+      "en": "Streets on the Targi–Głuska section"
+    }
+  ],
+  "todo": [
+    {
+      "pl": "Ulice na odcinku Głuska-Abramowice",
+      "en": "Streets on the Głuska–Abramowice section"
+    },
+    {
+      "pl": "Wykonanie Obiektów na odcinku Kunickiego-Abramowice",
+      "en": "Objects on the Kunickiego–Abramowice section"
+    },
+    {
+      "pl": "Modernizacja AL.Racławickich",
+      "en": "Modernization of Al. Racławickie"
+    }
+  ]
+}
