@@ -7,10 +7,10 @@
   const root = document.documentElement;
 
   /* =====================================================================
-     i18n – pliki pl.json / en.json w katalogu głównym
+     i18n – pliki json/pl.json i json/en.json
      Statyczny HTML: data-i18n="sekcja.klucz"  |  data-i18n-attr="atrybut:sekcja.klucz;atrybut2:klucz2"
      Dynamiczny JS:  t('sekcja.klucz', { param })  |  tn('klucz.liczbaMnoga', n)
-     Dane z JSON-ów (posts.json, mods.json): pole *_en, a gdy go brak – polski oryginał
+     Dane z JSON-ów (json/posts.json, json/mods.json, json/progress.json): pole *_en, a gdy go brak – polski oryginał
      ===================================================================== */
   const LANGS = ['pl', 'en'];
   const DEFAULT_LANG = 'pl';
@@ -23,10 +23,10 @@
 
   function loadLanguage(lang) {
     if (!loading[lang]) {
-      loading[lang] = fetch(`${lang}.json`, { cache: 'no-cache', credentials: 'omit' })
+      loading[lang] = fetch(`json/${lang}.json`, { cache: 'no-cache', credentials: 'omit' })
         .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
         .then(data => (bundles[lang] = data))
-        .catch(err => { console.error(`${lang}.json:`, err); delete loading[lang]; return null; });
+        .catch(err => { console.error(`json/${lang}.json:`, err); delete loading[lang]; return null; });
     }
     return loading[lang];
   }
@@ -62,9 +62,10 @@
     });
   }
 
-  // odświeża treści generowane w JS: wpisy, filtry, lista modów, otwarte okno moda
+  // odświeża treści generowane w JS: wpisy, zakładka Rozwój, filtry, lista modów, otwarte okno moda
   function renderDynamic() {
     renderPosts();
+    renderProgress(false);   // po zmianie języka bez ponownej animacji liczników i trasy
     if (modsFailed) renderModsPage();
     else if (modsData.mods.length) {
       buildFilters();
@@ -147,32 +148,6 @@
   }
   window.addEventListener('hashchange', route);
 
-  /* ---------- Rozwój: liczniki i trasa ---------- */
-  function updateProgress() {
-    const done = $$('.done-list li').length;
-    const todo = $$('.todo-list li').length;
-    $('#cDone').textContent = done; $('#cTodo').textContent = todo;
-    $('#hDone').textContent = done; $('#hTodo').textContent = todo;
-    updateRoute();
-  }
-
-  function updateRoute() {
-    const card = $('#routeCard'); if (!card) return;
-    [['#routeRed', 'progressRed'], ['#routeOrange', 'progressOrange'], ['#routeGreen', 'progressGreen']].forEach(([sel, key]) => {
-      let p = parseFloat(card.dataset[key]);
-      if (!isFinite(p)) p = 0;
-      p = Math.max(0, Math.min(100, p));
-      const fill = $(sel);
-      fill.style.transition = 'none';
-      fill.style.strokeDashoffset = 100;
-      fill.getBoundingClientRect();
-      requestAnimationFrame(() => {
-        fill.style.transition = 'stroke-dashoffset 1.4s var(--ease)';
-        fill.style.strokeDashoffset = 100 - p;
-      });
-    });
-  }
-
   /* ---------- Lightbox (galeria) ---------- */
   const lb = $('#lightbox');
   $$('.gallery .card').forEach(c => c.addEventListener('click', () => {
@@ -181,59 +156,9 @@
   }));
   lb.addEventListener('click', () => lb.classList.remove('open'));
 
-  /* ---------- Cząsteczki w tle ---------- */
-  const cv = $('#particles'), ctx = cv.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W, H, pts = [], dpr = 1, raf = 0;
-  let pColor = getComputedStyle(root).getPropertyValue('--particle').trim() || '255,255,255';
-  new MutationObserver(() => { pColor = getComputedStyle(root).getPropertyValue('--particle').trim() || pColor; })
-    .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-  const mouse = { x: -999, y: -999 };
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = innerWidth; H = innerHeight;
-    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.min(70, Math.round(W * H / 22000));
-    pts = Array.from({ length: n }, () => ({
-      x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
-      r: Math.random() * 1.3 + .4
-    }));
-  }
-  function draw() {
-    const c = pColor;
-    ctx.clearRect(0, 0, W, H);
-    const D = 120;
-    for (let i = 0; i < pts.length; i++) {
-      const p = pts[i];
-      if (!reduce) { p.x += p.vx; p.y += p.vy; }
-      if (p.x < 0 || p.x > W) p.vx *= -1;
-      if (p.y < 0 || p.y > H) p.vy *= -1;
-      const mdx = p.x - mouse.x, mdy = p.y - mouse.y, md = Math.hypot(mdx, mdy);
-      if (md < 100) { p.x += mdx / md * .6; p.y += mdy / md * .6; }
-      ctx.fillStyle = `rgba(${c},.55)`;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-      for (let j = i + 1; j < pts.length; j++) {
-        const q = pts[j], d = Math.hypot(p.x - q.x, p.y - q.y);
-        if (d < D) {
-          ctx.strokeStyle = `rgba(${c},${(1 - d / D) * .14})`;
-          ctx.lineWidth = .6;
-          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
-        }
-      }
-    }
-    raf = document.hidden ? 0 : requestAnimationFrame(draw);
-  }
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && !raf) raf = requestAnimationFrame(draw); });
-  addEventListener('resize', resize);
-  addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  addEventListener('mouseleave', () => { mouse.x = mouse.y = -999; });
-  resize(); draw();
-
   /* =====================================================================
      MODY – lista, wyszukiwarka, filtry, okno z historią wersji
-     Dane: mods.json  (każdy mod ma tablicę "versions")
+     Dane: json/mods.json  (każdy mod ma tablicę "versions")
      ===================================================================== */
   const MODS_PER_PAGE = 4;
   let modsData = { categories: [], mods: [] };
@@ -495,7 +420,7 @@
     if (c) { e.preventDefault(); openMod(c.dataset.id); }
   });
 
-  /* ---------- Wczytywanie i czyszczenie danych z mods.json ---------- */
+  /* ---------- Wczytywanie i czyszczenie danych z json/mods.json ---------- */
   let validCats = new Set();
   const str = (v, max) => (typeof v === 'string' ? v : '').replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, ' ').trim().slice(0, max);
   const safeUrl = (u) => {
@@ -580,7 +505,7 @@
 
   async function loadMods() {
     try {
-      const res = await fetch('mods.json', { cache: 'no-cache', credentials: 'omit' });
+      const res = await fetch('json/mods.json', { cache: 'no-cache', credentials: 'omit' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if (!data || !Array.isArray(data.mods)) throw new Error('Invalid JSON');
@@ -594,7 +519,7 @@
       buildFilters();
       applyModsFilter();
     } catch (err) {
-      console.error('mods.json:', err);
+      console.error('json/mods.json:', err);
       modsFailed = true;
       renderModsPage();
     }
@@ -660,7 +585,7 @@
   document.addEventListener('pointercancel', endDrag);
   document.addEventListener('click', (e) => { if (noClick) { e.stopPropagation(); e.preventDefault(); } }, true);
 
-  /* ---------- Aktualności z posts.json (najnowsze na górze) ---------- */
+  /* ---------- Aktualności z json/posts.json (najnowsze na górze) ---------- */
   const POSTS_PER_PAGE = 4;
   let postsData = [], postsPage = 1, postsFailed = false;
   const postTime = (s) => {
@@ -709,7 +634,7 @@
   };
   async function loadPosts() {
     try {
-      const res = await fetch('posts.json', { cache: 'no-cache', credentials: 'omit' });
+      const res = await fetch('json/posts.json', { cache: 'no-cache', credentials: 'omit' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       const arr = Array.isArray(data) ? data : data.posts;
@@ -718,13 +643,211 @@
         .sort((a, b) => (postTime(b.date) - postTime(a.date)) || (a._i - b._i));
       renderPosts();
     } catch (err) {
-      console.error('posts.json:', err);
+      console.error('json/posts.json:', err);
       postsFailed = true;
       renderPosts();
     }
   }
 
-  /* ---------- Start: routing od razu, potem język, a dopiero potem dane (posts/mods) ---------- */
+  /* =====================================================================
+     ROZWÓJ – cała zakładka generowana z json/progress.json
+     Format: jedna linia  { line, route, legend, done, todo }
+             albo wiele   { legend (wspólna, opcjonalna), lines: [ { line, route, legend?, done, todo }, … ] }
+     Teksty: pole + wersja *_en (line.name/name_en, legend.completed/completed_en…),
+             a elementy list done/todo to { pl, en } (lub zwykły tekst).
+     Trasa:  route.path (SVG), route.points (przystanki), route.progressRed/Orange/Green (0–100)
+     ===================================================================== */
+  const PROGRESS_COLORS = ['red', 'orange', 'green'];                         // kolejność rysowania (zielona na wierzchu)
+  const PROGRESS_STROKE = { red: '#ef2b2b', orange: '#ff7a1a', green: '#22c55e' };
+  const COUNT_MS = 1400;
+  const SVG_PATH_RE = /^[MmLlHhVvCcSsQqTtAaZz0-9\s.,eE+-]{1,12000}$/;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let progressData = [], progressFailed = false;
+
+  /* ---------- Animacje: liczniki i linie trasy ---------- */
+  // odliczanie od 0 do wartości docelowej (ease-out)
+  function countTo(el, to, animate) {
+    cancelAnimationFrame(el._raf);
+    if (!animate || reduceMotion || to <= 0) { el.textContent = to; return; }
+    el.textContent = 0;
+    const t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / COUNT_MS);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) el._raf = requestAnimationFrame(step);
+    };
+    el._raf = requestAnimationFrame(step);
+  }
+
+  function updateRoute(animate = true) {
+    $$('.route-card').forEach(card => {
+      PROGRESS_COLORS.forEach(color => {
+        const fill = $(`.route-line.${color}`, card); if (!fill) return;
+        const p = pct(card.dataset[`progress${color[0].toUpperCase()}${color.slice(1)}`]);
+        const run = animate && !reduceMotion;
+        fill.style.transition = 'none';
+        fill.style.strokeDashoffset = run ? 100 : 100 - p;
+        if (!run) return;
+        fill.getBoundingClientRect();
+        requestAnimationFrame(() => {
+          fill.style.transition = 'stroke-dashoffset 1.4s var(--ease)';
+          fill.style.strokeDashoffset = 100 - p;
+        });
+      });
+    });
+  }
+
+  // wywoływane przy wejściu na zakładkę #rozwoj (route) – animacja powtarza się za każdym razem
+  function updateProgress(animate = true) {
+    $$('.pg-count').forEach(el => countTo(el, +el.dataset.to || 0, animate));
+    updateRoute(animate);
+  }
+
+  const isProgressVisible = () => !!$('#page-rozwoj')?.classList.contains('show');
+
+  /* ---------- Czyszczenie danych z progress.json ---------- */
+  const num = (v, d = 0) => (v !== '' && v !== null && isFinite(+v) ? +v : d);
+  const pct = (v) => Math.max(0, Math.min(100, num(v)));
+
+  // element listy: { pl, en } albo zwykły tekst
+  const sanitizeProgressItem = (x) => {
+    if (typeof x === 'string') x = { pl: x };
+    if (!x || typeof x !== 'object') return null;
+    const pl = str(x.pl ?? x.text, 300);
+    return pl ? { pl, en: str(x.en ?? x.text_en, 300) } : null;
+  };
+
+  const sanitizePoint = (p) => {
+    if (!p || typeof p !== 'object') return null;
+    const lb = p.label && typeof p.label === 'object' ? p.label : {};
+    const text = str(typeof p.label === 'string' ? p.label : p.text, 40);
+    const x = num(p.x), y = num(p.y);
+    const lw = num(lb.width, text.length * 13 + 26);
+    const lx = num(lb.x, x + 16);
+    return {
+      x, y, text, lx, lw,
+      ly: num(lb.y, y - 18),
+      tx: num(lb.textX, lx + 14),
+      ty: num(lb.textY, y + 7),
+      tl: num(lb.textLength, lw - 26)
+    };
+  };
+
+  const sanitizeProgressLine = (d, shared) => {
+    if (!d || typeof d !== 'object') return null;
+    const ln = d.line && typeof d.line === 'object' ? d.line : {};
+    const rt = d.route && typeof d.route === 'object' ? d.route : {};
+    const lg = (d.legend && typeof d.legend === 'object' ? d.legend : shared && shared.legend) || {};
+    const list = (a) => (Array.isArray(a) ? a : []).slice(0, 100).map(sanitizeProgressItem).filter(Boolean);
+    const legend = {};
+    ['completed', 'renovation', 'streets'].forEach(k => {
+      legend[k] = str(lg[k], 80);
+      legend[`${k}_en`] = str(lg[`${k}_en`], 80);
+    });
+    const path = typeof rt.path === 'string' ? rt.path.trim() : '';
+    return {
+      number: str(ln.number, 8),
+      name: str(ln.name, 80), name_en: str(ln.name_en, 80),
+      completionLabel: str(ln.completionLabel, 80), completionLabel_en: str(ln.completionLabel_en, 80),
+      legend,
+      route: {
+        image: safeMedia(rt.image),
+        imageAlt: str(rt.imageAlt, 200), imageAlt_en: str(rt.imageAlt_en, 200),
+        width: Math.max(1, num(rt.width, 1376)), height: Math.max(1, num(rt.height, 752)),
+        path: SVG_PATH_RE.test(path) ? path : '',
+        points: (Array.isArray(rt.points) ? rt.points : []).slice(0, 50).map(sanitizePoint).filter(Boolean),
+        progress: { red: pct(rt.progressRed), orange: pct(rt.progressOrange), green: pct(rt.progressGreen) }
+      },
+      done: list(d.done),
+      todo: list(d.todo)
+    };
+  };
+
+  /* ---------- Renderowanie ---------- */
+  const itemText = (it) => (currentLang !== DEFAULT_LANG && it[currentLang]) || it.pl;
+
+  const pointSvg = (p) => `<g class="route-point">${p.text
+    ? `<rect x="${p.lx}" y="${p.ly}" width="${p.lw}" height="36" rx="18" fill="#050505"/><text x="${p.tx}" y="${p.ty}" textLength="${p.tl}" lengthAdjust="spacingAndGlyphs">${esc(p.text)}</text>`
+    : ''}<circle cx="${p.x}" cy="${p.y}" r="12" fill="#000" stroke="#fff" stroke-width="5"/></g>`;
+
+  function progressLineHtml(ln, i) {
+    const sfx = i ? `-${i}` : '';   // pierwsza linia zachowuje id: cDone, cTodo, hDone, hTodo
+    const rt = ln.route, lg = ln.legend;
+
+    const legend = [['green', 'completed'], ['orange', 'renovation'], ['red', 'streets']].map(([color, key]) =>
+      `<div class="item"><span class="swatch ${color}"></span><span>${fmt(pick(lg, key) || t(`progress.legend.${key}`))}</span></div>`
+    ).join('');
+
+    const route = rt.image ? `<div class="card route-card" data-progress-red="${rt.progress.red}" data-progress-orange="${rt.progress.orange}" data-progress-green="${rt.progress.green}">
+      <div class="route-stage">
+        <img decoding="async" fetchpriority="low" src="${esc(rt.image)}" alt="${esc(pick(rt, 'imageAlt') || t('progress.routeAlt'))}" width="${rt.width}" height="${rt.height}">
+        ${rt.path ? `<svg viewBox="0 0 ${rt.width} ${rt.height}" preserveAspectRatio="none" aria-hidden="true">
+          ${PROGRESS_COLORS.map(c => `<path class="route-line ${c}" pathLength="100" fill="none" stroke="${PROGRESS_STROKE[c]}" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round" d="${esc(rt.path)}"/>`).join('')}
+          ${rt.points.map(pointSvg).join('')}
+        </svg>` : ''}
+      </div>
+    </div>` : '';
+
+    const items = (arr) => arr.map(it => `<li>${fmt(itemText(it))}</li>`).join('');
+
+    return `<div class="progress-line">
+      <div class="card progress-card">
+        <div class="progress-top">
+          <div class="line-tag">
+            ${ln.number ? `<span class="line-num">${esc(ln.number)}</span>` : ''}
+            <div><h2>${esc(pick(ln, 'name') || t('progress.line'))}</h2><small>${esc(pick(ln, 'completionLabel') || t('progress.completion'))}</small></div>
+          </div>
+        </div>
+        <div class="progress-info">
+          <span><span>${esc(t('progress.done'))}</span> <b class="pg-count" id="cDone${sfx}" data-to="${ln.done.length}">0</b></span>
+          <span><span>${esc(t('progress.todo'))}</span> <b class="pg-count" id="cTodo${sfx}" data-to="${ln.todo.length}">0</b></span>
+        </div>
+        <div class="route-legend">${legend}</div>
+      </div>
+      ${route}
+      <div class="tasks">
+        <div class="card">
+          <h3><svg class="icon ok"><use href="#i-check"/></svg><span>${esc(t('progress.doneHeading'))}</span> <span class="count pg-count" id="hDone${sfx}" data-to="${ln.done.length}">0</span></h3>
+          <ul class="task-list done-list">${items(ln.done)}</ul>
+        </div>
+        <div class="card">
+          <h3><svg class="icon no"><use href="#i-clock"/></svg><span>${esc(t('progress.todoHeading'))}</span> <span class="count pg-count" id="hTodo${sfx}" data-to="${ln.todo.length}">0</span></h3>
+          <ul class="task-list todo-list">${items(ln.todo)}</ul>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // animate = true tylko przy pierwszym wczytaniu na otwartej zakładce; po zmianie języka wartości od razu końcowe
+  function renderProgress(animate = false) {
+    const box = $('#progressRoot'); if (!box) return;
+    if (progressFailed) {
+      const msg = t('progress.loadError');
+      box.innerHTML = `<div class="mod-empty">${esc(msg === 'progress.loadError' ? t('mods.loadError') : msg)}</div>`;
+      return;
+    }
+    box.innerHTML = progressData.map(progressLineHtml).join('');
+    if (isProgressVisible()) updateProgress(animate);
+  }
+
+  async function loadProgress() {
+    try {
+      const res = await fetch('json/progress.json', { cache: 'no-cache', credentials: 'omit' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (!data || typeof data !== 'object') throw new Error('Invalid JSON');
+      const raw = Array.isArray(data.lines) ? data.lines : [data];
+      progressData = raw.slice(0, 20).map(d => sanitizeProgressLine(d, data)).filter(Boolean);
+      if (!progressData.length) throw new Error('Invalid JSON');
+      progressFailed = false;
+    } catch (err) {
+      console.error('json/progress.json:', err);
+      progressFailed = true;
+    }
+    renderProgress(true);
+  }
+
+  /* ---------- Start: routing od razu, potem język, a dopiero potem dane (posts/mods/progress) ---------- */
   route();
   (async () => {
     let saved = DEFAULT_LANG;
@@ -732,6 +855,7 @@
     await setLang(saved);
     loadPosts();
     loadMods();
+    loadProgress();
   })();
 })();
   /* ---------- Wymagania: animacje wejścia/wyjścia (Intersection Observer) ----------
