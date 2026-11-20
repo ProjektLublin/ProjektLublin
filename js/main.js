@@ -766,6 +766,18 @@
   /* ---------- Renderowanie ---------- */
   const itemText = (it) => (currentLang !== DEFAULT_LANG && it[currentLang]) || it.pl;
 
+  /* ---------- Mapa tła trasy: szablon <template id="routeMapTpl"> z index.html ---------- */
+  let routeMapHtml = null;
+  const routeMapSvg = (label) => {
+    if (routeMapHtml === null) {
+      const svg = $('#routeMapTpl')?.content.firstElementChild;
+      routeMapHtml = svg ? { vb: svg.getAttribute('viewBox') || '0 0 1273 699', inner: svg.innerHTML } : false;
+    }
+    return routeMapHtml
+      ? `<svg class="route-map" viewBox="${esc(routeMapHtml.vb)}" preserveAspectRatio="none" role="img" aria-label="${label}">${routeMapHtml.inner}</svg>`
+      : '';
+  };
+
   const pointSvg = (p) => `<g class="route-point">${p.text
     ? `<rect x="${p.lx}" y="${p.ly}" width="${p.lw}" height="36" rx="18" fill="#050505"/><text x="${p.tx}" y="${p.ty}" textLength="${p.tl}" lengthAdjust="spacingAndGlyphs">${esc(p.text)}</text>`
     : ''}<circle cx="${p.x}" cy="${p.y}" r="12" fill="#000" stroke="#fff" stroke-width="5"/></g>`;
@@ -778,9 +790,14 @@
       `<div class="item"><span class="swatch ${color}"></span><span>${fmt(pick(lg, key) || t(`progress.legend.${key}`))}</span></div>`
     ).join('');
 
-    const route = rt.image ? `<div class="card route-card" data-progress-red="${rt.progress.red}" data-progress-orange="${rt.progress.orange}" data-progress-green="${rt.progress.green}">
+    const alt = esc(pick(rt, 'imageAlt') || t('progress.routeAlt'));
+    const mapSvg = routeMapSvg(alt);
+    // tło: narysowana mapa (szablon #routeMapTpl); gdy go brak – dawny obraz z progress.json
+    const stage = mapSvg || (rt.image ? `<img decoding="async" fetchpriority="low" src="${esc(rt.image)}" alt="${alt}" width="${rt.width}" height="${rt.height}">` : '');
+
+    const route = stage ? `<div class="card route-card" data-progress-red="${rt.progress.red}" data-progress-orange="${rt.progress.orange}" data-progress-green="${rt.progress.green}">
       <div class="route-stage">
-        <img decoding="async" fetchpriority="low" src="${esc(rt.image)}" alt="${esc(pick(rt, 'imageAlt') || t('progress.routeAlt'))}" width="${rt.width}" height="${rt.height}">
+        ${stage}
         ${rt.path ? `<svg viewBox="0 0 ${rt.width} ${rt.height}" preserveAspectRatio="none" aria-hidden="true">
           ${PROGRESS_COLORS.map(c => `<path class="route-line ${c}" pathLength="100" fill="none" stroke="${PROGRESS_STROKE[c]}" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round" d="${esc(rt.path)}"/>`).join('')}
           ${rt.points.map(pointSvg).join('')}
