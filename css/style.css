@@ -700,15 +700,17 @@ body.modal-open{overflow:hidden}
   padding:10px 20px 22px;           /* miejsce na lift karty (-4px) */
   scroll-snap-type:x mandatory;
   scroll-padding-inline:20px;
+  scroll-behavior:smooth;           /* natywne przewijanie, np. przy focusie klawiaturą */
   overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
   scrollbar-width:none;
   cursor:grab;
   user-select:none;-webkit-user-select:none;
 }
 .hgal-track::-webkit-scrollbar{display:none}
-/* wheel / przeciąganie myszą: snap wyłączony na czas ruchu, wraca po jego zakończeniu */
+/* ruch sterowany z JS (kółko / drag / animacje): snap i CSS smooth wyłączone na czas ruchu */
 .hgal-track.is-free,
-.hgal-track.is-drag{scroll-snap-type:none}
+.hgal-track.is-drag{scroll-snap-type:none;scroll-behavior:auto}
 .hgal-track.is-drag,
 .hgal-track.is-drag *{cursor:grabbing}
 
@@ -743,12 +745,11 @@ body.modal-open{overflow:hidden}
 .hgal::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
 .hgal.at-start::before,.hgal.at-end::after{opacity:0}
 
-/* przyciski ← → */
+/* przyciski ← →  (bez backdrop-filter: blur nad przewijaną zawartością przerysowywał się co klatkę) */
 .hgal-btn{
   position:absolute;top:calc(50% - 22px);transform:translateY(-50%);z-index:3;
   width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
-  border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.6);color:#fff;cursor:pointer;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.72);color:#fff;cursor:pointer;
   transition:background .2s,border-color .2s,transform .2s var(--ease),opacity .2s;
 }
 .hgal-btn:hover:not(:disabled){background:var(--accent);border-color:var(--accent);transform:translateY(-50%) scale(1.08)}
@@ -758,10 +759,41 @@ body.modal-open{overflow:hidden}
 .hgal-btn.next{right:12px}
 .hgal-btn .icon{width:20px;height:20px;stroke-width:2}
 
+/* suwak z kropek: aktywna największa, im dalej tym mniejsze (skalę --s liczy JS) */
+.hgal-dots{
+  --dot:14px;--slot:26px;--hit:36px;
+  display:flex;justify-content:center;align-items:center;
+  max-width:100%;margin:0 auto;padding:0 12px;
+}
+.hgal-dots[hidden]{display:none}
+.hgal-dot{
+  flex:0 1 var(--slot);min-width:12px;height:var(--hit);
+  display:grid;place-items:center;padding:0;border:0;border-radius:50%;
+  background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.hgal-dot::before{
+  content:"";width:var(--dot);height:var(--dot);border-radius:50%;
+  background:var(--line-2);
+  background:color-mix(in srgb,var(--text) 30%,var(--bg));
+  transform:scale(var(--s,.3));
+  transition:transform .35s var(--ease),background-color .25s;
+}
+.hgal-dot.on::before{background:var(--accent)}
+@media (hover:hover){
+  .hgal-dot:not(.on):hover::before{background:var(--muted)}
+}
+.hgal-dot:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
 @media (max-width:640px){
   .hgal-track{gap:16px;padding-inline:14px;scroll-padding-inline:14px}
   .hgal-card{flex-basis:min(82vw,420px)}
   .hgal-btn{display:none}   /* na mobile wystarczy swipe */
+  .hgal-dots{--dot:11px;--slot:22px;--hit:40px}   /* mniejsze kropki, ale wysoki obszar dotyku */
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hgal-track{scroll-behavior:auto}
+  .hgal-dot::before{transition:none}
 }
 
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;place-items:center;padding:24px}
