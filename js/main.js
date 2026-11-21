@@ -148,13 +148,135 @@
   }
   window.addEventListener('hashchange', route);
 
-  /* ---------- Lightbox (galeria) ---------- */
+  /* ---------- Lightbox + Galeria (poziomy pasek) ---------- */
   const lb = $('#lightbox');
-  $$('.gallery .card').forEach(c => c.addEventListener('click', () => {
-    const img = c.querySelector('.media img'); if (!img) return;
-    lb.querySelector('img').src = img.src; lb.classList.add('open');
-  }));
+  const lbImg = lb.querySelector('img');
+  const openLightbox = (img, title) => {
+    lbImg.src = img.src;
+    lbImg.alt = title || '';
+    lb.classList.add('open');
+  };
   lb.addEventListener('click', () => lb.classList.remove('open'));
+
+  (() => {
+    const hg = $('#hgal');
+    if (!hg) return;
+    const track = $('.hgal-track', hg);
+    const prevBtn = $('.hgal-btn.prev', hg);
+    const nextBtn = $('.hgal-btn.next', hg);
+    const smooth = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+    // losowa kolejność kart przy każdym załadowaniu (Fisher–Yates)
+    const cards = $$('.hgal-card', track);
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    cards.forEach(c => track.appendChild(c));
+    track.scrollLeft = 0;
+
+    // brakujący plik -> usuń <img>, wtedy pokazuje się placeholder (.ph)
+    track.addEventListener('error', (e) => {
+      if (e.target && e.target.tagName === 'IMG') e.target.remove();
+    }, true);
+
+    // stan krawędzi: fade po bokach + przyciski
+    const sync = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const x = track.scrollLeft;
+      const start = x <= 2, end = x >= max - 2;
+      hg.classList.toggle('at-start', start);
+      hg.classList.toggle('at-end', end);
+      prevBtn.disabled = start;
+      nextBtn.disabled = end;
+    };
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sync);
+    }, { passive: true });
+    if ('ResizeObserver' in window) new ResizeObserver(sync).observe(track);   // też przy wejściu na zakładkę
+    addEventListener('resize', sync);
+    sync();
+
+    // przyciski ← →  (przewijają o jedną kartę)
+    const step = () => {
+      const c = track.querySelector('.hgal-card');
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+      return (c ? c.getBoundingClientRect().width : track.clientWidth * 0.8) + gap;
+    };
+    prevBtn.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: smooth() }));
+    nextBtn.addEventListener('click', () => track.scrollBy({ left: step(), behavior: smooth() }));
+
+    // kółko myszy nad galerią -> przewijanie w poziomie
+    let freeT = 0;
+    const free = () => {
+      track.classList.add('is-free');
+      clearTimeout(freeT);
+      freeT = setTimeout(() => track.classList.remove('is-free'), 140);
+    };
+    hg.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) return;                                   // zoom przeglądarki
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;     // natywny gest poziomy (touchpad)
+      if (!e.deltaY) return;
+      const max = track.scrollWidth - track.clientWidth;
+      if (max <= 0) return;
+      const atStart = track.scrollLeft <= 0 && e.deltaY < 0;
+      const atEnd = track.scrollLeft >= max - 1 && e.deltaY > 0;
+      if (atStart || atEnd) return;                            // na krańcach strona przewija się normalnie
+      e.preventDefault();
+      const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? track.clientWidth : 1;
+      free();
+      track.scrollLeft += e.deltaY * unit;
+    }, { passive: false });
+
+    // przeciąganie myszą (na dotyku działa natywny swipe)
+    let drag = null, suppress = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x: e.clientX, s: track.scrollLeft, moved: false };
+    });
+    document.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) < 6) return;
+      drag.moved = true;
+      track.classList.add('is-drag');
+      track.scrollLeft = drag.s - dx;
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      const moved = drag.moved;
+      drag = null;
+      if (!moved) return;
+      suppress = true;
+      setTimeout(() => { suppress = false; }, 80);
+      track.classList.remove('is-drag');                       // snap wraca i dociąga do najbliższej karty
+    };
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
+
+    // klik / Enter / Spacja -> lightbox
+    const openCard = (card) => {
+      const img = card.querySelector('.media img');
+      if (!img) return;                                        // brak pliku – nie ma co powiększać
+      openLightbox(img, card.querySelector('h3')?.textContent.trim());
+    };
+    track.addEventListener('click', (e) => {
+      if (suppress) { e.preventDefault(); e.stopPropagation(); return; }
+      const card = e.target.closest('.hgal-card');
+      if (card) openCard(card);
+    });
+    track.addEventListener('keydown', (e) => {
+      const card = e.target.closest('.hgal-card');
+      if (!card) return;
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(card); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        const sib = e.key === 'ArrowRight' ? card.nextElementSibling : card.previousElementSibling;
+        if (sib && sib.classList.contains('hgal-card')) { e.preventDefault(); sib.focus(); }
+      }
+    });
+  })();
 
   /* =====================================================================
      MODY – lista, wyszukiwarka, filtry, okno z historią wersji
