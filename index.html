@@ -337,125 +337,113 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     <div class="eyebrow"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="gallery.eyebrow">Screenshoty</span></div>
     <h1 data-i18n="gallery.title">Galeria</h1>
   </div>
-  <div class="gallery">
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/image.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3>Rzemieślnicza</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3>Zwycięska</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace1.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3>Węglin</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace2.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3>Poczekajka</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace3.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace4.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3>
-        <p></p>
-      </figcaption>
-    </figure>
-    <figure class="card">
-      <div class="media">
-        <img decoding="async" fetchpriority="low" src="image/obrazyPokazujace5.png" alt="Miniaturka wpisu" data-i18n-attr="alt:common.postThumbnail" width="2013" height="48" style="width: 100%; height: 100%; display: block; object-fit: cover;" />
-      </div>
-      <figcaption class="body">
-        <h3>Wojciechowska</h3>
-        <p></p>
-      </figcaption>
-    </figure>
+
+  <!-- Kolejność kart jest losowana w main.js przy każdym załadowaniu strony -->
+  <div class="hgal" id="hgal">
+    <button class="hgal-btn prev" type="button" aria-label="Poprzednie" data-i18n-attr="aria-label:common.prevSlide"><svg class="icon"><use href="#i-left"/></svg></button>
+
+    <div class="hgal-track">
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace2.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3>Poczekajka</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/image.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3>Rzemieślnicza</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3>Zwycięska</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace3.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace1.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3>Węglin</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace4.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="gallery.hospital">Szpital Wojewódzki</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace5.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3>Wojciechowska</h3></figcaption>
+      </figure>
+
+      <!-- Pliki 6–10: jeśli jeszcze nie istnieją, karta pokaże placeholder. Tytuły podmień, gdy będą gotowe. -->
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace6.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="6">Zdjęcie 6</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace7.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="7">Zdjęcie 7</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace8.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="8">Zdjęcie 8</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace9.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="9">Zdjęcie 9</h3></figcaption>
+      </figure>
+
+      <figure class="card hgal-card" tabindex="0" role="button">
+        <div class="media">
+          <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace10.png" alt="">
+          <div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.noPreview">Brak podglądu</span></div>
+        </div>
+        <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="10">Zdjęcie 10</h3></figcaption>
+      </figure>
+    </div>
+
+    <button class="hgal-btn next" type="button" aria-label="Następne" data-i18n-attr="aria-label:common.nextSlide"><svg class="icon"><use href="#i-right"/></svg></button>
   </div>
 </section>
-
-<section class="page" id="page-info">
-  <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-users"/></svg><span data-i18n="info.eyebrow">Zespół</span></div>
-    <h1 data-i18n="info.title">Info</h1>
-  </div>
-
-  <div class="team">
-    <div class="member">
-      <div class="avatar"><img decoding="async" src="image/avatar1.jpg" alt="Awatar 1" data-i18n-attr="alt:info.avatar1"></div>
-      <div class="box">
-        <h2>Ziemniak</h2>
-        <h3 data-i18n="info.role">Główny twórca Projektu Lublin</h3>
-        <p data-i18n="info.skillsEditorBlender">Edytor, Blender</p>
-      </div>
-    </div>
-    <div class="member">
-      <div class="avatar"><img decoding="async" src="image/avatar2.jpg" alt="Awatar 2" data-i18n-attr="alt:info.avatar2"></div>
-      <div class="box">
-        <h2>Pikacz</h2>
-        <h3 data-i18n="info.role">Główny twórca Projektu Lublin</h3>
-        <p data-i18n="info.skillsEditorBlenderPr">Edytor, Blender, PR</p>
-      </div>
-    </div>
-  </div>
-
-  <h2 class="arch-head city"><svg class="icon"><use href="#i-pin"/></svg><span data-i18n="info.cityHeading">O mieście</span></h2>
-
-  <div class="info-grid">
-    <div class="card map">
-      <iframe src="https://maps.google.com/maps?q=Lublin,%20Polska&z=12&output=embed" sandbox="allow-scripts allow-same-origin allow-popups" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa Lublina" data-i18n-attr="title:info.mapTitle"></iframe>
-    </div>
-
-    <div class="card about">
-      <h2>Lublin</h2>
-      <p data-i18n="info.about">Lublin to największe miasto we wschodniej Polsce i stolica województwa lubelskiego. Położony nad Bystrzycą, słynie z malowniczego Starego Miasta, Zamku Lubelskiego z Kaplicą Trójcy Świętej oraz Bramy Krakowskiej. To ważny ośrodek akademicki z kilkoma uczelniami i dziesiątkami tysięcy studentów. Lublin ma jedną z największych sieci trolejbusowych w Polsce, a komunikację miejską obsługuje ZTM Lublin.</p>
-      <div class="stats">
-        <div class="stat"><svg class="icon"><use href="#i-users"/></svg><b>326 685</b><span data-i18n="info.stats.population">mieszkańców (koniec 2025)</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-area"/></svg><b>147,5 km²</b><span data-i18n="info.stats.area">powierzchnia</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-landmark"/></svg><b>1317</b><span data-i18n="info.stats.cityRights">prawa miejskie</span></div>
-        <div class="stat"><svg class="icon"><use href="#i-pin"/></svg><b data-i18n="info.stats.voivodeshipValue">lubelskie</b><span data-i18n="info.stats.voivodeship">województwo</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="photos">
-    <div class="media"> <img decoding="async" fetchpriority="low" src="image/Lublin/images.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="1">Zdjęcie 1</span></div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/images (1).jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="2">Zdjęcie 2</span></div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image2.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="3">Zdjęcie 3</span></div></div>
-    <div class="media"><img decoding="async" fetchpriority="low" src="image/Lublin/image3.jpg" alt=""><div class="ph"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="common.photoNumber" data-n="4">Zdjęcie 4</span></div></div>
-  </div>
-</section>
-
 </div>
 </main>
 
