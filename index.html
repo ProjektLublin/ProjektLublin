@@ -54,7 +54,18 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/mods.css">
+<link rel="stylesheet" href="css/download.css">
+<link rel="stylesheet" href="css/progress.css">
+<link rel="stylesheet" href="css/coop.css">
+<link rel="stylesheet" href="css/gallery.css">
+<link rel="stylesheet" href="css/info.css">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 
@@ -263,7 +274,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     <h1 data-i18n="progress.title">Rozwój</h1>
   </div>
 
-  <!-- Zawartość (linie, legenda, trasa, listy zadań, liczniki) generuje main.js z json/progress.json -->
+  <!-- Zawartość (linie, legenda, trasa, listy zadań, liczniki) generuje js/features/progress.js z json/progress.json -->
   <div id="progressRoot"></div>
 </section>
 
@@ -338,7 +349,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     <h1 data-i18n="gallery.title">Galeria</h1>
   </div>
 
-  <!-- Kolejność kart jest losowana w main.js przy każdym załadowaniu strony -->
+  <!-- Kolejność kart jest losowana w js/ui/gallery.js przy każdym załadowaniu strony -->
   <div class="hgal" id="hgal">
     <button class="hgal-btn prev" type="button" aria-label="Poprzednie" data-i18n-attr="aria-label:common.prevSlide"><svg class="icon"><use href="#i-left"/></svg></button>
 
@@ -527,6 +538,6 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   </div>
 </div>
 
-<script src="js/main.js"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
