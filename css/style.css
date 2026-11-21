@@ -685,14 +685,85 @@ body.modal-open{overflow:hidden}
   color:var(--muted);
 }
 
-/* ---------- Galeria ---------- */
-.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.gallery .card{cursor:zoom-in;background:transparent}
-.gallery .media{aspect-ratio:4/3}
-.gallery .body{padding:16px 18px 20px}
-.gallery h3{font-size:1.08rem;margin-bottom:4px}
-.gallery p{color:var(--muted);font-size:.9rem}
-.gallery .card:hover{transform:translateY(-3px)}
+/* ---------- Galeria: poziomy pasek ---------- */
+.hgal{
+  position:relative;
+  width:min(1560px,calc(100vw - 40px));
+  left:50%;
+  transform:translateX(-50%);
+}
+.hgal-track{
+  display:flex;
+  gap:24px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:10px 20px 22px;           /* miejsce na lift karty (-4px) */
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:20px;
+  overscroll-behavior-x:contain;
+  scrollbar-width:none;
+  cursor:grab;
+  user-select:none;-webkit-user-select:none;
+}
+.hgal-track::-webkit-scrollbar{display:none}
+/* wheel / przeciąganie myszą: snap wyłączony na czas ruchu, wraca po jego zakończeniu */
+.hgal-track.is-free,
+.hgal-track.is-drag{scroll-snap-type:none}
+.hgal-track.is-drag,
+.hgal-track.is-drag *{cursor:grabbing}
+
+.hgal-card{
+  flex:0 0 clamp(270px,42vw,560px);
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  cursor:inherit;
+  outline:none;
+}
+.hgal-card .media{aspect-ratio:16/10}
+.hgal-card .media img{pointer-events:none;-webkit-user-drag:none}
+.hgal-card .body{padding:16px 18px 20px}
+.hgal-card h3{font-size:1.08rem;letter-spacing:-.01em}
+.hgal-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media (hover:hover){
+  .hgal-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--line-2);
+    border-color:color-mix(in srgb,var(--text) 45%,var(--line));
+  }
+}
+
+/* delikatny fade na brzegach – znika, gdy nie ma już co przewijać */
+.hgal::before,.hgal::after{
+  content:"";position:absolute;top:0;bottom:0;z-index:2;
+  width:clamp(28px,6vw,90px);pointer-events:none;
+  transition:opacity .3s var(--ease);
+}
+.hgal::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.hgal::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.hgal.at-start::before,.hgal.at-end::after{opacity:0}
+
+/* przyciski ← → */
+.hgal-btn{
+  position:absolute;top:calc(50% - 22px);transform:translateY(-50%);z-index:3;
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.6);color:#fff;cursor:pointer;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background .2s,border-color .2s,transform .2s var(--ease),opacity .2s;
+}
+.hgal-btn:hover:not(:disabled){background:var(--accent);border-color:var(--accent);transform:translateY(-50%) scale(1.08)}
+.hgal-btn:disabled{opacity:0;pointer-events:none}
+.hgal-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hgal-btn.prev{left:12px}
+.hgal-btn.next{right:12px}
+.hgal-btn .icon{width:20px;height:20px;stroke-width:2}
+
+@media (max-width:640px){
+  .hgal-track{gap:16px;padding-inline:14px;scroll-padding-inline:14px}
+  .hgal-card{flex-basis:min(82vw,420px)}
+  .hgal-btn{display:none}   /* na mobile wystarczy swipe */
+}
+
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;place-items:center;padding:24px}
 .lightbox.open{display:grid}
 .lightbox img{max-height:86vh;border-radius:12px}
