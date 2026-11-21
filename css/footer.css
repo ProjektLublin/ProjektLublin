@@ -1,0 +1,7 @@
+/* ---------- Stopka ---------- */
+footer{border-top:1px solid var(--line);background:var(--bg)}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:26px 20px;flex-wrap:wrap}
+.foot .brand{font-family:var(--display);font-weight:700;font-size:1.15rem}
+.foot nav{display:flex;gap:18px;flex-wrap:wrap}
+.foot nav a{font-size:.83rem;color:var(--muted);transition:color .2s}
+.foot nav a:hover{color:var(--text)}

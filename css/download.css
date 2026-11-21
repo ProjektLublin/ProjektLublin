@@ -1,0 +1,18 @@
+/* ---------- Download ---------- */
+.dl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.dl{padding:26px;display:flex;flex-direction:column;gap:12px;background:transparent}
+.dl .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);background:transparent}
+.dl .ic .icon{width:24px;height:24px}
+.dl h3{font-size:1.2rem}
+.dl p{color:var(--muted);font-size:.93rem;flex:1}
+.dl .meta{margin-bottom:6px}
+
+.arch-head{display:flex;align-items:center;gap:10px;margin:48px 0 6px;font-size:1.5rem;letter-spacing:-.02em}
+.arch-sub{color:var(--muted);margin-bottom:20px}
+.arch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ver{display:flex;align-items:center;gap:16px;padding:16px 18px;background:transparent}
+.ver .tag{font-family:var(--display);font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--line-2);white-space:nowrap}
+.ver .txt{flex:1;min-width:0}
+.ver h4{font-size:1rem}
+.ver .txt p{color:var(--muted);font-size:.85rem}
+.ver .btn{padding:10px 14px}

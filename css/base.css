@@ -1,0 +1,55 @@
+/* =====================================================================
+   Projekt Lublin – style.css
+   ===================================================================== */
+
+/* ---------- Zmienne i motywy ---------- */
+:root{
+  --accent:#ff7a1a;
+  --radius:14px;
+  --maxw:1180px;
+  --display:"Space Grotesk",Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#000; --bg-2:#0b0b0b; --card:#0f0f0f; --line:#222; --line-2:#333;
+  --text:#fff; --muted:#9a9a9a; --invert:#fff; --on-invert:#000;
+}
+[data-theme="light"]{
+  --bg:#fff; --bg-2:#f5f5f5; --card:#fafafa; --line:#e4e4e4; --line-2:#cfcfcf;
+  --text:#000; --muted:#5f5f5f; --invert:#000; --on-invert:#fff;
+}
+
+/* ---------- Reset i baza ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html.js-smooth{scroll-behavior:auto}   /* płynność przewijania robi js/ui/smooth-scroll.js */
+body{
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column;
+  transition:background .35s var(--ease),color .35s var(--ease);
+}
+h1,h2,h3,h4,.btn{font-family:var(--display)}
+.logo,.nav a,.discord{font-family:Arial,Helvetica,system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.icon{width:1.15em;height:1.15em;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.icon.fill{fill:currentColor;stroke:none}
+
+/* ---------- Suwak (scrollbar) dopasowany do motywu ---------- */
+[data-theme="dark"]{color-scheme:dark;--sb:#3b3b3b}
+[data-theme="light"]{color-scheme:light;--sb:#bdbdbd}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--sb);border:4px solid var(--bg);border-radius:99px;transition:background .2s}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+::-webkit-scrollbar-corner{background:var(--bg)}
+.mod-modal-scroll::-webkit-scrollbar-track{background:transparent}
+.mod-modal-scroll::-webkit-scrollbar-thumb{border-color:var(--bg)}
+@supports (-moz-appearance:none){*{scrollbar-width:thin;scrollbar-color:var(--sb) transparent}}
+
+/* ---------- Układ ogólny ---------- */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
+main,header,footer{position:relative;z-index:1}
+main{flex:1;padding:48px 0 72px;overflow-x:clip}
+html,body{overflow-x:clip}

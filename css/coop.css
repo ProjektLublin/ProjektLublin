@@ -1,0 +1,190 @@
+/* ---------- Współpraca: scena sterowana przewijaniem ---------- */
+.coop-scene{overflow-x:visible}
+.fx{transform-origin:50% 50%;will-change:transform,opacity}
+
+.coop-hero{display:grid;place-items:center;text-align:center;min-height:clamp(260px,46vh,460px)}
+.coop-hero h1{font-size:clamp(2.8rem,10vw,6.5rem);line-height:1;letter-spacing:-.045em}
+
+/* ===== 2 OBRAZY – duże, bez ucinania ===== */
+.works{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:32px;
+  align-items:end;
+  width:min(1560px,calc(100vw - 40px));
+  max-width:none;
+  position:relative;
+  left:50%;
+  transform:translateX(-50%);
+  padding:50px 0 80px;
+  overflow:visible;
+}
+.work{margin:0;overflow:visible}
+.work .fx{display:flex;flex-direction:column;gap:20px;overflow:visible}
+.work img{
+  width:100%;
+  height:auto;
+  max-height:730px;
+  object-fit:contain;
+  filter:drop-shadow(0 36px 50px rgba(0,0,0,.65));
+}
+[data-theme="light"] .work img{filter:drop-shadow(0 28px 40px rgba(0,0,0,.28))}
+.work figcaption{
+  text-align:center;
+  font-family:var(--display);
+  font-weight:500;
+  font-size:1.15rem;
+  color:var(--muted);
+}
+
+
+/* blok Wymagania – bez tła i bez obramówki */
+.req{
+  position:relative;
+  padding:clamp(26px,4vw,44px);
+  background:transparent;
+}
+.req-node{
+  position:absolute;
+  left:50%;
+  top:-7px;
+  width:13px;
+  height:13px;
+  margin-left:-7px;
+  border-radius:50%;
+  border:2px solid var(--line-2);
+  background:transparent;
+  transition:border-color .4s var(--ease),background .4s var(--ease);
+}
+.req.lit .req-node{border-color:var(--accent);background:var(--accent)}
+
+.req h2{
+  text-align:center;
+  font-size:clamp(1.8rem,4.5vw,2.8rem);
+  letter-spacing:-.03em;
+  margin-bottom:clamp(24px,4vw,40px);
+}
+
+/* ============================================================
+   WYMAGANIA — układ naprzemienny z pionową osią (Opcja B)
+   ============================================================ */
+.req-flow{
+  --req-gap:48px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:clamp(28px,5vh,56px);
+  padding:8px 0 4px;
+  overflow-x:clip;
+}
+.req-flow::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:2px;
+  margin-left:-1px;
+  background:linear-gradient(to bottom,
+    transparent 0,
+    var(--line-2) 8%,
+    var(--line-2) 92%,
+    transparent 100%);
+  z-index:0;
+}
+.req-item{
+  position:relative;
+  z-index:1;
+  width:calc(50% - var(--req-gap));
+  display:flex;
+  opacity:0;
+  translate:-30px 0;
+  transition:opacity .8s var(--ease), translate .8s var(--ease);
+}
+.req-item[data-side="right"]{
+  translate:30px 0;
+  margin-left:auto;
+}
+.req-item.in{
+  opacity:1;
+  translate:0 0;
+}
+.req-item::before{
+  content:"";
+  position:absolute;
+  top:38px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--bg);
+  border:2px solid var(--line-2);
+  transition:border-color .4s var(--ease), background .4s var(--ease);
+}
+.req-item[data-side="left"]::before{right:calc(-1 * var(--req-gap) - 6px)}
+.req-item[data-side="right"]::before{left:calc(-1 * var(--req-gap) - 6px)}
+.req-item.in::before{border-color:var(--accent);background:var(--accent)}
+
+.req-item .fx{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:22px 24px;
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:12px;
+  transition:border-color .3s var(--ease);
+}
+.req-item:hover .fx{border-color:var(--line-2)}
+.req-item h3{display:flex;align-items:center;gap:10px;font-size:1.2rem}
+.req-item p{color:var(--muted);font-size:.95rem}
+.req-item .btn{align-self:flex-start;margin-top:auto}
+
+/* Długoterminowość – pasek bez pełnego tła */
+.tl{position:relative;height:58px;margin-top:auto}
+.tl-bar{
+  position:absolute;
+  left:0;right:0;
+  top:10px;
+  height:6px;
+  border-radius:99px;
+  overflow:hidden;
+  background:transparent;
+  border:1px solid var(--line);
+  -webkit-mask-image:linear-gradient(90deg,#000 78%,transparent);
+  mask-image:linear-gradient(90deg,#000 78%,transparent);
+}
+.tl-fill{
+  position:absolute;
+  inset:0;
+  background:var(--accent);
+  transform-origin:0 50%;
+  transform:scaleX(var(--p,0));
+}
+.tl-cut{
+  position:absolute;
+  left:calc(var(--at) * 100%);
+  top:2px;
+  width:2px;
+  height:22px;
+  margin-left:-1px;
+  border-radius:2px;
+  background:var(--text);
+  opacity:clamp(.25,calc(.25 + (var(--p,0) - var(--at)) * 40),1);
+}
+.tl-cut i{
+  position:absolute;
+  top:calc(100% + 6px);
+  left:50%;
+  transform:translateX(-50%);
+  font:500 .82rem var(--display);
+  font-style:normal;
+  color:var(--muted);
+}
+.tl-unit{
+  position:absolute;
+  right:0;
+  bottom:0;
+  font-size:.8rem;
+  color:var(--muted);
+}

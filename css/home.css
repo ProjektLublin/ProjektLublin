@@ -1,0 +1,32 @@
+/* ---------- Aktualności (wpisy) ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1fr);max-width:980px;margin:0 auto;gap:32px;align-items:start}
+.posts{display:grid;grid-template-columns:1fr;gap:26px}
+.post .media{aspect-ratio:2/1}
+.post .body{padding:18px 20px 22px}
+.meta{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--muted)}
+.post h3{font-size:1.25rem;margin:6px 0 8px;letter-spacing:-.01em}
+.post p{color:var(--muted);font-size:.95rem;white-space:pre-line}
+.post:hover{transform:translateY(-3px)}
+a.post{display:block;color:inherit;cursor:pointer}
+.post .media.pm{aspect-ratio:auto;background:var(--bg-2)}
+.post .media.pm img{position:static;width:100%;height:auto}
+
+/* ---------- Wsparcie ---------- */
+.support{position:sticky;top:96px;padding:22px}
+.support h3{display:flex;align-items:center;gap:9px;font-size:1.1rem;margin-bottom:4px}
+.support > p{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+.donations{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.don{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:.88rem;
+}
+.don .who{display:flex;align-items:center;gap:9px;min-width:0}
+.don .av{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--bg-2);border:1px solid var(--line);flex:none}
+.don .av .icon{width:15px;height:15px}
+.don .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.don .amt{font-family:var(--display);font-weight:700;white-space:nowrap}
+.support .btn{width:100%}
+.support .btn .icon{color:var(--accent)}
+.support-box{display:flex;justify-content:center;margin-top:28px}
+.support-box .btn{min-width:220px}
+.support-box .btn .icon{color:var(--accent)}

@@ -1,0 +1,95 @@
+/* ---------- Responsywność ---------- */
+@media (max-width:1060px){
+  .nav a{padding:9px 10px}
+  .nav a .icon{display:none}
+  .discord span{display:none}
+  .discord{padding:9px 11px}
+  .req-flow{--req-gap:34px}
+  .req-item h3{font-size:1.1rem}
+}
+@media (max-width:1000px){
+  .works{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .work:nth-child(even){margin-top:40px}
+}
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .support{position:static}
+  .dl-grid,.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .info-grid{grid-template-columns:1fr}
+  .map{min-height:340px}
+  .photos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  #menuBtn{display:grid}
+  .nav{
+    position:absolute;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;
+    padding:10px 16px 16px;background:var(--bg);border-bottom:1px solid var(--line);
+    transform:translateY(-8px);opacity:0;pointer-events:none;transition:all .25s var(--ease);
+  }
+  .nav.open{transform:none;opacity:1;pointer-events:auto}
+  .nav a{padding:13px 14px;font-size:1rem}
+  .nav a .icon{display:block}
+  .nav-tools{margin-left:auto}
+
+  /* jeden przycisk: Discord i menu (język, motyw) przechodzą do panelu hamburgera */
+  .nav-tools .discord,.more-menu{display:none}
+  .nav{max-height:calc(100vh - 68px);max-height:calc(100dvh - 68px);overflow-y:auto;overscroll-behavior:contain}
+  .nav-extra{display:flex;flex-direction:column;gap:2px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+  .nav-item,.nav .nav-extra .nav-discord{
+    display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;border:0;border-radius:10px;
+    font:500 1rem Arial,Helvetica,system-ui,sans-serif;text-align:left;cursor:pointer;
+    background:transparent;color:var(--muted);transition:color .2s,background .2s,filter .2s;
+  }
+  .nav-item:hover{color:var(--text);background:var(--bg-2)}
+  .nav-item .icon{width:19px;height:19px}
+  .nav .nav-extra .nav-discord{background:#5865f2;color:#fff;font-weight:600}
+  .nav .nav-extra .nav-discord:hover{background:#5865f2;color:#fff;filter:brightness(1.1)}
+  .nav .nav-extra .nav-discord .icon{width:20px;height:20px}
+  .mod{grid-template-columns:1fr}
+  .mod .media{aspect-ratio:16/9;min-height:0;height:auto}
+  .req-flow{--req-gap:28px;gap:clamp(22px,4vh,38px)}
+  .req-item .fx{padding:20px}
+}
+@media (max-width:720px){
+  /* Wymagania – stack pionowy, linia i kropki ukryte */
+  .req-flow{--req-gap:0;gap:22px;padding:6px 0;overflow-x:visible}
+  .req-flow::before{display:none}
+  .req-item,
+  .req-item[data-side="left"],
+  .req-item[data-side="right"]{
+    width:100%;
+    margin:0;
+    translate:0 24px;
+  }
+  .req-item.in{translate:0 0}
+  .req-item::before{display:none}
+
+  /* Obrazy Współpracy – mniej dominujące na mobile */
+  .work img{max-height:420px}
+}
+@media (max-width:640px){
+  main{padding:32px 0 56px}
+  .posts,.dl-grid,.gallery,.tasks{grid-template-columns:1fr}
+  .post .media{aspect-ratio:16/10}
+  .post .media.pm{aspect-ratio:auto}
+  .post .body{padding:18px 20px 22px}
+  .post h3{font-size:1.3rem}
+  .arch{grid-template-columns:1fr!important}
+  .foot{flex-direction:column;align-items:flex-start}
+  .mod .body,.about,.progress-card{padding:20px}
+  .req{padding:22px 14px}
+  .mod-modal{padding:12px}
+  .mod-modal-box{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}
+  .mm-content{padding:16px 16px 20px}
+  .mm-ver-body{padding:16px}
+}
+@media (max-width:380px){
+  .logo{font-size:1rem}
+  .wrap{padding:0 14px}
+  .stats{grid-template-columns:1fr}
+  .req-item .fx{padding:16px}
+  .work img{max-height:320px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}

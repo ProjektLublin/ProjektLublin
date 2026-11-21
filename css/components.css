@@ -1,0 +1,41 @@
+/* ---------- Strony i animacje ---------- */
+.page{display:none;animation:fade .45s var(--ease)}
+.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes ovl{from{opacity:0}to{opacity:1}}
+.page-head{margin-bottom:32px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.page-head h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.03em}
+.page-head p{color:var(--muted);margin-top:10px;max-width:640px}
+
+/* ---------- Karty i przyciski ---------- */
+.card{background:transparent;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color .25s,transform .3s var(--ease)}
+.card:hover{border-color:var(--line-2)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;border-radius:11px;
+  background:var(--invert);color:var(--on-invert);font-weight:600;border:1px solid var(--invert);cursor:pointer;
+  transition:transform .2s var(--ease),opacity .2s;font-size:.95rem;
+}
+.btn:hover{transform:translateY(-2px);opacity:.9}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line-2)}
+
+.media{
+  position:relative;aspect-ratio:16/9;background:var(--bg-2);display:grid;place-items:center;
+  color:var(--muted);overflow:hidden;
+}
+.media::after{content:"";position:absolute;inset:0;pointer-events:none}
+.media .ph{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.82rem}
+.media .ph .icon{width:34px;height:34px;stroke-width:1.2}
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.media:has(img) .ph{display:none}
+
+/* ---------- Paginacja ---------- */
+.pager{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:30px;flex-wrap:wrap}
+.pager button{
+  min-width:40px;height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);
+  background:transparent;color:var(--text);cursor:pointer;font-family:var(--display);font-weight:600;
+  display:grid;place-items:center;transition:background .2s,border-color .2s;
+}
+.pager button:hover:not(:disabled){border-color:var(--line-2);background:var(--bg-2)}
+.pager button.on{background:var(--invert);color:var(--on-invert);border-color:var(--invert)}
+.pager button:disabled{opacity:.35;cursor:default}
