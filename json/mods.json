@@ -5,8 +5,7 @@
     { "id": "blender", "label": "Blender / Narzędzia", "label_en": "Blender / Tools" },
     { "id": "siec", "label": "Sieć trolejbusowa", "label_en": "Trolleybus network" },
     { "id": "ai", "label": "AI / HOF", "label_en": "AI / HOF" },
-    { "id": "inne", "label": "Inne", "label_en": "Other" },
-    { "id": "inne", "label": "Modyfikacja", "label_en": "Modification" }
+    { "id": "inne", "label": "Inne", "label_en": "Other" }
   ],
   "mods": [
     {
@@ -14,7 +13,7 @@
       "title": "Trollino 18MD",
       "title_en": "Trollino 18MD",
       "author": "Po wirtualnym lublinie",
-      "categories": ["Modyfikacja"],
+      "categories": ["Inne"],
       "versions": [
         {
           "version": "1.0",
