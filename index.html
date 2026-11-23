@@ -349,11 +349,10 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     <h1 data-i18n="gallery.title">Galeria</h1>
   </div>
 
-  <!-- Kolejność kart jest losowana w js/ui/gallery.js przy każdym załadowaniu strony -->
+  <!-- Kolejność kart jest losowana w js/ui/gallery.js przy każdym załadowaniu strony.
+       Pierwsza karta po losowaniu staje się dużym, wyróżnionym zdjęciem (featured). -->
   <div class="hgal" id="hgal">
-    <button class="hgal-btn prev" type="button" aria-label="Poprzednie" data-i18n-attr="aria-label:common.prevSlide"><svg class="icon"><use href="#i-left"/></svg></button>
-
-    <div class="hgal-track">
+    <div class="hgal-grid" role="group" aria-label="Galeria" data-i18n-attr="aria-label:gallery.title">
       <figure class="card hgal-card" tabindex="0" role="button">
         <div class="media">
           <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace2.png" alt="">
@@ -410,7 +409,8 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
         <figcaption class="body"><h3>Wojciechowska</h3></figcaption>
       </figure>
 
-      <!-- Pliki 6–10: jeśli jeszcze nie istnieją, karta pokaże placeholder. Tytuły podmień, gdy będą gotowe. -->
+      <!-- Pliki 6–10: jeśli jeszcze nie istnieją, karta pokaże placeholder (i trafi na koniec siatki).
+           Tytuły podmień, gdy zdjęcia będą gotowe. -->
       <figure class="card hgal-card" tabindex="0" role="button">
         <div class="media">
           <img loading="lazy" decoding="async" draggable="false" src="image/obrazyPokazujace6.png" alt="">
@@ -451,11 +451,9 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
         <figcaption class="body"><h3 data-i18n="common.photoNumber" data-n="10">Zdjęcie 10</h3></figcaption>
       </figure>
     </div>
-
-    <button class="hgal-btn next" type="button" aria-label="Następne" data-i18n-attr="aria-label:common.nextSlide"><svg class="icon"><use href="#i-right"/></svg></button>
   </div>
-  <div class="hgal-dots" id="hgalDots" role="group" aria-label="Galeria" data-i18n-attr="aria-label:gallery.title" hidden></div>
 </section>
+
 
 <section class="page" id="page-info">
   <div class="page-head">
