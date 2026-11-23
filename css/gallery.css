@@ -1,122 +1,138 @@
-/* ---------- Galeria: poziomy pasek ---------- */
+/* =====================================================================
+   css/gallery.css – zakładka „Galeria": mozaika (duże zdjęcie + siatka)
+   ---------------------------------------------------------------------
+   Siatka 12-kolumnowa, żeby JS mógł równo rozciągnąć ostatni rząd.
+   Liczba „nominalnych" kolumn (--cols) zależy od szerokości ekranu:
+     ≥1280px: 4   |   900–1279px: 3   |   340–899px: 2   |   <340px: 1
+   Wysokość rzędu = szerokość kolumny × 10/16 (jak dotychczasowe 16/10),
+   liczona z container query units (cqw) – bez JS i bez skoków układu.
+   ===================================================================== */
 .hgal{
   position:relative;
-  width:min(1560px,calc(100vw - 40px));
+  width:min(1400px,calc(100vw - 40px));
   left:50%;
   transform:translateX(-50%);
+  container-type:inline-size;       /* potrzebne dla jednostek cqw w .hgal-grid */
 }
-.hgal-track{
-  display:flex;
-  gap:24px;
-  overflow-x:auto;
-  overflow-y:hidden;
-  padding:10px 20px 22px;           /* miejsce na lift karty (-4px) */
-  scroll-snap-type:x mandatory;
-  scroll-padding-inline:20px;
-  scroll-behavior:smooth;           /* natywne przewijanie, np. przy focusie klawiaturą */
-  overscroll-behavior-x:contain;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-  cursor:grab;
-  user-select:none;-webkit-user-select:none;
-}
-.hgal-track::-webkit-scrollbar{display:none}
-/* ruch sterowany z JS (kółko / drag / animacje): snap i CSS smooth wyłączone na czas ruchu */
-.hgal-track.is-free,
-.hgal-track.is-drag{scroll-snap-type:none;scroll-behavior:auto}
-.hgal-track.is-drag,
-.hgal-track.is-drag *{cursor:grabbing}
 
-.hgal-card{
-  flex:0 0 clamp(270px,42vw,560px);
-  scroll-snap-align:start;
-  scroll-snap-stop:always;
-  cursor:inherit;
-  outline:none;
-  transition:border-color .5s var(--ease),transform .55s var(--ease),box-shadow .55s var(--ease);
-}
-.hgal-card .media{aspect-ratio:16/10}
-.hgal-card .media img{pointer-events:none;-webkit-user-drag:none}
-.hgal-card .body{padding:16px 18px 20px}
-.hgal-card h3{font-size:1.08rem;letter-spacing:-.01em}
-.hgal-card:focus-visible{outline:2px solid color-mix(in srgb,var(--accent) 60%,transparent);outline-offset:3px}
+.hgal-grid{
+  --cols:4;     /* liczba nominalnych kolumn (czyta ją też gallery.js) */
+  --cs:3;       /* rozpiętość zwykłej karty (z 12 kolumn) */
+  --fs:6;       /* rozpiętość karty wyróżnionej */
+  --frs:2;      /* ile rzędów zajmuje karta wyróżniona */
+  --gap:20px;
+  --rowh:clamp(150px,16vw,230px);   /* zapas dla przeglądarek bez cqw */
 
-@media (hover:hover){
-  .hgal-card:hover{
-    transform:translateY(-2px);
-    border-color:var(--line-2);
-    border-color:color-mix(in srgb,var(--text) 16%,var(--line));
-    box-shadow:0 14px 34px -18px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  grid-auto-rows:var(--rowh);
+  grid-auto-flow:row dense;
+  gap:var(--gap);
+}
+@supports (width:1cqw){
+  .hgal-grid{
+    --rowh:calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) * .625);
   }
 }
 
-/* delikatny fade na brzegach – znika, gdy nie ma już co przewijać */
-.hgal::before,.hgal::after{
-  content:"";position:absolute;top:0;bottom:0;z-index:2;
-  width:clamp(28px,6vw,90px);pointer-events:none;
-  transition:opacity .3s var(--ease);
+/* ---------- Karta ---------- */
+.hgal-card{
+  --span:var(--cs);                       /* gallery.js może nadpisać inline przy ostatnim rzędzie */
+  grid-column:span var(--span);
+  grid-row:span var(--rspan,1);
+  position:relative;
+  min-width:0;
+  cursor:zoom-in;
+  outline:none;
+  transition:transform .55s var(--ease),border-color .5s var(--ease),box-shadow .55s var(--ease);
 }
-.hgal::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
-.hgal::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
-.hgal.at-start::before,.hgal.at-end::after{opacity:0}
+/* pierwsza karta po losowaniu = zdjęcie wyróżnione (2×2, proporcje zachowane) */
+.hgal-grid:not(.no-feature) .hgal-card:first-child{
+  --span:var(--fs);
+  grid-row:span var(--frs);
+}
 
-/* przyciski ← →  (bez backdrop-filter: blur nad przewijaną zawartością przerysowywał się co klatkę) */
-.hgal-btn{
-  position:absolute;top:calc(50% - 22px);transform:translateY(-50%);z-index:3;
-  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
-  border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.72);color:#fff;cursor:pointer;
-  transition:background .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease),opacity .3s;
+/* zdjęcie wypełnia całą kartę niezależnie od tego, ile komórek zajmuje */
+.hgal-card .media{position:absolute;inset:0;aspect-ratio:auto}
+.hgal-card .media img{
+  pointer-events:none;-webkit-user-drag:none;
+  transition:transform .8s var(--ease);
 }
-.hgal-btn:hover:not(:disabled){
-  background:rgba(24,24,24,.9);
-  border-color:rgba(255,255,255,.38);
-  border-color:color-mix(in srgb,var(--accent) 45%,rgba(255,255,255,.25));
-  transform:translateY(-50%) scale(1.04);
-}
-.hgal-btn:disabled{opacity:0;pointer-events:none}
-.hgal-btn:focus-visible{outline:2px solid color-mix(in srgb,var(--accent) 60%,transparent);outline-offset:2px}
-.hgal-btn.prev{left:12px}
-.hgal-btn.next{right:12px}
-.hgal-btn .icon{width:20px;height:20px;stroke-width:2}
 
-/* suwak z kropek: aktywna największa, im dalej tym mniejsze (skalę --s liczy JS) */
-.hgal-dots{
-  --dot:14px;--slot:26px;--hit:36px;
-  display:flex;justify-content:center;align-items:center;
-  max-width:100%;margin:0 auto;padding:0 12px;
+/* podpis nałożony na zdjęcie – nie zabiera wysokości, więc mieści się więcej zdjęć */
+.hgal-card .body{
+  position:absolute;left:0;right:0;bottom:0;z-index:1;
+  padding:36px 16px 13px;
+  background:linear-gradient(to top,rgba(0,0,0,.78),rgba(0,0,0,.34) 55%,transparent);
+  color:#fff;
+  pointer-events:none;
 }
-.hgal-dots[hidden]{display:none}
-.hgal-dot{
-  flex:0 1 var(--slot);min-width:12px;height:var(--hit);
-  display:grid;place-items:center;padding:0;border:0;border-radius:50%;
-  background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;
+.hgal-card h3{
+  font-size:1rem;line-height:1.3;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
 }
-.hgal-dot::before{
-  content:"";width:var(--dot);height:var(--dot);border-radius:50%;
-  background:var(--line-2);
-  background:color-mix(in srgb,var(--text) 30%,var(--bg));
-  transform:scale(var(--s,.3));
-  transition:transform .35s var(--ease),background-color .25s;
-}
-.hgal-dot.on::before{background:var(--accent)}
+.hgal-grid:not(.no-feature) .hgal-card:first-child .body{padding:56px 22px 18px}
+.hgal-grid:not(.no-feature) .hgal-card:first-child h3{font-size:clamp(1.1rem,1.7vw,1.5rem)}
+
+/* hover / focus */
 @media (hover:hover){
-  .hgal-dot:not(.on):hover::before{background:var(--muted)}
+  .hgal-card:not([aria-disabled="true"]):hover{
+    transform:translateY(-3px);
+    border-color:var(--line-2);
+    border-color:color-mix(in srgb,var(--text) 16%,var(--line));
+    box-shadow:0 16px 36px -18px rgba(0,0,0,.55);
+  }
+  .hgal-card:not([aria-disabled="true"]):hover .media img{transform:scale(1.045)}
 }
-.hgal-dot:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.hgal-card:focus-visible{
+  outline:2px solid color-mix(in srgb,var(--accent) 60%,transparent);
+  outline-offset:3px;
+}
+.hgal-card:focus-visible .media img{transform:scale(1.03)}
+.hgal-card[aria-disabled="true"]{cursor:default}
 
-@media (max-width:640px){
-  .hgal-track{gap:16px;padding-inline:14px;scroll-padding-inline:14px}
-  .hgal-card{flex-basis:min(82vw,420px)}
-  .hgal-btn{display:none}   /* na mobile wystarczy swipe */
-  .hgal-dots{--dot:11px;--slot:22px;--hit:40px}   /* mniejsze kropki, ale wysoki obszar dotyku */
+/* ---------- Subtelne pojawianie się (klasa .is-reveal dodawana przez JS) ---------- */
+.hgal-grid.is-reveal .hgal-card{
+  transition:
+    opacity .6s var(--ease) var(--d,0ms),
+    translate .7s var(--ease) var(--d,0ms),
+    transform .55s var(--ease),
+    border-color .5s var(--ease),
+    box-shadow .55s var(--ease);
+}
+.hgal-grid.is-reveal .hgal-card:not(.in){opacity:0;translate:0 18px}
+
+/* ---------- Responsywność ---------- */
+@media (max-width:1279px){
+  .hgal-grid{--cols:3;--cs:4;--fs:8;--gap:18px}
+}
+@media (max-width:899px){
+  .hgal-grid{--cols:2;--cs:6;--fs:12;--gap:14px}     /* tablet / telefon: 2 kolumny, wyróżnione zdjęcie na całą szerokość */
+}
+@media (max-width:559px){
+  .hgal-grid{--gap:10px}
+  .hgal-card .body{padding:26px 10px 8px}
+  .hgal-card h3{font-size:.84rem}
+  .hgal-grid:not(.no-feature) .hgal-card:first-child .body{padding:40px 14px 12px}
+  .hgal-grid:not(.no-feature) .hgal-card:first-child h3{font-size:1.05rem}
+}
+@media (max-width:339px){
+  .hgal-grid{--cols:1;--cs:12;--fs:12;--frs:1}       /* bardzo wąskie ekrany: jedna kolumna */
 }
 
+/* ---------- Ograniczony ruch ---------- */
 @media (prefers-reduced-motion:reduce){
-  .hgal-track{scroll-behavior:auto}
-  .hgal-dot::before{transition:none}
+  .hgal-card,
+  .hgal-card .media img{transition:none}
+  .hgal-grid.is-reveal .hgal-card:not(.in){opacity:1;translate:none}
+  .hgal-card:hover,
+  .hgal-card:hover .media img,
+  .hgal-card:focus-visible .media img{transform:none}
 }
 
-.lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;place-items:center;padding:24px}
-.lightbox.open{display:grid}
+/* ---------- Lightbox (używa go galeria) ---------- */
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;place-items:center;padding:24px;cursor:zoom-out}
+.lightbox.open{display:grid;animation:ovl .25s var(--ease)}
 .lightbox img{max-height:86vh;border-radius:12px}
 .lightbox .icon-btn{position:absolute;top:18px;right:18px;color:#fff;border-color:#444}
