@@ -129,7 +129,6 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       <a href="#rozwoj"><svg class="icon"><use href="#i-dev"/></svg><span data-i18n="nav.progress">Rozwój</span></a>
       <a href="#wspolpraca"><svg class="icon"><use href="#i-link"/></svg><span data-i18n="nav.coop">Współpraca</span></a>
       <a href="#galeria"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="nav.gallery">Galeria</span></a>
-      <a href="#modele"><svg class="icon"><use href="#i-box"/></svg><span data-i18n="nav.models">Modele 3D</span></a>
       <a href="#info"><svg class="icon"><use href="#i-info"/></svg><span data-i18n="nav.info">Info</span></a>
 
       <!-- Widoczne tylko na mobile: to, co na desktopie jest w osobnych przyciskach -->
@@ -288,12 +287,13 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       <div class="fx"><h1 data-i18n="coop.heroTitle">Pracuj z nami</h1></div>
     </div>
 
-    <!-- Prace: podmień src na PNG z przezroczystym tłem (sam budynek), reszta zadziała bez zmian -->
+    <!-- Prace: modele 3D z json/modele.json (data-model = "id" z JSON-a).
+         Obrazek zostaje jako zapas – pokaże się, jeśli model się nie wczyta. -->
     <div class="works">
-      <figure class="work" data-fx="work" data-depth="1.5" data-tilt="18">
+      <figure class="work" data-fx="work" data-depth="1.5" data-tilt="18" data-model="obiekt1">
         <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/1.png" alt=""><figcaption data-i18n="coop.workCaption">Budynek na placu Bychawskim</figcaption></div>
       </figure>
-      <figure class="work" data-fx="work" data-depth=".7" data-tilt="-14">
+      <figure class="work" data-fx="work" data-depth=".7" data-tilt="-14" data-model="obiekt2">
         <div class="fx"><img loading="lazy" decoding="async" src="image/Wspolpraca/2.png" alt=""><figcaption data-i18n="coop.workCaption">Budynek na placu Bychawskim</figcaption></div>
       </figure>
     </div>
@@ -451,17 +451,6 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   </div>
 </section>
 
-<section class="page" id="page-modele">
-  <div class="page-head">
-    <div class="eyebrow"><svg class="icon"><use href="#i-box"/></svg><span data-i18n="models.eyebrow">Obiekty</span></div>
-    <h1 data-i18n="models.title">Modele 3D</h1>
-    <p class="models-hint" id="modelsHint">Przeciągnij, aby obrócić. Kółko / dwa palce – zoom.</p>
-  </div>
-
-  <!-- Karty generuje js/features/models.js z json/modele.json -->
-  <div class="models" id="modelsList"></div>
-</section>
-
 
 <section class="page" id="page-info">
   <div class="page-head">
@@ -527,7 +516,6 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       <a href="#rozwoj" data-i18n="nav.progress">Rozwój</a>
       <a href="#wspolpraca" data-i18n="nav.coop">Współpraca</a>
       <a href="#galeria" data-i18n="nav.gallery">Galeria</a>
-      <a href="#modele" data-i18n="nav.models">Modele 3D</a>
       <a href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer">Discord</a>
     </nav>
   </div>
