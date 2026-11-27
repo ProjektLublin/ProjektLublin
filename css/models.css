@@ -1,65 +1,101 @@
 /* Modele 3D w sekcji Współpraca (zamiast obrazków w .work) */
-.work model-viewer.work-model {
-  display: block;
+
+/* Gdy są modele: dwie równe kolumny z odstępem – większe, ale nie nachodzą na siebie */
+.works:has(.work.has-model) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 5vw, 72px);
+  width: min(1200px, 100%);
+  margin-inline: auto;
+}
+
+.works:has(.work.has-model) .work {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  height: auto;
-  background: transparent;
-  --poster-color: transparent;
-  --progress-bar-color: currentColor;
-  --progress-bar-height: 2px;
-  cursor: grab;
+  max-width: none;
+  margin: 0;
+  min-width: 0;
 }
 
-.work model-viewer.work-model:active {
-  cursor: grabbing;
-}
-
-/* Dopóki model się ładuje, obrazek jest widoczny, a model nie zajmuje miejsca */
-.work:not(.has-model) model-viewer.work-model {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
+@media (max-width: 760px) {
+  .works:has(.work.has-model) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .work .fx {
   position: relative;
 }
 
-/* Przyciski przybliżania na modelu */
+/* Ramka modelu */
+.work-model-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* Dopóki model się ładuje, obrazek jest widoczny, a ramka nie zajmuje miejsca */
+.work:not(.has-model) .work-model-frame {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.work model-viewer.work-model {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  --poster-color: transparent;
+  --progress-bar-color: currentColor;
+  --progress-bar-height: 2px;
+  cursor: grab;
+  /* Miękkie wygaszenie przy krawędziach */
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
+          mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
+}
+
+.work model-viewer.work-model:active {
+  cursor: grabbing;
+}
+
+/* Lekki blur na krawędziach (środek ostry) */
+.work-model-edge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 55%, #000 100%);
+          mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 55%, #000 100%);
+}
+
+/* Przyciski przybliżania – tylko na telefonie (tworzy je JS) */
 .work-model-tools {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
+  right: 10px;
+  bottom: 10px;
   display: flex;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity .2s;
-}
-
-.work:hover .work-model-tools,
-.work-model-tools:focus-within {
-  opacity: 1;
-}
-
-@media (hover: none) {
-  .work-model-tools { opacity: 1; }
+  gap: 8px;
+  z-index: 2;
 }
 
 .work-model-tools button {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, .25);
   background: rgba(0, 0, 0, .55);
   color: #fff;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  touch-action: manipulation;
 }
 
-.work-model-tools button:hover {
+.work-model-tools button:active {
   background: rgba(0, 0, 0, .8);
 }
