@@ -49,7 +49,7 @@ function attach(fig, m) {
   const img = fx.querySelector('img');
   const cap = fx.querySelector('figcaption');
 
-  // Ramka: model + rozmyte krawędzie
+  // Ramka modelu (krawędzie wygaszane w CSS)
   const frame = document.createElement('div');
   frame.className = 'work-model-frame';
 
@@ -69,11 +69,7 @@ function attach(fig, m) {
     mv.setAttribute('disable-zoom', '');
   }
 
-  const edge = document.createElement('div');
-  edge.className = 'work-model-edge';
-  edge.setAttribute('aria-hidden', 'true');
-
-  frame.append(mv, edge);
+  frame.append(mv);
 
   // Przyciski tylko na telefonie
   const buttons = [];
@@ -117,12 +113,38 @@ function attach(fig, m) {
   items.push({ m, mv, cap, buttons });
 }
 
+// --- Szybsze wczytywanie -------------------------------------------------
+// Biblioteka i pliki .glb pobierają się równolegle i zaczynają wcześniej:
+// gdy użytkownik najedzie / dotknie linku „Współpraca” albo gdy sekcja jest blisko ekranu.
+let libPromise = null;
+const prefetched = new Set();
+
+function loadLib() {
+  if (!libPromise) {
+    libPromise = import(VIEWER_URL).catch((e) => {
+      libPromise = null;
+      throw e;
+    });
+  }
+  return libPromise;
+}
+
+function prefetchModels(models) {
+  for (const fig of figures) {
+    const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
+    if (!m || prefetched.has(m.src)) continue;
+    prefetched.add(m.src);
+    // Trafia do cache przeglądarki – model-viewer weźmie plik stamtąd
+    fetch(m.src).catch(() => prefetched.delete(m.src));
+  }
+}
+
 async function init() {
   if (!figures.length) return;
 
   let models;
   try {
-    const res = await fetch(DATA_URL, { cache: 'no-cache' });
+    const res = await fetch(DATA_URL);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     models = Array.isArray(data.models) ? data.models : [];
@@ -131,11 +153,24 @@ async function init() {
     return; // zostają obrazki
   }
 
+  const warmUp = () => { loadLib().catch(() => {}); prefetchModels(models); };
+
+  // Zamiar wejścia w „Współpracę” → zacznij pobierać od razu
+  document.querySelectorAll('a[href="#wspolpraca"]').forEach((a) => {
+    a.addEventListener('pointerenter', warmUp, { once: true, passive: true });
+    a.addEventListener('touchstart', warmUp, { once: true, passive: true });
+    a.addEventListener('focus', warmUp, { once: true });
+  });
+  if (location.hash === '#wspolpraca') warmUp();
+
+  let started = false;
   const io = new IntersectionObserver(async (entries) => {
-    if (!entries.some((e) => e.isIntersecting)) return;
+    if (started || !entries.some((e) => e.isIntersecting)) return;
+    started = true;
     io.disconnect();
+    warmUp();
     try {
-      await import(VIEWER_URL);
+      await loadLib();
     } catch (e) {
       console.error('model-viewer: nie udało się wczytać biblioteki', e);
       return; // zostają obrazki
@@ -146,7 +181,7 @@ async function init() {
       else console.warn('[modele] brak w JSON modelu o id', fig.dataset.model);
     }
     updateTexts();
-  }, { rootMargin: '200px' });
+  }, { rootMargin: '600px' });
   figures.forEach((f) => io.observe(f));
 
   new MutationObserver(updateTexts)
