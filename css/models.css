@@ -51,24 +51,21 @@
   --progress-bar-color: currentColor;
   --progress-bar-height: 2px;
   cursor: grab;
-  /* Miękkie wygaszenie przy krawędziach */
-  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
-          mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
+  /* Miękkie wygaszenie przy wszystkich krawędziach miejsca na obiekt:
+     część modelu wychodząca poza ramkę płynnie zanika zamiast być ucięta */
+  --fade: 14%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+          mask-composite: intersect;
 }
 
 .work model-viewer.work-model:active {
   cursor: grabbing;
-}
-
-/* Lekki blur na krawędziach (środek ostry) */
-.work-model-edge {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 55%, #000 100%);
-          mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 55%, #000 100%);
 }
 
 /* Przyciski przybliżania – tylko na telefonie (tworzy je JS) */
