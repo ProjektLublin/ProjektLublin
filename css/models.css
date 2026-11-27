@@ -93,7 +93,7 @@
   opacity: 0;
   transition: opacity .7s var(--ease);
 }
-.work-model-frame.is-ready model-viewer.work-model { opacity: 1; }
+.work-model-frame.is-ready model-viewer.work-model { opacity: var(--model-alpha, 1); } /* --model-alpha: fallback dla "alpha" z modele.json */
 .work model-viewer.work-model:active { cursor: grabbing; }
 
 /* ===== Loader ===== */
