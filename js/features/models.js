@@ -51,6 +51,53 @@ function updateTexts() {
   }
 }
 
+/* ---------- Przezroczystość (alpha) modelu ----------
+   "alpha" w modele.json może być:
+     • liczbą 0–1                      → cały model (1 = pełne krycie)
+     • obiektem { "NazwaMateriału": 0.3, ... } → tylko wskazane materiały
+   Nazwy materiałów (porównanie bez rozróżniania wielkości liter) wypisuje konsola
+   po wczytaniu modelu: „[modele] obiekt1 – materiały: [...]”.
+   Uwaga: alfa działa na cały materiał – jeśli dwie części budynku mają ten sam
+   materiał, trzeba je rozdzielić w programie 3D (Blender), by miały osobne. */
+function applyAlpha(mv, frame, m) {
+  const materials = (mv.model && mv.model.materials) || [];
+  console.info(`[modele] ${m.id} – materiały:`, materials.map((x) => x.name));
+
+  const alpha = m.alpha;
+  if (alpha == null) return;
+
+  const clamp = (v) => Math.min(1, Math.max(0, Number(v)));
+  const perMaterial = typeof alpha === 'object';
+  const map = {};
+  if (perMaterial) {
+    for (const [k, v] of Object.entries(alpha)) map[k.trim().toLowerCase()] = clamp(v);
+  }
+
+  let applied = 0;
+  for (const mat of materials) {
+    const a = perMaterial ? map[String(mat.name || '').trim().toLowerCase()] : clamp(alpha);
+    if (a == null || !isFinite(a) || a >= 1) continue;
+    try {
+      if (typeof mat.setAlphaMode !== 'function') continue;
+      mat.setAlphaMode('BLEND');
+      const f = mat.pbrMetallicRoughness.baseColorFactor;
+      mat.pbrMetallicRoughness.setBaseColorFactor([f[0], f[1], f[2], a]);
+      applied++;
+    } catch (e) {
+      console.warn('[modele] alpha – błąd materiału', mat.name, e);
+    }
+  }
+
+  if (perMaterial && !applied) {
+    console.warn(`[modele] ${m.id}: żaden materiał nie pasuje do nazw w "alpha". Sprawdź listę wyżej.`);
+  }
+  // Zastępczo (stara wersja model-viewer bez setAlphaMode): CSS opacity – tylko dla alfy liczbowej
+  if (!perMaterial && !applied) {
+    const a = clamp(alpha);
+    if (isFinite(a) && a < 1) frame.style.setProperty('--model-alpha', String(a));
+  }
+}
+
 /* ---------- Zoom przyciskami (niezawodny, niezależny od mv.zoom()) ----------
    Trzymamy własny „docelowy” promień kamery. Dzięki temu szybkie, kolejne
    dotknięcia sumują się (getCameraOrbit() w trakcie animacji zwraca wartość
@@ -186,6 +233,7 @@ function attach(fig, m) {
   };
 
   mv.addEventListener('load', () => {
+    applyAlpha(mv, frame, m);
     fig.classList.add('has-model');
     frame.classList.remove('is-loading');
     frame.classList.add('is-ready');
