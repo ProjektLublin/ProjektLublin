@@ -6,6 +6,7 @@ const DATA_URL = 'json/modele.json';
 const VIEWER_URL = '../vendor/model-viewer.min.js'; // względem js/features/
 
 const figures = [...document.querySelectorAll('.work[data-model]')];
+console.info('[modele] start, ramek z data-model:', figures.length);
 const items = [];
 
 function lang() {
@@ -43,8 +44,12 @@ function attach(fig, m) {
   if (m.cameraOrbit) mv.setAttribute('camera-orbit', m.cameraOrbit);
 
   // Obrazek znika dopiero, gdy model się wczyta; przy błędzie zostaje
-  mv.addEventListener('load', () => { if (img) img.hidden = true; fig.classList.add('has-model'); });
-  mv.addEventListener('error', () => { mv.remove(); if (img) img.hidden = false; });
+  mv.addEventListener('load', () => {
+    console.info('[modele] wczytano', m.src); if (img) img.hidden = true; fig.classList.add('has-model'); });
+  mv.addEventListener('error', (e) => {
+    console.error('[modele] nie udało się wczytać', m.src, e.detail || e);
+    mv.remove(); if (img) img.hidden = false;
+  });
 
   if (img) img.after(mv); else fx.prepend(mv);
 
@@ -63,6 +68,7 @@ async function init() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     models = Array.isArray(data.models) ? data.models : [];
+    console.info('[modele] modele.json OK, modeli:', models.length);
   } catch (e) {
     console.error('modele.json:', e);
     return; // zostają obrazki
@@ -73,6 +79,7 @@ async function init() {
     io.disconnect();
     try {
       await import(VIEWER_URL);
+      console.info('[modele] biblioteka model-viewer OK');
     } catch (e) {
       console.error('model-viewer: nie udało się wczytać biblioteki', e);
       return; // zostają obrazki
@@ -80,6 +87,7 @@ async function init() {
     for (const fig of figures) {
       const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
       if (m) attach(fig, m);
+      else console.warn('[modele] brak w JSON modelu o id', fig.dataset.model);
     }
     updateTexts();
   }, { rootMargin: '200px' });
