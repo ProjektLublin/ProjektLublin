@@ -3,14 +3,14 @@
     {
       "id": "obiekt1",
       "src": "obiekty/obiekt1.glb",
-      "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
+      "title": { "pl": "Budynek 1 Maja-Plac Bychawski", "en": "Building at Bychawski Square" },
       "autoRotate": true,
       "cameraOrbit": "45deg 70deg 85%"
     },
     {
       "id": "obiekt2",
       "src": "obiekty/obiekt2.glb",
-      "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
+      "title": { "pl": "McDonalds-Węglin", "en": "McDonald's, Węglin" },
       "autoRotate": true,
       "cameraOrbit": "-45deg 70deg 85%"
     }
