@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="pl" data-theme="dark">
 <head>
-  <!-- Google tag (gtag.js) -->
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' blob: https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9VVVQPSV7S"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -10,11 +14,7 @@
 
   gtag('config', 'G-9VVVQPSV7S');
 </script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/models.css">
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-src https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>
 if (window.top !== window.self) { try { window.top.location = window.self.location; } catch (e) { document.documentElement.style.display = 'none'; } }
@@ -64,6 +64,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
 <link rel="stylesheet" href="css/progress.css">
 <link rel="stylesheet" href="css/coop.css">
 <link rel="stylesheet" href="css/gallery.css">
+<link rel="stylesheet" href="css/models.css">
 <link rel="stylesheet" href="css/info.css">
 <link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="css/responsive.css">
@@ -128,6 +129,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       <a href="#rozwoj"><svg class="icon"><use href="#i-dev"/></svg><span data-i18n="nav.progress">Rozwój</span></a>
       <a href="#wspolpraca"><svg class="icon"><use href="#i-link"/></svg><span data-i18n="nav.coop">Współpraca</span></a>
       <a href="#galeria"><svg class="icon"><use href="#i-image"/></svg><span data-i18n="nav.gallery">Galeria</span></a>
+      <a href="#modele"><svg class="icon"><use href="#i-box"/></svg><span data-i18n="nav.models">Modele 3D</span></a>
       <a href="#info"><svg class="icon"><use href="#i-info"/></svg><span data-i18n="nav.info">Info</span></a>
 
       <!-- Widoczne tylko na mobile: to, co na desktopie jest w osobnych przyciskach -->
@@ -449,6 +451,17 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   </div>
 </section>
 
+<section class="page" id="page-modele">
+  <div class="page-head">
+    <div class="eyebrow"><svg class="icon"><use href="#i-box"/></svg><span data-i18n="models.eyebrow">Obiekty</span></div>
+    <h1 data-i18n="models.title">Modele 3D</h1>
+    <p class="models-hint" id="modelsHint">Przeciągnij, aby obrócić. Kółko / dwa palce – zoom.</p>
+  </div>
+
+  <!-- Karty generuje js/features/models.js z json/modele.json -->
+  <div class="models" id="modelsList"></div>
+</section>
+
 
 <section class="page" id="page-info">
   <div class="page-head">
@@ -514,6 +527,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       <a href="#rozwoj" data-i18n="nav.progress">Rozwój</a>
       <a href="#wspolpraca" data-i18n="nav.coop">Współpraca</a>
       <a href="#galeria" data-i18n="nav.gallery">Galeria</a>
+      <a href="#modele" data-i18n="nav.models">Modele 3D</a>
       <a href="https://discord.gg/DWz5tAW4T4" target="_blank" rel="noopener noreferrer">Discord</a>
     </nav>
   </div>
