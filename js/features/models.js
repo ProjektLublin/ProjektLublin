@@ -36,7 +36,6 @@ function attach(fig, m) {
   mv.className = 'work-model';
   mv.setAttribute('src', m.src);
   mv.setAttribute('camera-controls', '');
-  mv.setAttribute('disable-zoom', '');          // kółko myszy przewija stronę, nie zoomuje
   mv.setAttribute('touch-action', 'pan-y');      // na telefonie da się przewijać stronę
   mv.setAttribute('interaction-prompt', 'none');
   mv.setAttribute('shadow-intensity', String(m.shadow ?? 1));
@@ -50,6 +49,37 @@ function attach(fig, m) {
     console.error('[modele] nie udało się wczytać', m.src, e.detail || e);
     mv.remove(); if (img) img.hidden = false;
   });
+
+  // Zwykłe kółko przewija stronę, Ctrl + kółko przybliża model
+  mv.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey && !e.metaKey) e.stopPropagation();
+  }, { capture: true });
+
+  // Przyciski: przybliż / oddal / reset
+  const tools = document.createElement('div');
+  tools.className = 'work-model-tools';
+  const mk = (label, title, fn) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.title = title;
+    b.setAttribute('aria-label', title);
+    b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+    tools.append(b);
+  };
+  const zoom = (n) => {
+    if (typeof mv.zoom === 'function') { mv.zoom(n); return; }
+    const o = mv.getCameraOrbit();
+    mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${o.radius * (n > 0 ? 0.8 : 1.25)}m`;
+  };
+  mk('+', 'Przybliż', () => zoom(3));
+  mk('−', 'Oddal', () => zoom(-3));
+  mk('⟲', 'Resetuj widok', () => {
+    mv.cameraOrbit = m.cameraOrbit || 'auto auto auto';
+    mv.cameraTarget = 'auto auto auto';
+    mv.fieldOfView = 'auto';
+  });
+  mv.append(tools); // wewnątrz model-viewera = nakładka na model
 
   if (img) img.after(mv); else fx.prepend(mv);
 
