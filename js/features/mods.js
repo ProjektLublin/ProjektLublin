@@ -1,4 +1,3 @@
-@@ -1,175 +1,191 @@
 /* =====================================================================
    features/mods.js – zakładka MODY: lista, wyszukiwarka, filtry, sortowanie, paginacja
    Dane: mods-data.js | okno szczegółów: mod-modal.js | karuzela: ui/carousel.js
@@ -34,6 +33,8 @@ function buildFilters() {
     });
     box.append(lab);
   });
+}
+
 function renderModsPage() {
   const list = $('#modsList');
   const pager = $('#modsPager');
@@ -45,26 +46,27 @@ function renderModsPage() {
     if (pager) pager.innerHTML = '';
     if (countEl) countEl.textContent = '';
     return;
-function renderModsPage() {
-  const list = $('#modsList');
-  const pager = $('#modsPager');
-  const countEl = $('#modCount');
-  if (!list) return;
+  }
 
-  if (modsFailed) {
-    list.innerHTML = `<div class="mod-empty">${esc(t('mods.loadError'))}</div>`;
-    if (pager) pager.innerHTML = '';
-    if (countEl) countEl.textContent = '';
-    return;
-if (countEl) {
+  const total = modsFiltered.length;
+  const pages = Math.max(1, Math.ceil(total / MODS_PER_PAGE));
+  modsPage = Math.min(Math.max(1, modsPage), pages);
+  const start = (modsPage - 1) * MODS_PER_PAGE;
+  const slice = modsFiltered.slice(start, start + MODS_PER_PAGE);
+
+  if (countEl) {
     countEl.textContent = total
       ? tn('mods.shown', total, { shown: slice.length, total })
       : t('mods.noResults');
- if (!slice.length) {
+  }
+
+  if (!slice.length) {
     list.innerHTML = `<div class="mod-empty">${esc(t('mods.empty'))}</div>`;
     if (pager) pager.innerHTML = '';
     return;
- // karta na liście = NAJNOWSZA wersja moda
+  }
+
+  // karta na liście = NAJNOWSZA wersja moda
   list.innerHTML = slice.map(mod => {
     const v = mod.versions[0];
     const n = mod.versions.length;
@@ -89,13 +91,15 @@ if (countEl) {
     modsPage = n;
     renderModsPage();
     scrollToElement(list);
+  });
 }
 
 function applyModsFilter(keepPage = false) {
   const q = ($('#modSearch')?.value || '').trim().toLowerCase();
   const checked = $$('#modFilters input:checked').map(i => i.value);
   const sort = $('#modSort')?.value || 'date-desc';
-modsFiltered = modsData.mods.filter(m => {
+
+  modsFiltered = modsData.mods.filter(m => {
     if (checked.length) {
       const cats = m.categories || [];
       if (!checked.some(c => cats.includes(c))) return false;
@@ -108,7 +112,8 @@ modsFiltered = modsData.mods.filter(m => {
     ].join(' ').toLowerCase();
     return hay.includes(q);
   });
- const byTitle = (a, b) => (pick(a, 'title') || '').localeCompare(pick(b, 'title') || '', currentLang);
+
+  const byTitle = (a, b) => (pick(a, 'title') || '').localeCompare(pick(b, 'title') || '', currentLang);
   const byIndex = (a, b) => a._i - b._i;
 
   modsFiltered.sort((a, b) => {
@@ -121,8 +126,11 @@ modsFiltered = modsData.mods.filter(m => {
       default:           return byIndex(a, b);
     }
   });
- if (!keepPage) modsPage = 1;
+
+  if (!keepPage) modsPage = 1;
   renderModsPage();
+}
+
 export async function loadMods() {
   try {
     modsData = await fetchMods();
@@ -132,10 +140,14 @@ export async function loadMods() {
     console.error('json/mods.json:', err);
     modsFailed = true;
     renderModsPage();
+  }
+}
+
 export function initMods() {
   const listEl = $('#modsList');
   const findMod = (id) => modsData.mods.find(m => m.id === id);
-listEl?.addEventListener('click', (e) => {
+
+  listEl?.addEventListener('click', (e) => {
     if (e.target.closest('.car-btn, .car-dot, .car-count')) return;
     const c = e.target.closest('.mod');
     if (c) openMod(findMod(c.dataset.id));
@@ -146,7 +158,8 @@ listEl?.addEventListener('click', (e) => {
     const c = e.target.closest('.mod');
     if (c) { e.preventDefault(); openMod(findMod(c.dataset.id)); }
   });
-$('#modSearch')?.addEventListener('input', () => applyModsFilter());
+
+  $('#modSearch')?.addEventListener('input', () => applyModsFilter());
   $('#modSort')?.addEventListener('change', () => applyModsFilter());
 
   // zmiana języka: filtry, lista i (jeśli otwarte) okno moda
@@ -158,3 +171,5 @@ $('#modSearch')?.addEventListener('input', () => applyModsFilter());
     const id = getOpenModId();
     const mod = id && findMod(id);
     if (mod) refreshModal(mod);
+  });
+}
