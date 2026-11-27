@@ -10,7 +10,7 @@
     {
       "id": "obiekt2",
       "src": "obiekty/obiekt2.glb",
-      "title": { "pl": "McDonald's - Węglin", "en": "McDonald's, - Węglin" },
+      "title": { "pl": "McDonald's - Węglin", "en": "McDonald's - Węglin" },
       "autoRotate": true,
       "cameraOrbit": "-45deg 70deg 85%"
     }
