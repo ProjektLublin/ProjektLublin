@@ -1,0 +1,90 @@
+/* Modele 3D */
+.models-hint {
+  margin: -4px 0 18px;
+  opacity: .7;
+  font-size: .9rem;
+}
+
+.models {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.model-card {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.model-media {
+  position: relative;
+}
+
+.model-card model-viewer {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  background: radial-gradient(circle at 50% 40%, rgba(127, 127, 127, .18), transparent 70%);
+  --poster-color: transparent;
+  --progress-bar-color: currentColor;
+  --progress-bar-height: 3px;
+}
+
+.model-error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  opacity: .8;
+}
+
+.model-card .body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-card h3 {
+  margin: 0;
+}
+
+.model-desc {
+  margin: 0;
+  opacity: .75;
+}
+
+.model-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  font-size: .85rem;
+}
+
+.model-author {
+  opacity: .65;
+}
+
+.model-reset {
+  font-size: .85rem;
+  padding: 6px 12px;
+}
+
+.models-empty {
+  opacity: .7;
+}
+
+@media (max-width: 560px) {
+  .models {
+    grid-template-columns: 1fr;
+  }
+}
