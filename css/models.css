@@ -26,3 +26,40 @@
 .work .fx {
   position: relative;
 }
+
+/* Przyciski przybliżania na modelu */
+.work-model-tools {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.work:hover .work-model-tools,
+.work-model-tools:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .work-model-tools { opacity: 1; }
+}
+
+.work-model-tools button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(0, 0, 0, .55);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.work-model-tools button:hover {
+  background: rgba(0, 0, 0, .8);
+}
