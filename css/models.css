@@ -9,14 +9,16 @@
   --glow-a: .16;
 }
 
-/* ===== Desktop: szersze kolumny, większe modele =====
+/* ===== Układ kolumn =====
    Szerokość jak w .works z coop.css (centrowanie left:50% + translateX(-50%)),
-   więc NIE ustawiamy margin-inline:auto – inaczej kontener się przesuwa. */
-.works:has(.work.has-model),
+   więc NIE ustawiamy margin-inline:auto – inaczej kontener się przesuwa.
+   Mobile (<=760px): jedna kolumna, modele pod sobą.
+   Desktop (>=761px): dwie kolumny. Reguły są rozdzielone media query,
+   więc nie ma sporu o specyficzność selektorów. */
 .works:has(.work-model-frame) {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 3vw, 48px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
   width: min(1560px, calc(100vw - 40px));
   align-items: center;
 }
@@ -28,10 +30,10 @@
   min-width: 0;
 }
 
-@media (max-width: 760px) {
+@media (min-width: 761px) {
   .works:has(.work-model-frame) {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 3vw, 48px);
   }
 }
 
