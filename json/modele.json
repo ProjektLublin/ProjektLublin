@@ -3,20 +3,16 @@
     {
       "id": "obiekt1",
       "src": "obiekty/obiekt1.glb",
-      "title": { "pl": "Obiekt 1", "en": "Object 1" },
-      "description": { "pl": "Opis obiektu 1.", "en": "Description of object 1." },
-      "author": "Projekt Lublin",
+      "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
       "autoRotate": true,
       "cameraOrbit": "45deg 70deg auto"
     },
     {
       "id": "obiekt2",
       "src": "obiekty/obiekt2.glb",
-      "title": { "pl": "Obiekt 2", "en": "Object 2" },
-      "description": { "pl": "Opis obiektu 2.", "en": "Description of object 2." },
-      "author": "Projekt Lublin",
+      "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
       "autoRotate": true,
-      "cameraOrbit": "45deg 70deg auto"
+      "cameraOrbit": "-45deg 70deg auto"
     }
   ]
 }
