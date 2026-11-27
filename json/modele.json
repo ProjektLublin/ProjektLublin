@@ -5,14 +5,14 @@
       "src": "obiekty/obiekt1.glb",
       "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
       "autoRotate": true,
-      "cameraOrbit": "45deg 70deg auto"
+      "cameraOrbit": "45deg 70deg 85%"
     },
     {
       "id": "obiekt2",
       "src": "obiekty/obiekt2.glb",
       "title": { "pl": "Budynek na placu Bychawskim", "en": "Building at Bychawski Square" },
       "autoRotate": true,
-      "cameraOrbit": "-45deg 70deg auto"
+      "cameraOrbit": "-45deg 70deg 85%"
     }
   ]
 }
