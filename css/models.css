@@ -1,59 +1,62 @@
-/* Modele 3D w sekcji Współpraca (zamiast obrazków w .work) */
+/* Modele 3D w sekcji Współpraca (zamiast obrazków w .work)
+   WAŻNE: podlinkuj ten plik w index.html PO coop.css (np. tuż przed responsive.css). */
 
-/* Gdy są modele: dwie równe kolumny z odstępem – większe, ale nie nachodzą na siebie */
-.works:has(.work.has-model) {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(24px, 5vw, 72px);
-  width: min(1200px, 100%);
-  margin-inline: auto;
+:root {
+  --glow-rgb: 155, 145, 128;   /* #9B9180 – ciepła szarość/beż */
+  --glow-a: .13;               /* krycie poświaty ~13% */
+}
+[data-theme="light"] {
+  --glow-a: .16;
 }
 
-.works:has(.work.has-model) .work {
+/* ===== Desktop: szersze kolumny, większe modele =====
+   Szerokość jak w .works z coop.css (centrowanie left:50% + translateX(-50%)),
+   więc NIE ustawiamy margin-inline:auto – inaczej kontener się przesuwa. */
+.works:has(.work.has-model),
+.works:has(.work-model-frame) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 48px);
+  width: min(1560px, calc(100vw - 40px));
+  align-items: center;
+}
+
+.works:has(.work-model-frame) .work {
   width: 100%;
   max-width: none;
-  margin: 0;
+  margin: 0;               /* kasuje margin-top z responsive.css (.work:nth-child(even)) */
   min-width: 0;
 }
 
 @media (max-width: 760px) {
-  .works:has(.work.has-model) {
+  .works:has(.work-model-frame) {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 }
 
-.work .fx {
-  position: relative;
-}
+.work .fx { position: relative; }
 
-/* Ramka modelu */
+/* Obrazek zastępczy – `hidden` przegrywało z `img{display:block}` z base.css */
+.work img[hidden] { display: none; }
+
+/* ===== Ramka modelu ===== */
 .work-model-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 6 / 5;
+}
+@media (max-width: 760px) {
+  .work-model-frame { aspect-ratio: 1 / 1; }
 }
 
-/* Dopóki model się ładuje, obrazek jest widoczny, a ramka nie zajmuje miejsca */
-.work:not(.has-model) .work-model-frame {
+/* Scena: poświata + model, razem z miękkim zanikaniem krawędzi (feather).
+   Maska siedzi na scenie, więc znikają równo i model, i poświata,
+   a przyciski/loader (rodzeństwo sceny) pozostają ostre. */
+.work-model-stage {
   position: absolute;
   inset: 0;
-  aspect-ratio: auto;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.work model-viewer.work-model {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  --poster-color: transparent;
-  --progress-bar-color: currentColor;
-  --progress-bar-height: 2px;
-  cursor: grab;
-  /* Miękkie wygaszenie przy wszystkich krawędziach miejsca na obiekt:
-     część modelu wychodząca poza ramkę płynnie zanika zamiast być ucięta */
-  --fade: 14%;
+  --fade: 12%;
   -webkit-mask-image:
     linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
     linear-gradient(to bottom, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
@@ -64,35 +67,96 @@
           mask-composite: intersect;
 }
 
-.work model-viewer.work-model:active {
-  cursor: grabbing;
+/* Subtelny ambient glow #9B9180 (10–15%) – bez twardej krawędzi */
+.work-model-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 58% 54% at 50% 56%,
+      rgba(var(--glow-rgb), var(--glow-a)) 0%,
+      rgba(var(--glow-rgb), calc(var(--glow-a) * .55)) 45%,
+      rgba(var(--glow-rgb), 0) 100%);
 }
 
-/* Przyciski przybliżania – tylko na telefonie (tworzy je JS) */
+.work model-viewer.work-model {
+  position: relative;       /* nad poświatą */
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  --poster-color: transparent;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity .7s var(--ease);
+}
+.work-model-frame.is-ready model-viewer.work-model { opacity: 1; }
+.work model-viewer.work-model:active { cursor: grabbing; }
+
+/* ===== Loader ===== */
+.work-model-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: .01em;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity .6s var(--ease);
+}
+.work-model-frame.is-ready .work-model-loader { opacity: 0; }
+
+.work-model-spinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid var(--line-2);
+  border-top-color: var(--accent);
+  animation: wm-spin .9s linear infinite;
+}
+@keyframes wm-spin { to { transform: rotate(360deg); } }
+
+/* responsive.css wyłącza wszystkie animacje przy reduced-motion – spinner zostawiamy
+   (wolniejszy), bo inaczej wyglądałby jak zawieszony. Wyższa specyficzność wygrywa mimo !important. */
+@media (prefers-reduced-motion: reduce) {
+  .work-model-spinner { animation: wm-spin 1.8s linear infinite !important; }
+}
+
+/* ===== Przyciski przybliżania – tylko dotyk (tworzy je JS) ===== */
 .work-model-tools {
   position: absolute;
   right: 10px;
   bottom: 10px;
+  z-index: 3;
   display: flex;
-  gap: 8px;
-  z-index: 2;
+  gap: 10px;
 }
 
 .work-model-tools button {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, .25);
-  background: rgba(0, 0, 0, .55);
+  background: rgba(0, 0, 0, .6);
   color: #fff;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
   cursor: pointer;
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
-  touch-action: manipulation;
+  touch-action: none;                    /* przycisk nie przewija strony i nie łapie double-tap zoom */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+          user-select: none;
+  transition: background .15s, opacity .3s;
 }
-
-.work-model-tools button:active {
-  background: rgba(0, 0, 0, .8);
-}
+.work-model-tools button:disabled { opacity: .35; pointer-events: none; }
+.work-model-tools button:active { background: rgba(0, 0, 0, .85); }
