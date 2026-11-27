@@ -5,12 +5,16 @@
       "src": "obiekty/obiekt1.glb",
       "title": { "pl": "Budynek 1 Maja-Plac Bychawski", "en": "Building at Bychawski Square" },
       "autoRotate": true,
+      "alpha": {
+        "1majabarierka.dds": 0.6,
+  "balkon2.dds": 0.6
+      },
       "cameraOrbit": "45deg 70deg 85%"
     },
     {
       "id": "obiekt2",
       "src": "obiekty/obiekt2.glb",
-      "title": { "pl": "McDonald's - Węglin", "en": "McDonald's - Węglin" },
+      "title": { "pl": "McDonalds-Węglin", "en": "McDonald's, Węglin" },
       "autoRotate": true,
       "cameraOrbit": "-45deg 70deg 85%"
     }
