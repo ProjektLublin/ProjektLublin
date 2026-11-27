@@ -2,6 +2,12 @@
 // Dane: json/modele.json. Biblioteka model-viewer ładowana lokalnie (CSP blokuje CDN)
 // i dopiero gdy sekcja pojawi się na ekranie.
 // Komputer: obrót myszką, przybliżanie kółkiem. Telefon: obrót palcem, przybliżanie przyciskami.
+//
+// Struktura tworzona dla każdego modelu:
+//   .work-model-frame
+//     ├─ .work-model-stage      (poświata + miękkie krawędzie; w środku <model-viewer>)
+//     ├─ .work-model-loader     (spinner + „Wczytywanie modelu...”)
+//     └─ .work-model-tools      (+ − ⟲, tylko urządzenia dotykowe)
 
 const DATA_URL = 'json/modele.json';
 const VIEWER_URL = '../vendor/model-viewer.min.js'; // względem js/features/
@@ -11,10 +17,16 @@ const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const items = [];
 
 const UI = {
+  loading: { pl: 'Wczytywanie modelu...', en: 'Loading model...' },
   zoomIn:  { pl: 'Przybliż', en: 'Zoom in' },
   zoomOut: { pl: 'Oddal', en: 'Zoom out' },
   reset:   { pl: 'Resetuj widok', en: 'Reset view' }
 };
+
+// Przybliżanie przyciskami: krok i zakres względem początkowego dystansu kamery
+const ZOOM_STEP = 1.25;
+const ZOOM_MIN = 0.4;   // najbliżej: 40% początkowego dystansu
+const ZOOM_MAX = 1.8;   // najdalej: 180%
 
 function lang() {
   return (document.documentElement.lang || 'pl').slice(0, 2).toLowerCase() === 'en' ? 'en' : 'pl';
@@ -27,21 +39,70 @@ function tr(v) {
 }
 
 function updateTexts() {
-  for (const { m, mv, cap, buttons } of items) {
-    const title = tr(m.title);
-    mv.setAttribute('alt', title);
-    if (cap && title) cap.textContent = title;
-    for (const [b, key] of buttons) {
+  for (const it of items) {
+    const title = tr(it.m.title);
+    it.mv.setAttribute('alt', title);
+    if (it.cap && title) it.cap.textContent = title;
+    if (it.loaderText) it.loaderText.textContent = tr(UI.loading);
+    for (const [b, key] of it.buttons) {
       b.title = tr(UI[key]);
       b.setAttribute('aria-label', tr(UI[key]));
     }
   }
 }
 
-function zoom(mv, dir) {
-  if (typeof mv.zoom === 'function') { mv.zoom(dir * 3); return; }
-  const o = mv.getCameraOrbit();
-  mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${o.radius * (dir > 0 ? 0.8 : 1.25)}m`;
+/* ---------- Zoom przyciskami (niezawodny, niezależny od mv.zoom()) ----------
+   Trzymamy własny „docelowy” promień kamery. Dzięki temu szybkie, kolejne
+   dotknięcia sumują się (getCameraOrbit() w trakcie animacji zwraca wartość
+   pośrednią, co wcześniej powodowało gubienie kliknięć). */
+function createZoomController(mv, m) {
+  const st = { base: null, r: null };
+
+  function zoom(dir) {
+    const o = mv.getCameraOrbit();
+    if (!o || !isFinite(o.radius)) return;
+    if (st.base == null) { st.base = o.radius; st.r = o.radius; }
+    const next = dir > 0 ? st.r / ZOOM_STEP : st.r * ZOOM_STEP;
+    st.r = Math.min(st.base * ZOOM_MAX, Math.max(st.base * ZOOM_MIN, next));
+    mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${st.r}m`;
+  }
+
+  function reset() {
+    st.base = null; st.r = null;
+    mv.cameraOrbit = m.cameraOrbit || 'auto auto auto';
+    mv.cameraTarget = 'auto auto auto';
+    mv.fieldOfView = 'auto';
+  }
+
+  return { zoom, reset };
+}
+
+// Przycisk obsługiwany przez pointer events (bez opóźnienia i gubienia „click”),
+// z powtarzaniem przy przytrzymaniu. Klawiatura (Enter/Spacja) → zwykły click.
+function bindPress(btn, fn) {
+  let timer = null, interval = null;
+  const stop = () => {
+    clearTimeout(timer); clearInterval(interval);
+    timer = interval = null;
+  };
+
+  btn.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();          // brak przewijania/zoomu strony i „ghost click”
+    e.stopPropagation();
+    try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+    fn();
+    stop();
+    timer = setTimeout(() => { interval = setInterval(fn, 110); }, 380);
+  });
+  ['pointerup', 'pointercancel', 'lostpointercapture', 'pointerleave'].forEach(
+    (ev) => btn.addEventListener(ev, stop)
+  );
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (e.detail === 0) fn();    // aktywacja z klawiatury
+  });
+  btn.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
 function attach(fig, m) {
@@ -49,73 +110,105 @@ function attach(fig, m) {
   const img = fx.querySelector('img');
   const cap = fx.querySelector('figcaption');
 
-  // Ramka modelu (krawędzie wygaszane w CSS)
   const frame = document.createElement('div');
-  frame.className = 'work-model-frame';
+  frame.className = 'work-model-frame is-loading';
+
+  // Scena: poświata + model (maska krawędzi w CSS)
+  const stage = document.createElement('div');
+  stage.className = 'work-model-stage';
 
   const mv = document.createElement('model-viewer');
   mv.className = 'work-model';
   mv.setAttribute('src', m.src);
+  mv.setAttribute('loading', 'eager');           // sekcja może być ukryta (strona po #hash)
   mv.setAttribute('camera-controls', '');
-  mv.setAttribute('bounds', 'tight');            // model ciaśniej wypełnia ramkę
+  mv.setAttribute('bounds', 'tight');
   mv.setAttribute('interaction-prompt', 'none');
   mv.setAttribute('shadow-intensity', String(m.shadow ?? 1));
   if (m.autoRotate !== false) mv.setAttribute('auto-rotate', '');
   if (m.cameraOrbit) mv.setAttribute('camera-orbit', m.cameraOrbit);
 
+  // Ukrywa wbudowany pasek postępu – mamy własny loader
+  const noBar = document.createElement('div');
+  noBar.slot = 'progress-bar';
+  mv.append(noBar);
+
   if (isTouch) {
-    // Telefon: jeden palec obraca / przewija stronę, przybliżanie tylko przyciskami
+    // Jeden palec obraca model / przewija stronę, przybliżanie tylko przyciskami
     mv.setAttribute('touch-action', 'pan-y');
     mv.setAttribute('disable-zoom', '');
   }
 
-  frame.append(mv);
+  stage.append(mv);
+  frame.append(stage);
 
-  // Przyciski tylko na telefonie
+  // Loader
+  const loader = document.createElement('div');
+  loader.className = 'work-model-loader';
+  loader.setAttribute('role', 'status');
+  loader.setAttribute('aria-live', 'polite');
+  const spinner = document.createElement('span');
+  spinner.className = 'work-model-spinner';
+  spinner.setAttribute('aria-hidden', 'true');
+  const loaderText = document.createElement('span');
+  loaderText.className = 'work-model-loader-text';
+  loader.append(spinner, loaderText);
+  frame.append(loader);
+
+  // Przyciski (tylko dotyk) – aktywne dopiero po wczytaniu modelu
   const buttons = [];
   if (isTouch) {
+    const ctrl = createZoomController(mv, m);
     const tools = document.createElement('div');
     tools.className = 'work-model-tools';
     const mk = (label, key, fn) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = label;
-      b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+      b.disabled = true;
+      bindPress(b, fn);
       tools.append(b);
       buttons.push([b, key]);
     };
-    mk('+', 'zoomIn', () => zoom(mv, 1));
-    mk('−', 'zoomOut', () => zoom(mv, -1));
-    mk('⟲', 'reset', () => {
-      mv.cameraOrbit = m.cameraOrbit || 'auto auto auto';
-      mv.cameraTarget = 'auto auto auto';
-      mv.fieldOfView = 'auto';
-    });
+    mk('+', 'zoomIn', () => ctrl.zoom(1));
+    mk('−', 'zoomOut', () => ctrl.zoom(-1));
+    mk('⟲', 'reset', () => ctrl.reset());
     frame.append(tools);
   }
 
-  // Obrazek znika dopiero, gdy model się wczyta; przy błędzie zostaje
+  const item = { m, mv, cap, buttons, loaderText, frame, img };
+  item.fail = () => {
+    frame.remove();
+    if (img) img.hidden = false;
+    fig.classList.remove('has-model');
+    const i = items.indexOf(item);
+    if (i >= 0) items.splice(i, 1);
+  };
+
   mv.addEventListener('load', () => {
-    if (img) img.hidden = true;
     fig.classList.add('has-model');
+    frame.classList.remove('is-loading');
+    frame.classList.add('is-ready');
+    buttons.forEach(([b]) => { b.disabled = false; });
+    loader.setAttribute('aria-hidden', 'true');
+    setTimeout(() => loader.remove(), 700);      // po zakończeniu płynnego zaniku
   });
   mv.addEventListener('error', (e) => {
     console.error('[modele] nie udało się wczytać', m.src, e.detail || e);
-    frame.remove();
-    if (img) img.hidden = false;
+    item.fail();
   });
 
+  // Obrazek zastępczy ukrywamy od razu – w tym miejscu jest loader (przy błędzie wraca)
+  if (img) img.hidden = true;
   if (img) img.after(frame); else fx.prepend(frame);
 
   // Podpis z JSON-a (jeśli jest tytuł) – wyłączamy wtedy tłumaczenie z i18n
   if (cap && m.title) cap.removeAttribute('data-i18n');
 
-  items.push({ m, mv, cap, buttons });
+  items.push(item);
 }
 
 // --- Szybsze wczytywanie -------------------------------------------------
-// Biblioteka i pliki .glb pobierają się równolegle i zaczynają wcześniej:
-// gdy użytkownik najedzie / dotknie linku „Współpraca” albo gdy sekcja jest blisko ekranu.
 let libPromise = null;
 const prefetched = new Set();
 
@@ -134,7 +227,6 @@ function prefetchModels(models) {
     const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
     if (!m || prefetched.has(m.src)) continue;
     prefetched.add(m.src);
-    // Trafia do cache przeglądarki – model-viewer weźmie plik stamtąd
     fetch(m.src).catch(() => prefetched.delete(m.src));
   }
 }
@@ -153,9 +245,16 @@ async function init() {
     return; // zostają obrazki
   }
 
+  // Ramki z loaderem powstają od razu – użytkownik widzi spinner, a nie pustkę
+  for (const fig of figures) {
+    const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
+    if (m) attach(fig, m);
+    else console.warn('[modele] brak w JSON modelu o id', fig.dataset.model);
+  }
+  updateTexts();
+
   const warmUp = () => { loadLib().catch(() => {}); prefetchModels(models); };
 
-  // Zamiar wejścia w „Współpracę” → zacznij pobierać od razu
   document.querySelectorAll('a[href="#wspolpraca"]').forEach((a) => {
     a.addEventListener('pointerenter', warmUp, { once: true, passive: true });
     a.addEventListener('touchstart', warmUp, { once: true, passive: true });
@@ -163,6 +262,7 @@ async function init() {
   });
   if (location.hash === '#wspolpraca') warmUp();
 
+  // Biblioteka (element <model-viewer> „ożywa” po jej załadowaniu i wtedy startuje pobieranie .glb)
   let started = false;
   const io = new IntersectionObserver(async (entries) => {
     if (started || !entries.some((e) => e.isIntersecting)) return;
@@ -173,14 +273,8 @@ async function init() {
       await loadLib();
     } catch (e) {
       console.error('model-viewer: nie udało się wczytać biblioteki', e);
-      return; // zostają obrazki
+      [...items].forEach((it) => it.fail());   // wracają obrazki
     }
-    for (const fig of figures) {
-      const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
-      if (m) attach(fig, m);
-      else console.warn('[modele] brak w JSON modelu o id', fig.dataset.model);
-    }
-    updateTexts();
   }, { rootMargin: '600px' });
   figures.forEach((f) => io.observe(f));
 
