@@ -1,175 +1,191 @@
-/* =====================================================================
-   features/mods.js – zakładka MODY: lista, wyszukiwarka, filtry, sortowanie, paginacja
-   Dane: mods-data.js | okno szczegółów: mod-modal.js | karuzela: ui/carousel.js
-   ===================================================================== */
-import { $, $$, esc, fmtDate, toTime } from '../core/dom.js';
-import { t, tn, pick, currentLang, onLangChange } from '../core/i18n.js';
-import { mediaHtml } from '../ui/carousel.js';
-import { pageButtons } from '../ui/pager.js';
-import { scrollToElement } from '../ui/smooth-scroll.js';
-import { fetchMods, catById, tagsHtml, verDesc } from './mods-data.js';
-import { openMod, refreshModal, getOpenModId } from './mod-modal.js';
+// Modele 3D w sekcji #wspolpraca – zamiast obrazków w .work[data-model]
+// Dane: json/modele.json. Biblioteka model-viewer ładowana lokalnie (CSP blokuje CDN)
+// i dopiero gdy sekcja pojawi się na ekranie.
+// Komputer: obrót myszką, przybliżanie kółkiem. Telefon: obrót palcem, przybliżanie przyciskami.
 
-const MODS_PER_PAGE = 4;
-let modsData = { categories: [], mods: [] };
-let modsFiltered = [];
-let modsPage = 1;
-let modsFailed = false;
+const DATA_URL = 'json/modele.json';
+const VIEWER_URL = '../vendor/model-viewer.min.js'; // względem js/features/
 
-function buildFilters() {
-  const box = $('#modFilters');
-  if (!box) return;
-  const checked = new Set($$('#modFilters input:checked').map(i => i.value));   // zachowaj zaznaczenie przy zmianie języka
-  box.innerHTML = '';
-  modsData.categories.forEach(c => {
-    const lab = document.createElement('label');
-    lab.innerHTML = `<input type="checkbox" value="${esc(c.id)}"><span>${esc(pick(c, 'label'))}</span>`;
-    const input = lab.querySelector('input');
-    input.checked = checked.has(c.id);
-    lab.classList.toggle('active', input.checked);
-    lab.addEventListener('change', () => {
-      lab.classList.toggle('active', input.checked);
-      applyModsFilter();
+const figures = [...document.querySelectorAll('.work[data-model]')];
+const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const items = [];
+
+const UI = {
+  zoomIn:  { pl: 'Przybliż', en: 'Zoom in' },
+  zoomOut: { pl: 'Oddal', en: 'Zoom out' },
+  reset:   { pl: 'Resetuj widok', en: 'Reset view' }
+};
+
+function lang() {
+  return (document.documentElement.lang || 'pl').slice(0, 2).toLowerCase() === 'en' ? 'en' : 'pl';
+}
+
+function tr(v) {
+  if (v == null) return '';
+  if (typeof v === 'string') return v;
+  return v[lang()] ?? v.pl ?? '';
+}
+
+function updateTexts() {
+  for (const { m, mv, cap, buttons } of items) {
+    const title = tr(m.title);
+    mv.setAttribute('alt', title);
+    if (cap && title) cap.textContent = title;
+    for (const [b, key] of buttons) {
+      b.title = tr(UI[key]);
+      b.setAttribute('aria-label', tr(UI[key]));
+    }
+  }
+}
+
+function zoom(mv, dir) {
+  if (typeof mv.zoom === 'function') { mv.zoom(dir * 3); return; }
+  const o = mv.getCameraOrbit();
+  mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${o.radius * (dir > 0 ? 0.8 : 1.25)}m`;
+}
+
+function attach(fig, m) {
+  const fx = fig.querySelector('.fx') || fig;
+  const img = fx.querySelector('img');
+  const cap = fx.querySelector('figcaption');
+
+  // Ramka modelu (krawędzie wygaszane w CSS)
+  const frame = document.createElement('div');
+  frame.className = 'work-model-frame';
+
+  const mv = document.createElement('model-viewer');
+  mv.className = 'work-model';
+  mv.setAttribute('src', m.src);
+  mv.setAttribute('camera-controls', '');
+  mv.setAttribute('bounds', 'tight');            // model ciaśniej wypełnia ramkę
+  mv.setAttribute('interaction-prompt', 'none');
+  mv.setAttribute('shadow-intensity', String(m.shadow ?? 1));
+  if (m.autoRotate !== false) mv.setAttribute('auto-rotate', '');
+  if (m.cameraOrbit) mv.setAttribute('camera-orbit', m.cameraOrbit);
+
+  if (isTouch) {
+    // Telefon: jeden palec obraca / przewija stronę, przybliżanie tylko przyciskami
+    mv.setAttribute('touch-action', 'pan-y');
+    mv.setAttribute('disable-zoom', '');
+  }
+
+  frame.append(mv);
+
+  // Przyciski tylko na telefonie
+  const buttons = [];
+  if (isTouch) {
+    const tools = document.createElement('div');
+    tools.className = 'work-model-tools';
+    const mk = (label, key, fn) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+      tools.append(b);
+      buttons.push([b, key]);
+    };
+    mk('+', 'zoomIn', () => zoom(mv, 1));
+    mk('−', 'zoomOut', () => zoom(mv, -1));
+    mk('⟲', 'reset', () => {
+      mv.cameraOrbit = m.cameraOrbit || 'auto auto auto';
+      mv.cameraTarget = 'auto auto auto';
+      mv.fieldOfView = 'auto';
     });
-    box.append(lab);
-  });
-}
-
-function renderModsPage() {
-  const list = $('#modsList');
-  const pager = $('#modsPager');
-  const countEl = $('#modCount');
-  if (!list) return;
-
-  if (modsFailed) {
-    list.innerHTML = `<div class="mod-empty">${esc(t('mods.loadError'))}</div>`;
-    if (pager) pager.innerHTML = '';
-    if (countEl) countEl.textContent = '';
-    return;
+    frame.append(tools);
   }
 
-  const total = modsFiltered.length;
-  const pages = Math.max(1, Math.ceil(total / MODS_PER_PAGE));
-  modsPage = Math.min(Math.max(1, modsPage), pages);
-  const start = (modsPage - 1) * MODS_PER_PAGE;
-  const slice = modsFiltered.slice(start, start + MODS_PER_PAGE);
-
-  if (countEl) {
-    countEl.textContent = total
-      ? tn('mods.shown', total, { shown: slice.length, total })
-      : t('mods.noResults');
-  }
-
-  if (!slice.length) {
-    list.innerHTML = `<div class="mod-empty">${esc(t('mods.empty'))}</div>`;
-    if (pager) pager.innerHTML = '';
-    return;
-  }
-
-  // karta na liście = NAJNOWSZA wersja moda
-  list.innerHTML = slice.map(mod => {
-    const v = mod.versions[0];
-    const n = mod.versions.length;
-    const verLabel = pick(v, 'version') ? ` · ${esc(pick(v, 'version'))}` : '';
-    const countChip = n > 1 ? `<span class="tag-chip">${esc(tn('common.versions', n))}</span>` : '';
-    return `<article class="card mod" data-id="${esc(mod.id)}" tabindex="0" role="button" aria-haspopup="dialog">
-      <div class="media">${mediaHtml(v.media)}</div>
-      <div class="body">
-        <div class="date-meta"><svg class="icon"><use href="#i-cal"/></svg>${esc(fmtDate(v.date))}${verLabel}</div>
-        <h3>${esc(pick(mod, 'title'))}</h3>
-        <p>${verDesc(v)}</p>
-        <div class="tags">${tagsHtml(mod)}${countChip}</div>
-        <div class="row">
-          <div class="meta"><svg class="icon"><use href="#i-user"/></svg>${esc(t('common.author'))} ${esc(mod.author)}</div>
-          <span class="btn ghost mod-open"><svg class="icon"><use href="#i-download"/></svg>${esc(t('common.download'))}</span>
-        </div>
-      </div>
-    </article>`;
-  }).join('');
-
-  if (pager) pageButtons(pager, pages, modsPage, (n) => {
-    modsPage = n;
-    renderModsPage();
-    scrollToElement(list);
+  // Obrazek znika dopiero, gdy model się wczyta; przy błędzie zostaje
+  mv.addEventListener('load', () => {
+    if (img) img.hidden = true;
+    fig.classList.add('has-model');
   });
+  mv.addEventListener('error', (e) => {
+    console.error('[modele] nie udało się wczytać', m.src, e.detail || e);
+    frame.remove();
+    if (img) img.hidden = false;
+  });
+
+  if (img) img.after(frame); else fx.prepend(frame);
+
+  // Podpis z JSON-a (jeśli jest tytuł) – wyłączamy wtedy tłumaczenie z i18n
+  if (cap && m.title) cap.removeAttribute('data-i18n');
+
+  items.push({ m, mv, cap, buttons });
 }
 
-function applyModsFilter(keepPage = false) {
-  const q = ($('#modSearch')?.value || '').trim().toLowerCase();
-  const checked = $$('#modFilters input:checked').map(i => i.value);
-  const sort = $('#modSort')?.value || 'date-desc';
+// --- Szybsze wczytywanie -------------------------------------------------
+// Biblioteka i pliki .glb pobierają się równolegle i zaczynają wcześniej:
+// gdy użytkownik najedzie / dotknie linku „Współpraca” albo gdy sekcja jest blisko ekranu.
+let libPromise = null;
+const prefetched = new Set();
 
-  modsFiltered = modsData.mods.filter(m => {
-    if (checked.length) {
-      const cats = m.categories || [];
-      if (!checked.some(c => cats.includes(c))) return false;
-    }
-    if (!q) return true;
-    const hay = [
-      m.title, m.title_en, m.author,
-      ...m.versions.flatMap(v => [v.version, v.version_en, v.description, v.description_en]),
-      ...(m.categories || []).flatMap(c => [catById[c]?.label || c, catById[c]?.label_en])
-    ].join(' ').toLowerCase();
-    return hay.includes(q);
-  });
-
-  const byTitle = (a, b) => (pick(a, 'title') || '').localeCompare(pick(b, 'title') || '', currentLang);
-  const byIndex = (a, b) => a._i - b._i;
-
-  modsFiltered.sort((a, b) => {
-    switch (sort) {
-      case 'date-desc':  return (toTime(b.date) - toTime(a.date)) || byIndex(a, b);
-      case 'date-asc':   return (toTime(a.date) - toTime(b.date)) || byIndex(a, b);
-      case 'title-asc':  return byTitle(a, b) || byIndex(a, b);
-      case 'title-desc': return byTitle(b, a) || byIndex(a, b);
-      case 'author-asc': return (a.author || '').localeCompare(b.author || '', currentLang) || byIndex(a, b);
-      default:           return byIndex(a, b);
-    }
-  });
-
-  if (!keepPage) modsPage = 1;
-  renderModsPage();
+function loadLib() {
+  if (!libPromise) {
+    libPromise = import(VIEWER_URL).catch((e) => {
+      libPromise = null;
+      throw e;
+    });
+  }
+  return libPromise;
 }
 
-export async function loadMods() {
+function prefetchModels(models) {
+  for (const fig of figures) {
+    const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
+    if (!m || prefetched.has(m.src)) continue;
+    prefetched.add(m.src);
+    // Trafia do cache przeglądarki – model-viewer weźmie plik stamtąd
+    fetch(m.src).catch(() => prefetched.delete(m.src));
+  }
+}
+
+async function init() {
+  if (!figures.length) return;
+
+  let models;
   try {
-    modsData = await fetchMods();
-    buildFilters();
-    applyModsFilter();
-  } catch (err) {
-    console.error('json/mods.json:', err);
-    modsFailed = true;
-    renderModsPage();
+    const res = await fetch(DATA_URL);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    models = Array.isArray(data.models) ? data.models : [];
+  } catch (e) {
+    console.error('modele.json:', e);
+    return; // zostają obrazki
   }
+
+  const warmUp = () => { loadLib().catch(() => {}); prefetchModels(models); };
+
+  // Zamiar wejścia w „Współpracę” → zacznij pobierać od razu
+  document.querySelectorAll('a[href="#wspolpraca"]').forEach((a) => {
+    a.addEventListener('pointerenter', warmUp, { once: true, passive: true });
+    a.addEventListener('touchstart', warmUp, { once: true, passive: true });
+    a.addEventListener('focus', warmUp, { once: true });
+  });
+  if (location.hash === '#wspolpraca') warmUp();
+
+  let started = false;
+  const io = new IntersectionObserver(async (entries) => {
+    if (started || !entries.some((e) => e.isIntersecting)) return;
+    started = true;
+    io.disconnect();
+    warmUp();
+    try {
+      await loadLib();
+    } catch (e) {
+      console.error('model-viewer: nie udało się wczytać biblioteki', e);
+      return; // zostają obrazki
+    }
+    for (const fig of figures) {
+      const m = models.find((x) => x && x.id === fig.dataset.model && x.src);
+      if (m) attach(fig, m);
+      else console.warn('[modele] brak w JSON modelu o id', fig.dataset.model);
+    }
+    updateTexts();
+  }, { rootMargin: '600px' });
+  figures.forEach((f) => io.observe(f));
+
+  new MutationObserver(updateTexts)
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 }
 
-export function initMods() {
-  const listEl = $('#modsList');
-  const findMod = (id) => modsData.mods.find(m => m.id === id);
-
-  listEl?.addEventListener('click', (e) => {
-    if (e.target.closest('.car-btn, .car-dot, .car-count')) return;
-    const c = e.target.closest('.mod');
-    if (c) openMod(findMod(c.dataset.id));
-  });
-  listEl?.addEventListener('keydown', (e) => {
-    if (e.target.closest('.car-btn, .car-dot')) return;
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    const c = e.target.closest('.mod');
-    if (c) { e.preventDefault(); openMod(findMod(c.dataset.id)); }
-  });
-
-  $('#modSearch')?.addEventListener('input', () => applyModsFilter());
-  $('#modSort')?.addEventListener('change', () => applyModsFilter());
-
-  // zmiana języka: filtry, lista i (jeśli otwarte) okno moda
-  onLangChange(() => {
-    if (modsFailed) { renderModsPage(); return; }
-    if (!modsData.mods.length) return;
-    buildFilters();
-    applyModsFilter(true);
-    const id = getOpenModId();
-    const mod = id && findMod(id);
-    if (mod) refreshModal(mod);
-  });
-}
+init();
