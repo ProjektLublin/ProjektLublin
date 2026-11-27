@@ -15,6 +15,7 @@ import { initProgress, loadProgress } from './features/progress.js';
 import { initMods, loadMods } from './features/mods.js';
 import { initModModal } from './features/mod-modal.js';
 import { initCoop } from './features/coop.js';
+import './features/models.js';
 
 initSmoothScroll();
 initHeader();
